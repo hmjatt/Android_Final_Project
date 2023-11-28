@@ -3,7 +3,7 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/sunrise_sunset_lookup"
-            android:icon="@drawable/sunset"
+            android:icon="@drawable/sunrise"
             android:title="Sunrise &amp; Sunset Lookup" />
         <item
             android:id="@+id/recipe_search"
