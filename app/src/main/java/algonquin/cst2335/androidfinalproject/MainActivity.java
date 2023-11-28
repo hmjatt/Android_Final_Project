@@ -59,47 +59,40 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void selectDrawerItem(MenuItem menuItem) {
-        Fragment fragment;
-        Class fragmentClass = null; // Initialize to a default value
+        Fragment fragment = null;
+        Class fragmentClass = null;
 
-        switch (menuItem.getItemId()) {
-            case R.id.sunrise_sunset_lookup:
-                fragmentClass = SunriseSunsetFragment.class;
-                break;
-            case R.id.recipe_search:
-                fragmentClass = RecipeSearchFragment.class;
-                break;
-            case R.id.dictionary:
-                fragmentClass = DictionaryFragment.class;
-                break;
-            case R.id.song_search:
-                fragmentClass = SongSearchFragment.class;
-                break;
+        if (menuItem.getItemId() == R.id.sunrise_sunset_lookup) {
+            fragmentClass = SunriseSunsetFragment.class;
+        } else if (menuItem.getItemId() == R.id.recipe_search) {
+            fragmentClass = RecipeSearchFragment.class;
+        } else if (menuItem.getItemId() == R.id.dictionary) {
+            fragmentClass = DictionaryFragment.class;
+        } else if (menuItem.getItemId() == R.id.song_search) {
+            fragmentClass = SongSearchFragment.class;
         }
 
-        if (fragmentClass == null) {
-            // Handle the case when none of the IDs match
-            return;
+        if (fragmentClass != null) {
+            try {
+                fragment = (Fragment) fragmentClass.newInstance();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return;
+            }
+
+            // Insert the fragment by replacing any existing fragment
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
+
+            // Highlight the selected item has been done by NavigationView
+            menuItem.setChecked(true);
+            // Set action bar title
+            setTitle(menuItem.getTitle());
+            // Close the navigation drawer
+            mDrawer.closeDrawers();
         }
-
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return;
-        }
-
-        // Insert the fragment by replacing any existing fragment
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
-
-        // Highlight the selected item has been done by NavigationView
-        menuItem.setChecked(true);
-        // Set action bar title
-        setTitle(menuItem.getTitle());
-        // Close the navigation drawer
-        mDrawer.closeDrawers();
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
