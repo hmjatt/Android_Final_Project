@@ -63,21 +63,15 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
         public void bind(final Song song, final SongAdapter.OnItemClickListener songListener) {
             // Bind data to views
             songTitle.setText(song.getTitle());
-            duration.setText(song.getDuration());
-            albumName.setText(song.getAlbumName());
+//            duration.setText(song.getDuration());
+//            albumName.setText(song.getAlbumName());
             Picasso.get().load(song.getAlbumCoverUrl()).into(albumCover);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Display a toast with the title and album cover URL when a song is clicked
-                    Toast.makeText(itemView.getContext(), "Clicked on: " + song.getTitle() + "\nAlbum Cover URL: " + song.getAlbumCoverUrl(), Toast.LENGTH_SHORT).show();
-
-                    // If you want to perform additional actions when a song is clicked,
-                    // you can call the onItemClick method of the listener
-                    if (songListener != null) {
-                        songListener.onItemClick(song);
-                    }
+            itemView.setOnClickListener(v -> {
+                // If you want to perform additional actions when a song is clicked,
+                // you can call the onItemClick method of the listener
+                if (songListener != null) {
+                    songListener.onItemClick(song);
                 }
             });
         }

@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="8dp"
+    android:layout_margin="5dp"
     android:background="@drawable/rounded_corner">
 
     <ImageView
@@ -19,10 +20,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_toEndOf="@id/ivAlbumCover"
-        android:layout_alignTop="@id/ivAlbumCover"
         android:textSize="16sp"
         android:textColor="#333333"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_centerVertical="true"/>
 
     <TextView
         android:id="@+id/tvDuration"
