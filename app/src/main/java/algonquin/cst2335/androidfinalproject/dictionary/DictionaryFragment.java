@@ -1,4 +1,4 @@
-package algonquin.cst2335.androidfinalproject;
+package algonquin.cst2335.androidfinalproject.dictionary;
 
 import android.os.Bundle;
 
@@ -8,12 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import algonquin.cst2335.androidfinalproject.R;
+
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link SunriseSunsetFragment#newInstance} factory method to
+ * Use the {@link DictionaryFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SunriseSunsetFragment extends Fragment {
+public class DictionaryFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,7 +26,7 @@ public class SunriseSunsetFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public SunriseSunsetFragment() {
+    public DictionaryFragment() {
         // Required empty public constructor
     }
 
@@ -34,11 +36,11 @@ public class SunriseSunsetFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment SunriseSunsetLookup.
+     * @return A new instance of fragment DictionaryFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SunriseSunsetFragment newInstance(String param1, String param2) {
-        SunriseSunsetFragment fragment = new SunriseSunsetFragment();
+    public static DictionaryFragment newInstance(String param1, String param2) {
+        DictionaryFragment fragment = new DictionaryFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -59,6 +61,6 @@ public class SunriseSunsetFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sunrise_sunset_lookup, container, false);
+        return inflater.inflate(R.layout.fragment_dictionary, container, false);
     }
 }

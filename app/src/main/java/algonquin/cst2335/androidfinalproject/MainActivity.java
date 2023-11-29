@@ -12,6 +12,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import com.google.android.material.navigation.NavigationView;
 
+import algonquin.cst2335.androidfinalproject.dictionary.DictionaryFragment;
+import algonquin.cst2335.androidfinalproject.recipe.RecipeSearchFragment;
+import algonquin.cst2335.androidfinalproject.song.ArtistSearchFragment;
+import algonquin.cst2335.androidfinalproject.sunrise.SunriseSunsetFragment;
+
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawer;
     private ActionBarDrawerToggle drawerToggle;
@@ -69,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         } else if (menuItem.getItemId() == R.id.dictionary) {
             fragmentClass = DictionaryFragment.class;
         } else if (menuItem.getItemId() == R.id.song_search) {
-            fragmentClass = SongSearchFragment.class;
+            fragmentClass = ArtistSearchFragment.class;
         }
 
         if (fragmentClass != null) {
