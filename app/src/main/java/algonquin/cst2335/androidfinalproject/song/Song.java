@@ -1,10 +1,11 @@
 // Song.java
 package algonquin.cst2335.androidfinalproject.song;
 
-public class Song {
+public class  Song {
     private String title;
     private String duration;
     private String albumName;
+
     private String albumCoverUrl;
 
     // Constructors, getters, setters
@@ -33,5 +34,13 @@ public class Song {
 
     public String getAlbumName() {
         return albumName;
+    }
+
+    public String getAlbumCoverUrl() {
+        return albumCoverUrl;
+    }
+
+    public void setAlbumCoverUrl(String albumCoverUrl) {
+        this.albumCoverUrl = albumCoverUrl;
     }
 }

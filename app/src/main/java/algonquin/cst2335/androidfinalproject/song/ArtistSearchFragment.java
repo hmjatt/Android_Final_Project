@@ -35,8 +35,11 @@ public class ArtistSearchFragment extends Fragment {
     private EditText etSearch;
     private RecyclerView recyclerView;
     private AlbumAdapter albumAdapter;
+    private SongAdapter songAdapter;
     private List<Artist> artistList;
     private List<Album> albumList;
+
+    private List<Song> songList;
 
     public ArtistSearchFragment() {
         // Required empty public constructor
@@ -52,9 +55,20 @@ public class ArtistSearchFragment extends Fragment {
 
         artistList = new ArrayList<>();
         albumList = new ArrayList<>();
+        songList = new ArrayList<>();
 
 //        artistAdapter = new ArtistAdapter(artistList, artist -> searchAlbums(artist.getId()));
-        albumAdapter = new AlbumAdapter(albumList, album -> searchTracks(album.getId()));
+//        albumAdapter = new AlbumAdapter(albumList, album -> searchTracks(album.getId(), album.getTitle(), album.getCoverUrl()));
+
+        albumAdapter = new AlbumAdapter(albumList, album -> searchTracks(album.getId(), album.getTitle(), album.getCoverUrl()));
+
+
+
+        songAdapter = new SongAdapter(songList, song -> {
+            // Handle the click event for a song item
+            // You may want to implement the logic to show detailed information or play the song
+        });
+
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 //        recyclerView.setAdapter(artistAdapter);
@@ -158,8 +172,8 @@ public class ArtistSearchFragment extends Fragment {
                                     String albumId = albumObject.getString("id");
                                     String albumTitle = albumObject.getString("title");
                                     String albumCoverUrl = albumObject.getString("cover_medium");
-                                    String albumTrackList = albumObject.getString("tracklist");
-                                    Album album = new Album(albumId, albumTitle, albumCoverUrl, albumTrackList);
+//                                    String albumTrackList = albumObject.getString("tracklist");
+                                    Album album = new Album(albumId, albumTitle, albumCoverUrl);
 
                                     // Check if the album already exists in the list
                                     if (!albumList.contains(album)) {
@@ -188,11 +202,58 @@ public class ArtistSearchFragment extends Fragment {
 
 
 
-    private void searchTracks(String albumId) {
-        // Implement the logic to search for tracks based on the albumId
-        // This will involve making another API call to get the tracklist
-        // and displaying the list of tracks in a new fragment or activity
+    private void searchTracks(String albumId, String albumTitle, String albumCoverUrl) {
+        String url = "https://api.deezer.com/album/" + albumId + "/tracks";
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    // Parse the JSON response and update the RecyclerView with songs
+
+                    // Clear the existing list of songs
+                    songList.clear();
+
+                    if (response.length() > 0) {
+                        // Extract the "data" array from the response
+                        try {
+                            JSONArray dataArray = response.getJSONArray("data");
+
+                            for (int i = 0; i < dataArray.length(); i++) {
+                                try {
+                                    JSONObject trackObject = dataArray.getJSONObject(i);
+                                    String songTitle = trackObject.getString("title");
+                                    String duration = trackObject.getString("duration");
+                                    String albumName = albumTitle;
+                                    String albumCover = albumCoverUrl;
+
+                                    // Create a new Song object
+                                    Song song = new Song();
+                                    song.setTitle(songTitle);
+                                    song.setDuration(duration);
+                                    song.setAlbumName(albumName);
+                                    song.setAlbumCoverUrl(albumCover);
+
+                                    // Add the new song to the list
+                                    songList.add(song);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            // Update the RecyclerView with songs
+                            recyclerView.setAdapter(songAdapter);
+                            songAdapter.notifyDataSetChanged();
+
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                },
+                error -> handleVolleyError(error));
+
+        // Add the request to the RequestQueue
+        Volley.newRequestQueue(requireContext()).add(request);
     }
+
 
     private void handleVolleyError(VolleyError error) {
         if (error.networkResponse != null) {

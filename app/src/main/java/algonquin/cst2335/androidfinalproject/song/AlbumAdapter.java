@@ -60,12 +60,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
 
             albumTitle.setText(album.getTitle());
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onItemClick(album);
-                }
-            });
+            itemView.setOnClickListener(v -> listener.onItemClick(album));
         }
     }
 }

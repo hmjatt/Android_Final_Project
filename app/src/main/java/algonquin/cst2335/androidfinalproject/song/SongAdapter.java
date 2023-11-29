@@ -6,16 +6,28 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 import algonquin.cst2335.androidfinalproject.R;
 
 public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
     private List<Song> songs;
 
-    public SongAdapter(List<Song> songs) {
+    private SongAdapter.OnItemClickListener songListener;
+
+    public interface OnItemClickListener {
+        void onItemClick(Song song);
+    }
+
+    public SongAdapter(List<Song> songs, SongAdapter.OnItemClickListener songListener) {
         this.songs = songs;
+        this.songListener = songListener;
     }
 
     @NonNull
@@ -28,7 +40,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Song song = songs.get(position);
-        holder.bind(song);
+        holder.bind(song, songListener);
     }
 
     @Override
@@ -48,16 +60,28 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
             albumCover = itemView.findViewById(R.id.ivAlbumCover);
         }
 
-        public void bind(Song song) {
+        public void bind(final Song song, final SongAdapter.OnItemClickListener songListener) {
             // Bind data to views
             songTitle.setText(song.getTitle());
             duration.setText(song.getDuration());
             albumName.setText(song.getAlbumName());
+            Picasso.get().load(song.getAlbumCoverUrl()).into(albumCover);
 
-            // You may need to load the album cover image using a library like Picasso or Glide
-            // For simplicity, I'm assuming there's a method `getAlbumCoverUrl()` in the Song class
-            // that returns the URL for the album cover image.
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Display a toast with the title and album cover URL when a song is clicked
+                    Toast.makeText(itemView.getContext(), "Clicked on: " + song.getTitle() + "\nAlbum Cover URL: " + song.getAlbumCoverUrl(), Toast.LENGTH_SHORT).show();
 
+                    // If you want to perform additional actions when a song is clicked,
+                    // you can call the onItemClick method of the listener
+                    if (songListener != null) {
+                        songListener.onItemClick(song);
+                    }
+                }
+            });
         }
+
+
     }
 }
