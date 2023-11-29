@@ -158,7 +158,8 @@ public class ArtistSearchFragment extends Fragment {
                                     String albumId = albumObject.getString("id");
                                     String albumTitle = albumObject.getString("title");
                                     String albumCoverUrl = albumObject.getString("cover_medium");
-                                    Album album = new Album(albumId, albumTitle, albumCoverUrl);
+                                    String albumTrackList = albumObject.getString("tracklist");
+                                    Album album = new Album(albumId, albumTitle, albumCoverUrl, albumTrackList);
 
                                     // Check if the album already exists in the list
                                     if (!albumList.contains(album)) {

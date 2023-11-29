@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.squareup.picasso.Picasso;
 import java.util.List;
 import algonquin.cst2335.androidfinalproject.R;
 
@@ -54,10 +55,8 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
 
         public void bind(final Album album, final OnItemClickListener listener) {
             // Bind data to views
-            // You may need to load the album cover image using a library like Picasso or Glide
-            // For simplicity, I'm assuming there's a method `getCoverUrl()` in the Album class
-            // that returns the URL for the album cover image.
-            // Picasso.get().load(album.getCoverUrl()).into(albumCover);
+            // Use Picasso to load the album cover image
+            Picasso.get().load(album.getCoverUrl()).into(albumCover);
 
             albumTitle.setText(album.getTitle());
 
