@@ -1,13 +1,18 @@
-<!-- item_album.xml -->
+<!-- album_view.xml -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_corner"
+    android:layout_margin="5dp"
+    android:padding="5dp">
 
     <ImageView
         android:id="@+id/ivAlbumCover"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:scaleType="centerCrop" />
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:scaleType="centerCrop"
+        android:layout_margin="8dp"
+        />
 
     <TextView
         android:id="@+id/tvAlbumTitle"
@@ -16,6 +21,8 @@
         android:layout_marginStart="16dp"
         android:layout_toEndOf="@id/ivAlbumCover"
         android:layout_centerVertical="true"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:textColor="#333333"
+        android:textStyle="bold" />
 
 </RelativeLayout>

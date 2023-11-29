@@ -1,9 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">#1976D2</item> <!-- Deep Blue -->
         <item name="colorPrimaryDark">#0D47A1</item> <!-- Dark Blue -->
         <item name="colorAccent">#4CAF50</item> <!-- Green -->
+    </style>
+
+    <style name="AlbumTitleText">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#333333</item>
     </style>
 </resources>

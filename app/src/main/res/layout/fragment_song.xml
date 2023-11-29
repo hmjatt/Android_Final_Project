@@ -1,37 +1,45 @@
-<!-- item_song.xml -->
+<!-- fragment_song.xml -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="8dp"
+    android:background="@drawable/rounded_corner">
 
     <ImageView
         android:id="@+id/ivAlbumCover"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/image_border" />
 
     <TextView
         android:id="@+id/tvSongTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_toEndOf="@id/ivAlbumCover"
-        android:layout_centerVertical="true"
-        android:textSize="16sp" />
+        android:layout_alignTop="@id/ivAlbumCover"
+        android:textSize="16sp"
+        android:textColor="#333333"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tvDuration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tvSongTitle"
-        android:layout_marginStart="16dp"
-        android:textSize="14sp" />
+        android:layout_marginStart="8dp"
+        android:textSize="14sp"
+        android:textColor="#666666" />
 
     <TextView
         android:id="@+id/tvAlbumName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/tvDuration"
-        android:layout_marginStart="16dp"
-        android:textSize="14sp" />
+        android:layout_marginStart="8dp"
+        android:textSize="14sp"
+        android:textColor="#666666" />
 
 </RelativeLayout>
