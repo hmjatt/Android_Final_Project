@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,20 +13,25 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+
 import algonquin.cst2335.androidfinalproject.R;
 
 public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
     private List<Song> songs;
-
-    private SongAdapter.OnItemClickListener songListener;
+    private OnItemClickListener songListener;
 
     public interface OnItemClickListener {
         void onItemClick(Song song);
     }
 
-    public SongAdapter(List<Song> songs, SongAdapter.OnItemClickListener songListener) {
+    // Constructor with one argument
+    public SongAdapter(List<Song> songs) {
         this.songs = songs;
-        this.songListener = songListener;
+    }
+
+    // Setter for the listener
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.songListener = listener;
     }
 
     @NonNull
@@ -40,7 +44,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Song song = songs.get(position);
-        holder.bind(song, songListener);
+        holder.bind(song);
     }
 
     @Override
@@ -48,23 +52,19 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
         return songs.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView songTitle, duration, albumName;
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        private TextView songTitle;
         private ImageView albumCover;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             songTitle = itemView.findViewById(R.id.tvSongTitle);
-            duration = itemView.findViewById(R.id.tvDuration);
-            albumName = itemView.findViewById(R.id.tvAlbumName);
             albumCover = itemView.findViewById(R.id.ivAlbumCover);
         }
 
-        public void bind(final Song song, final SongAdapter.OnItemClickListener songListener) {
+        public void bind(final Song song) {
             // Bind data to views
             songTitle.setText(song.getTitle());
-//            duration.setText(song.getDuration());
-//            albumName.setText(song.getAlbumName());
             Picasso.get().load(song.getAlbumCoverUrl()).into(albumCover);
 
             itemView.setOnClickListener(v -> {
@@ -75,7 +75,5 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
                 }
             });
         }
-
-
     }
 }

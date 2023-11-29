@@ -1,39 +1,59 @@
-// Song.java
 package algonquin.cst2335.androidfinalproject.song;
 
-public class  Song {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Song implements Parcelable {
     private String title;
     private String duration;
     private String albumName;
-
     private String albumCoverUrl;
 
-    // Constructors, getters, setters
-
-    // Additional methods to set data for a song
-    public void setTitle(String title) {
-        this.title = title;
+    public Song() {
+        // Empty constructor needed for Parcelable
     }
 
-    public void setDuration(String duration) {
-        this.duration = duration;
+    protected Song(Parcel in) {
+        title = in.readString();
+        duration = in.readString();
+        albumName = in.readString();
+        albumCoverUrl = in.readString();
     }
 
-    public void setAlbumName(String albumName) {
-        this.albumName = albumName;
-    }
+    public static final Creator<Song> CREATOR = new Creator<Song>() {
+        @Override
+        public Song createFromParcel(Parcel in) {
+            return new Song(in);
+        }
 
-    // Additional methods to get data from a song
+        @Override
+        public Song[] newArray(int size) {
+            return new Song[size];
+        }
+    };
+
     public String getTitle() {
         return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getDuration() {
         return duration;
     }
 
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
     public String getAlbumName() {
         return albumName;
+    }
+
+    public void setAlbumName(String albumName) {
+        this.albumName = albumName;
     }
 
     public String getAlbumCoverUrl() {
@@ -42,5 +62,18 @@ public class  Song {
 
     public void setAlbumCoverUrl(String albumCoverUrl) {
         this.albumCoverUrl = albumCoverUrl;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(title);
+        dest.writeString(duration);
+        dest.writeString(albumName);
+        dest.writeString(albumCoverUrl);
     }
 }

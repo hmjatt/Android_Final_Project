@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,15 +31,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import algonquin.cst2335.androidfinalproject.R;
+import algonquin.cst2335.androidfinalproject.databinding.FragmentArtistSearchBinding;
 
-public class ArtistSearchFragment extends Fragment {
+public class ArtistSearchFragment extends Fragment implements SongAdapter.OnItemClickListener {
+
     private EditText etSearch;
     private RecyclerView recyclerView;
     private AlbumAdapter albumAdapter;
     private SongAdapter songAdapter;
     private List<Artist> artistList;
     private List<Album> albumList;
-
     private List<Song> songList;
 
     public ArtistSearchFragment() {
@@ -48,34 +50,49 @@ public class ArtistSearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_artist_search, container, false);
+        FragmentArtistSearchBinding binding = FragmentArtistSearchBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
-        etSearch = view.findViewById(R.id.etSearch);
-        recyclerView = view.findViewById(R.id.recyclerView);
+        etSearch = binding.etSearch;
+        recyclerView = binding.recyclerView;
 
         artistList = new ArrayList<>();
         albumList = new ArrayList<>();
         songList = new ArrayList<>();
 
-//        artistAdapter = new ArtistAdapter(artistList, artist -> searchAlbums(artist.getId()));
-//        albumAdapter = new AlbumAdapter(albumList, album -> searchTracks(album.getId(), album.getTitle(), album.getCoverUrl()));
-
         albumAdapter = new AlbumAdapter(albumList, album -> searchTracks(album.getId(), album.getTitle(), album.getCoverUrl()));
 
+        songAdapter = new SongAdapter(songList);
+
+//        songAdapter = new SongAdapter(songList, song -> {
+//            // Launch the song detail fragment with the selected song
+//            SongDetailFragment songDetailFragment = SongDetailFragment.newInstance(song);
+//
+//            // Use FragmentTransaction to replace the current fragment with the song detail fragment
+//            FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+//            transaction.replace(R.id.fragmentContainer, songDetailFragment);
+//            transaction.addToBackStack(null);
+//            transaction.commit();
+//        });
 
 
-        songAdapter = new SongAdapter(songList, song -> {
-            // Handle the click event for a song item
-            // You may want to implement the logic to show detailed information or play the song
+        // Set the song listener for the song adapter
+        songAdapter.setOnItemClickListener(song -> {
+            // Launch the song detail fragment with the selected song
+            SongDetailFragment songDetailFragment = SongDetailFragment.newInstance(song);
+
+            // Use FragmentTransaction to replace the current fragment with the song detail fragment
+            FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragmentContainer, songDetailFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
         });
 
-
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-//        recyclerView.setAdapter(artistAdapter);
         recyclerView.setAdapter(albumAdapter);
 
         // Set up the search button click listener
-        view.findViewById(R.id.btnSearch).setOnClickListener(v -> {
+        binding.btnSearch.setOnClickListener(v -> {
             String query = etSearch.getText().toString().trim();
 
             try {
@@ -98,24 +115,16 @@ public class ArtistSearchFragment extends Fragment {
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
-                    // Parse the JSON response and update the RecyclerView with the first artist
                     artistList.clear();
 
                     if (response.length() > 0) {
                         try {
-                            // Extract the "data" array from the response
                             JSONArray dataArray = response.getJSONArray("data");
 
-                            // Make sure the "data" array is not empty
                             if (dataArray.length() > 0) {
-                                // Extract the first artist from the "data" array
                                 JSONObject firstArtist = dataArray.getJSONObject(0);
-
-                                // Extract required fields from the artist object
                                 String artistId = firstArtist.optString("id");
-//                                String artistName = firstArtist.optString("name");
 
-                                // Validate if the required fields are present
                                 if (!artistId.isEmpty()) {
                                     Artist artist = new Artist(artistId);
                                     artistList.add(artist);
@@ -123,16 +132,7 @@ public class ArtistSearchFragment extends Fragment {
                                     // search for albums using the artist id
                                     searchAlbums(artistId);
 
-                                    // Update the RecyclerView with artists
-//                                    recyclerView.setAdapter(artistAdapter);
-//                                    artistAdapter.notifyDataSetChanged();
-
-                                    // Update the RecyclerView with albums
-//                                    recyclerView.setAdapter(albumAdapter);
-//                                    albumAdapter.notifyDataSetChanged();
-
                                 } else {
-                                    // Handle the case where the expected fields are not present in the JSON
                                     showToast("Invalid JSON structure for artist data");
                                 }
                             } else {
@@ -146,7 +146,6 @@ public class ArtistSearchFragment extends Fragment {
                 },
                 error -> handleVolleyError(error));
 
-        // Add the request to the RequestQueue
         Volley.newRequestQueue(requireContext()).add(request);
     }
 
@@ -155,33 +154,23 @@ public class ArtistSearchFragment extends Fragment {
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
-                    // Parse the JSON response and update the RecyclerView with albums
-
-                    // Clear the existing list of albums
                     albumList.clear();
 
                     if (response.length() > 0) {
-
-                        // Extract the "data" array from the response
                         try {
                             JSONArray dataArray = response.getJSONArray("data");
 
                             for (int i = 0; i < dataArray.length(); i++) {
-                                try {
-                                    JSONObject albumObject = dataArray.getJSONObject(i); // Corrected line
-                                    String albumId = albumObject.getString("id");
-                                    String albumTitle = albumObject.getString("title");
-                                    String albumCoverUrl = albumObject.getString("cover_medium");
-//                                    String albumTrackList = albumObject.getString("tracklist");
-                                    Album album = new Album(albumId, albumTitle, albumCoverUrl);
+                                JSONObject albumObject = dataArray.getJSONObject(i);
+                                String albumId = albumObject.getString("id");
+                                String albumTitle = albumObject.getString("title");
+                                String albumCoverUrl = albumObject.getString("cover_medium");
+                                Album album = new Album(albumId, albumTitle, albumCoverUrl);
 
-                                    // Check if the album already exists in the list
-                                    if (!albumList.contains(album)) {
-                                        // Add the new album to the list
-                                        albumList.add(album);
-                                    }
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+                                // Check if the album already exists in the list
+                                if (!albumList.contains(album)) {
+                                    // Add the new album to the list
+                                    albumList.add(album);
                                 }
                             }
 
@@ -195,48 +184,34 @@ public class ArtistSearchFragment extends Fragment {
                 },
                 error -> handleVolleyError(error));
 
-        // Add the request to the RequestQueue
         Volley.newRequestQueue(requireContext()).add(request);
     }
-
-
-
 
     private void searchTracks(String albumId, String albumTitle, String albumCoverUrl) {
         String url = "https://api.deezer.com/album/" + albumId + "/tracks";
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
-                    // Parse the JSON response and update the RecyclerView with songs
-
-                    // Clear the existing list of songs
                     songList.clear();
 
                     if (response.length() > 0) {
-                        // Extract the "data" array from the response
                         try {
                             JSONArray dataArray = response.getJSONArray("data");
 
                             for (int i = 0; i < dataArray.length(); i++) {
-                                try {
-                                    JSONObject trackObject = dataArray.getJSONObject(i);
-                                    String songTitle = trackObject.getString("title");
-                                    String duration = trackObject.getString("duration");
-                                    String albumName = albumTitle;
-                                    String albumCover = albumCoverUrl;
+                                JSONObject trackObject = dataArray.getJSONObject(i);
+                                String songTitle = trackObject.getString("title");
+                                String duration = trackObject.getString("duration");
+                                String albumName = albumTitle;
+                                String albumCover = albumCoverUrl;
 
-                                    // Create a new Song object
-                                    Song song = new Song();
-                                    song.setTitle(songTitle);
-                                    song.setDuration(duration);
-                                    song.setAlbumName(albumName);
-                                    song.setAlbumCoverUrl(albumCover);
+                                Song song = new Song();
+                                song.setTitle(songTitle);
+                                song.setDuration(duration);
+                                song.setAlbumName(albumName);
+                                song.setAlbumCoverUrl(albumCover);
 
-                                    // Add the new song to the list
-                                    songList.add(song);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                                songList.add(song);
                             }
 
                             // Update the RecyclerView with songs
@@ -250,23 +225,29 @@ public class ArtistSearchFragment extends Fragment {
                 },
                 error -> handleVolleyError(error));
 
-        // Add the request to the RequestQueue
         Volley.newRequestQueue(requireContext()).add(request);
     }
 
+    @Override
+    public void onItemClick(Song song) {
+        // Launch the song detail fragment with the selected song
+        SongDetailFragment songDetailFragment = SongDetailFragment.newInstance(song);
+
+        // Use FragmentTransaction to replace the current fragment with the song detail fragment
+        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragmentContainer, songDetailFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
 
     private void handleVolleyError(VolleyError error) {
         if (error.networkResponse != null) {
-            // Network-related error
             int statusCode = error.networkResponse.statusCode;
             showToast("Network error. Status code: " + statusCode);
         } else if (error.getCause() instanceof TimeoutError) {
-            // Timeout error
             showToast("Request timed out. Please try again.");
         } else {
             Log.e("artistError", "Error: " + error.toString());
-
-            // Other types of errors
             showToast("An error occurred. Please try again later.");
         }
     }
