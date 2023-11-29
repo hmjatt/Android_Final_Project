@@ -4,20 +4,16 @@ package algonquin.cst2335.androidfinalproject.song;
 
 public class Artist {
     private String id;
-    private String name;
 
-    public Artist(String id, String name) {
+    public Artist(String id) {
         this.id = id;
-        this.name = name;
     }
 
     public String getId() {
         return id;
     }
 
-    public String getName() {
-        return name;
-    }
+
 
     // You can also include setters if needed
 
@@ -25,7 +21,6 @@ public class Artist {
     public String toString() {
         return "Artist{" +
                 "id='" + id + '\'' +
-                ", name='" + name + '\'' +
                 '}';
     }
 }

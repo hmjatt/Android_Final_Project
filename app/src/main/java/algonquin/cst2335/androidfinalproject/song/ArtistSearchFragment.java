@@ -34,7 +34,6 @@ import algonquin.cst2335.androidfinalproject.R;
 public class ArtistSearchFragment extends Fragment {
     private EditText etSearch;
     private RecyclerView recyclerView;
-    private ArtistAdapter artistAdapter;
     private AlbumAdapter albumAdapter;
     private List<Artist> artistList;
     private List<Album> albumList;
@@ -54,11 +53,12 @@ public class ArtistSearchFragment extends Fragment {
         artistList = new ArrayList<>();
         albumList = new ArrayList<>();
 
-        artistAdapter = new ArtistAdapter(artistList, artist -> searchAlbums(artist.getId()));
+//        artistAdapter = new ArtistAdapter(artistList, artist -> searchAlbums(artist.getId()));
         albumAdapter = new AlbumAdapter(albumList, album -> searchTracks(album.getId()));
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(artistAdapter);
+//        recyclerView.setAdapter(artistAdapter);
+        recyclerView.setAdapter(albumAdapter);
 
         // Set up the search button click listener
         view.findViewById(R.id.btnSearch).setOnClickListener(v -> {
@@ -99,16 +99,24 @@ public class ArtistSearchFragment extends Fragment {
 
                                 // Extract required fields from the artist object
                                 String artistId = firstArtist.optString("id");
-                                String artistName = firstArtist.optString("name");
+//                                String artistName = firstArtist.optString("name");
 
                                 // Validate if the required fields are present
-                                if (!artistId.isEmpty() && !artistName.isEmpty()) {
-                                    Artist artist = new Artist(artistId, artistName);
+                                if (!artistId.isEmpty()) {
+                                    Artist artist = new Artist(artistId);
                                     artistList.add(artist);
 
+                                    // search for albums using the artist id
+                                    searchAlbums(artistId);
+
                                     // Update the RecyclerView with artists
-                                    recyclerView.setAdapter(artistAdapter);
-                                    artistAdapter.notifyDataSetChanged();
+//                                    recyclerView.setAdapter(artistAdapter);
+//                                    artistAdapter.notifyDataSetChanged();
+
+                                    // Update the RecyclerView with albums
+//                                    recyclerView.setAdapter(albumAdapter);
+//                                    albumAdapter.notifyDataSetChanged();
+
                                 } else {
                                     // Handle the case where the expected fields are not present in the JSON
                                     showToast("Invalid JSON structure for artist data");
@@ -131,33 +139,53 @@ public class ArtistSearchFragment extends Fragment {
     private void searchAlbums(String artistId) {
         String url = "https://api.deezer.com/artist/" + artistId + "/albums";
 
-//        https://api.deezer.com/artist/1/albums
-
-        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
                     // Parse the JSON response and update the RecyclerView with albums
+
+                    // Clear the existing list of albums
                     albumList.clear();
-                    for (int i = 0; i < response.length(); i++) {
+
+                    if (response.length() > 0) {
+
+                        // Extract the "data" array from the response
                         try {
-                            JSONObject albumObject = response.getJSONObject(i);
-                            String albumId = albumObject.getString("id");
-                            String albumTitle = albumObject.getString("title");
-                            String albumCoverUrl = albumObject.getString("cover_medium");
-                            Album album = new Album(albumId, albumTitle, albumCoverUrl);
-                            albumList.add(album);
+                            JSONArray dataArray = response.getJSONArray("data");
+
+                            for (int i = 0; i < dataArray.length(); i++) {
+                                try {
+                                    JSONObject albumObject = dataArray.getJSONObject(i); // Corrected line
+                                    String albumId = albumObject.getString("id");
+                                    String albumTitle = albumObject.getString("title");
+                                    String albumCoverUrl = albumObject.getString("cover_medium");
+                                    Album album = new Album(albumId, albumTitle, albumCoverUrl);
+
+                                    // Check if the album already exists in the list
+                                    if (!albumList.contains(album)) {
+                                        // Add the new album to the list
+                                        albumList.add(album);
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            // Update the RecyclerView with albums
+                            recyclerView.setAdapter(albumAdapter);
+                            albumAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                            throw new RuntimeException(e);
                         }
                     }
-                    // Update the RecyclerView with albums
-                    recyclerView.setAdapter(albumAdapter);
-                    albumAdapter.notifyDataSetChanged();
                 },
                 error -> handleVolleyError(error));
 
         // Add the request to the RequestQueue
         Volley.newRequestQueue(requireContext()).add(request);
     }
+
+
+
 
     private void searchTracks(String albumId) {
         // Implement the logic to search for tracks based on the albumId
