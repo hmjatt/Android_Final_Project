@@ -9,6 +9,8 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 
 //import algonquin.cst2335.androidfinalproject.databinding.FragmentSongDetailBinding;
+import com.squareup.picasso.Picasso;
+
 import algonquin.cst2335.androidfinalproject.databinding.FragmentSongDetailBinding;
 import algonquin.cst2335.androidfinalproject.song.Song;
 
@@ -33,9 +35,12 @@ public class SongDetailFragment extends Fragment {
         Song song = getArguments().getParcelable(ARG_SONG);
 
         // Display song details in the fragment
-        binding.tvSongTitle.setText(song.getTitle());
-        binding.tvDuration.setText(song.getDuration());
+        binding.tvSongTitleSf.setText(song.getTitle());
+        binding.tvDurationSf.setText(song.getDuration());
         binding.tvAlbumName.setText(song.getAlbumName());
+
+        Picasso.get().load(song.getAlbumCoverUrl()).into(binding.ivAlbumCover);
+
 
         return view;
     }

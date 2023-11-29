@@ -33,7 +33,7 @@ import java.util.List;
 import algonquin.cst2335.androidfinalproject.R;
 import algonquin.cst2335.androidfinalproject.databinding.FragmentArtistSearchBinding;
 
-public class ArtistSearchFragment extends Fragment implements SongAdapter.OnItemClickListener {
+public class ArtistSearchFragment extends Fragment {
 
     private EditText etSearch;
     private RecyclerView recyclerView;
@@ -64,17 +64,6 @@ public class ArtistSearchFragment extends Fragment implements SongAdapter.OnItem
 
         songAdapter = new SongAdapter(songList);
 
-//        songAdapter = new SongAdapter(songList, song -> {
-//            // Launch the song detail fragment with the selected song
-//            SongDetailFragment songDetailFragment = SongDetailFragment.newInstance(song);
-//
-//            // Use FragmentTransaction to replace the current fragment with the song detail fragment
-//            FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-//            transaction.replace(R.id.fragmentContainer, songDetailFragment);
-//            transaction.addToBackStack(null);
-//            transaction.commit();
-//        });
-
 
         // Set the song listener for the song adapter
         songAdapter.setOnItemClickListener(song -> {
@@ -83,7 +72,7 @@ public class ArtistSearchFragment extends Fragment implements SongAdapter.OnItem
 
             // Use FragmentTransaction to replace the current fragment with the song detail fragment
             FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragmentContainer, songDetailFragment);
+            transaction.replace(R.id.fragmentContainerSv, songDetailFragment);
             transaction.addToBackStack(null);
             transaction.commit();
         });
@@ -226,18 +215,6 @@ public class ArtistSearchFragment extends Fragment implements SongAdapter.OnItem
                 error -> handleVolleyError(error));
 
         Volley.newRequestQueue(requireContext()).add(request);
-    }
-
-    @Override
-    public void onItemClick(Song song) {
-        // Launch the song detail fragment with the selected song
-        SongDetailFragment songDetailFragment = SongDetailFragment.newInstance(song);
-
-        // Use FragmentTransaction to replace the current fragment with the song detail fragment
-        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragmentContainer, songDetailFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
     }
 
     private void handleVolleyError(VolleyError error) {

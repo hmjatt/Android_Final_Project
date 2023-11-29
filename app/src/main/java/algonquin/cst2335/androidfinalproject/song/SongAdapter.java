@@ -37,7 +37,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_song, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.song_view, parent, false);
         return new ViewHolder(view);
     }
 
@@ -58,7 +58,7 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            songTitle = itemView.findViewById(R.id.tvSongTitle);
+            songTitle = itemView.findViewById(R.id.tvSongTitleSv);
             albumCover = itemView.findViewById(R.id.ivAlbumCover);
         }
 
