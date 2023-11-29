@@ -11,7 +11,6 @@ import java.util.List;
 
 import algonquin.cst2335.androidfinalproject.R;
 
-// ArtistAdapter.java
 public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ViewHolder> {
     private List<Artist> artists;
     private OnItemClickListener listener;
@@ -52,12 +51,7 @@ public class ArtistAdapter extends RecyclerView.Adapter<ArtistAdapter.ViewHolder
 
         public void bind(final Artist artist, final OnItemClickListener listener) {
             artistName.setText(artist.getName());
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onItemClick(artist);
-                }
-            });
+            itemView.setOnClickListener(v -> listener.onItemClick(artist));
         }
     }
 }
