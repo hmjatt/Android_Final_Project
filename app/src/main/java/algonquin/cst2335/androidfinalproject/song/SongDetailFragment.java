@@ -37,11 +37,13 @@ public class SongDetailFragment extends Fragment {
         // Display song details in the fragment
         binding.tvSongTitleSf.setText(song.getTitle());
         binding.tvDurationSf.setText(song.getDuration());
-        binding.tvAlbumName.setText(song.getAlbumName());
+        binding.tvAlbumNameSf.setText(song.getAlbumName());
 
-        Picasso.get().load(song.getAlbumCoverUrl()).into(binding.ivAlbumCover);
+        Picasso.get().load(song.getAlbumCoverUrl()).into(binding.ivAlbumCoverSf);
 
 
         return view;
     }
+
+
 }

@@ -65,17 +65,7 @@ public class ArtistSearchFragment extends Fragment {
         songAdapter = new SongAdapter(songList);
 
 
-        // Set the song listener for the song adapter
-        songAdapter.setOnItemClickListener(song -> {
-            // Launch the song detail fragment with the selected song
-            SongDetailFragment songDetailFragment = SongDetailFragment.newInstance(song);
 
-            // Use FragmentTransaction to replace the current fragment with the song detail fragment
-            FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-            transaction.replace(R.id.fragmentContainerSv, songDetailFragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
-        });
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(albumAdapter);
@@ -207,6 +197,19 @@ public class ArtistSearchFragment extends Fragment {
                             recyclerView.setAdapter(songAdapter);
                             songAdapter.notifyDataSetChanged();
 
+                            // Set the song listener for the song adapter
+                            songAdapter.setOnItemClickListener(song -> {
+                                // Launch the song detail fragment with the selected song
+                                SongDetailFragment songDetailFragment = SongDetailFragment.newInstance(song);
+
+                                // Use FragmentTransaction to replace the current fragment with the song detail fragment
+                                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                                transaction.replace(R.id.fragmentContainerSf, songDetailFragment);
+                                transaction.addToBackStack(null);
+                                transaction.commit();
+                            });
+
+
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
@@ -232,4 +235,6 @@ public class ArtistSearchFragment extends Fragment {
     private void showToast(String message) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
     }
+
+
 }

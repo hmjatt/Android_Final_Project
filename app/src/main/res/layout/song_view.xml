@@ -1,52 +1,52 @@
-<!-- song_view.xml -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- song_view.xml-->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp"
     android:layout_margin="5dp"
-    android:background="@drawable/rounded_corner">
+    android:background="@drawable/rounded_corner"
+    android:padding="8dp">
 
-    <ImageView
-        android:id="@+id/ivAlbumCover"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:scaleType="centerCrop"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/image_border" />
 
-    <TextView
-        android:id="@+id/tvSongTitleSv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_toEndOf="@id/ivAlbumCover"
-        android:textSize="16sp"
-        android:textColor="#333333"
-        android:textStyle="bold"
-        android:layout_centerVertical="true"/>
-
-    <TextView
-        android:id="@+id/tvDurationSv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvSongTitleSv"
-        android:layout_marginStart="8dp"
-        android:textSize="14sp"
-        android:textColor="#666666" />
-
-    <TextView
-        android:id="@+id/tvAlbumName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/tvDurationSv"
-        android:layout_marginStart="8dp"
-        android:textSize="14sp"
-        android:textColor="#666666" />
-
-    <!-- This FrameLayout serves as the container for your fragments -->
     <FrameLayout
-        android:id="@+id/fragmentContainerSv"
+        android:id="@+id/fragmentContainerSf"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content">
 
-</RelativeLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/ivAlbumCover"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/image_border"
+                android:scaleType="centerCrop"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvSongTitleSv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_toEndOf="@id/ivAlbumCover"
+                android:textColor="#333333"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/ivAlbumCover"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </FrameLayout>
+
+
+</LinearLayout>
