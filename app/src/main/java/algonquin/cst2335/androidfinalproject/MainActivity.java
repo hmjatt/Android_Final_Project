@@ -12,10 +12,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import com.google.android.material.navigation.NavigationView;
 
-import algonquin.cst2335.androidfinalproject.dictionary.DictionaryFragment;
-import algonquin.cst2335.androidfinalproject.recipe.RecipeSearchFragment;
-import algonquin.cst2335.androidfinalproject.song.ui.fragments.ArtistSearchFragment;
-import algonquin.cst2335.androidfinalproject.sunrise.SunriseSunsetFragment;
+import algonquin.cst2335.androidfinalproject.IO_dictionary.DictionaryFragment;
+import algonquin.cst2335.androidfinalproject.CF_recipe.RecipeSearchFragment;
+import algonquin.cst2335.androidfinalproject.hmsong.ui.fragments.ArtistSearchFragment;
+import algonquin.cst2335.androidfinalproject.SK_sunrise.SunriseSunsetFragment;
 
 public class MainActivity extends AppCompatActivity {
     private DrawerLayout mDrawer;
