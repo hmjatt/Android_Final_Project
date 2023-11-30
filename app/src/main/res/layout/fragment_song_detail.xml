@@ -1,77 +1,42 @@
-<!--fragment_song_detail.xml-->
-
-
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<!-- fragment_song_detail.xml -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="5dp"
-    android:background="@drawable/image_border"
-    android:padding="8dp">
+    android:layout_height="match_parent">
+
+    <!-- Add your UI elements here -->
+    <TextView
+        android:id="@+id/tvSongTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Song Title"/>
+
+    <TextView
+        android:id="@+id/tvDuration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Duration"/>
+
+    <TextView
+        android:id="@+id/tvAlbumName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Album Name"/>
 
     <ImageView
-        android:id="@+id/ivAlbumCoverSf"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:background="@drawable/image_border"
-        android:scaleType="centerCrop"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:id="@+id/ivAlbumCover"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
     <Button
         android:id="@+id/btnSaveToFavorites"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save to Favorites"
-        android:layout_below="@id/ivAlbumCoverSf"
-        android:layout_margin="10dp"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivAlbumCoverSf"
-        />
+        android:text="Save to Favorites"/>
 
-
-    <TextView
-        android:id="@+id/tvSongTitleSf"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/btnBackSongDetail"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="Title: "
-        android:layout_toEndOf="@id/ivAlbumCoverSf"
-        android:textColor="#333333"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnSaveToFavorites" />
+        android:text="Back" />
 
-    <TextView
-        android:id="@+id/tvDurationSf"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="Duration: "
-        android:layout_below="@id/tvSongTitleSf"
-        android:textColor="#666666"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvSongTitleSf" />
-
-    <TextView
-        android:id="@+id/tvAlbumNameSf"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="Album: "
-        android:layout_below="@id/tvDurationSf"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvDurationSf" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</RelativeLayout>

@@ -1,24 +1,22 @@
-package algonquin.cst2335.androidfinalproject.song;
+package algonquin.cst2335.androidfinalproject.song.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 public class Song implements Parcelable {
+
     private String title;
     private String duration;
     private String albumName;
     private String albumCoverUrl;
 
-    public Song() {
-        // Empty constructor needed for Parcelable
+    // Constructors, getters, and setters
+
+   // Parcelable implementation
+    protected Song(Parcel in) {
+        // Read data from the parcel and initialize fields
     }
 
-    protected Song(Parcel in) {
-        title = in.readString();
-        duration = in.readString();
-        albumName = in.readString();
-        albumCoverUrl = in.readString();
-    }
 
     public static final Creator<Song> CREATOR = new Creator<Song>() {
         @Override
@@ -31,6 +29,16 @@ public class Song implements Parcelable {
             return new Song[size];
         }
     };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        // Write data to the parcel
+    }
 
     public String getTitle() {
         return title;
@@ -62,18 +70,5 @@ public class Song implements Parcelable {
 
     public void setAlbumCoverUrl(String albumCoverUrl) {
         this.albumCoverUrl = albumCoverUrl;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(title);
-        dest.writeString(duration);
-        dest.writeString(albumName);
-        dest.writeString(albumCoverUrl);
     }
 }

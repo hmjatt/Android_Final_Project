@@ -14,7 +14,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import algonquin.cst2335.androidfinalproject.dictionary.DictionaryFragment;
 import algonquin.cst2335.androidfinalproject.recipe.RecipeSearchFragment;
-import algonquin.cst2335.androidfinalproject.song.ArtistSearchFragment;
+import algonquin.cst2335.androidfinalproject.song.ui.fragments.ArtistSearchFragment;
 import algonquin.cst2335.androidfinalproject.sunrise.SunriseSunsetFragment;
 
 public class MainActivity extends AppCompatActivity {

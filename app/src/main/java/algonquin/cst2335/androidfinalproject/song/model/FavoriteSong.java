@@ -1,5 +1,6 @@
-package algonquin.cst2335.androidfinalproject.song;
+package algonquin.cst2335.androidfinalproject.song.model;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -7,21 +8,27 @@ import androidx.room.PrimaryKey;
 public class FavoriteSong {
 
     @PrimaryKey(autoGenerate = true)
-    private long id;
+    private int id;
 
+    @ColumnInfo(name = "title")
     private String title;
+
+    @ColumnInfo(name = "duration")
     private String duration;
+
+    @ColumnInfo(name = "album_name")
     private String albumName;
+
+    @ColumnInfo(name = "album_cover_url")
     private String albumCoverUrl;
 
-    // Getters and setters
+    // Constructors, getters, and setters
 
-
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -56,5 +63,4 @@ public class FavoriteSong {
     public void setAlbumCoverUrl(String albumCoverUrl) {
         this.albumCoverUrl = albumCoverUrl;
     }
-
 }
