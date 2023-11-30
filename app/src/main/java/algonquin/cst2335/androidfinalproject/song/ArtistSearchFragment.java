@@ -94,8 +94,7 @@ public class ArtistSearchFragment extends Fragment {
 
         // Set up the "View Favorites" button
         Button viewFavoritesButton = view.findViewById(R.id.btnViewFavorites);
-        viewFavoritesButton.setOnClickListener(v -> navigateToFavoriteSongsFragment());
-
+        viewFavoritesButton.setOnClickListener(v -> navigateToFavoriteSongsFragment(showSearch));
 
 
         // Add an OnEditorActionListener to the EditText
