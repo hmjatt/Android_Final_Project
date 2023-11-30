@@ -1,42 +1,58 @@
-<!-- fragment_song_detail.xml -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- Use a LinearLayout or another appropriate layout -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
 
-    <!-- Add your UI elements here -->
+    <ImageView
+        android:id="@+id/ivAlbumCover"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp"/>
+
     <TextView
         android:id="@+id/tvSongTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Song Title"/>
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="8dp"/>
 
     <TextView
         android:id="@+id/tvDuration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Duration"/>
+        android:textSize="16sp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="8dp"/>
 
     <TextView
         android:id="@+id/tvAlbumName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Album Name"/>
-
-    <ImageView
-        android:id="@+id/ivAlbumCover"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:textSize="16sp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="16dp"/>
 
     <Button
         android:id="@+id/btnSaveToFavorites"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Save to Favorites"/>
+        android:text="Save to Favorites"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@android:color/white"
+        android:layout_marginBottom="16dp"/>
 
     <Button
         android:id="@+id/btnBackSongDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Back" />
-
-</RelativeLayout>
+        android:text="Back"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@android:color/white"/>
+</LinearLayout>

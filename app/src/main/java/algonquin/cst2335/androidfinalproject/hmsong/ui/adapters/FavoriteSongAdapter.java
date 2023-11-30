@@ -8,11 +8,15 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.List;
+
 import algonquin.cst2335.androidfinalproject.databinding.HmItemFavoriteSongBinding;
 import algonquin.cst2335.androidfinalproject.hmsong.model.FavoriteSong;
 
 public class FavoriteSongAdapter extends ListAdapter<FavoriteSong, FavoriteSongAdapter.FavoriteSongViewHolder> {
 
+
+    private List<FavoriteSong> favoriteSongs;
 
     // Public constructor
     public FavoriteSongAdapter() {
@@ -30,6 +34,11 @@ public class FavoriteSongAdapter extends ListAdapter<FavoriteSong, FavoriteSongA
                 return oldItem.equals(newItem);
             }
         });
+    }
+
+    public void setFavoriteSongs(List<FavoriteSong> favoriteSongs) {
+        this.favoriteSongs = favoriteSongs;
+        notifyDataSetChanged();
     }
 
     @NonNull

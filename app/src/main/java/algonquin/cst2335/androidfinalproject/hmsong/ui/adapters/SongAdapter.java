@@ -3,10 +3,13 @@ package algonquin.cst2335.androidfinalproject.hmsong.ui.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -54,11 +57,16 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
         private TextView tvDuration;
         private TextView tvAlbumName;
 
+        private ImageView ivCover;
+
+
         public SongViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tvSongTitle);
             tvDuration = itemView.findViewById(R.id.tvDuration);
             tvAlbumName = itemView.findViewById(R.id.tvAlbumName);
+            ivCover = itemView.findViewById(R.id.ivAlbumCover);
+
 
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
@@ -72,6 +80,8 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
             tvTitle.setText(song.getTitle());
             tvDuration.setText(song.getDuration());
             tvAlbumName.setText(song.getAlbumName());
+            Picasso.get().load(song.getAlbumCoverUrl()).into(ivCover);
+
         }
     }
 }
