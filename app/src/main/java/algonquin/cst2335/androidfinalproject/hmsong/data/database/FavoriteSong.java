@@ -1,5 +1,4 @@
-// FavoriteSong.java
-package algonquin.cst2335.androidfinalproject.hmsong.model;
+package algonquin.cst2335.androidfinalproject.hmsong.data.database;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -14,6 +13,8 @@ public class FavoriteSong {
     private String duration;
     private String albumName;
     private String albumCoverUrl;
+
+    // Constructors, getters, and setters
 
     public long getId() {
         return id;

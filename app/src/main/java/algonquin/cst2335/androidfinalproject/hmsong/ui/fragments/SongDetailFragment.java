@@ -1,6 +1,6 @@
-// Add this class to the existing package
 package algonquin.cst2335.androidfinalproject.hmsong.ui.fragments;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,14 +10,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import algonquin.cst2335.androidfinalproject.R;
+import algonquin.cst2335.androidfinalproject.databinding.HmFragmentSongDetailBinding;
 import algonquin.cst2335.androidfinalproject.hmsong.data.database.FavoriteSongDatabase;
 import algonquin.cst2335.androidfinalproject.hmsong.model.FavoriteSong;
 import algonquin.cst2335.androidfinalproject.hmsong.model.Song;
-import algonquin.cst2335.androidfinalproject.hmsong.ui.SongApp;
-import algonquin.cst2335.androidfinalproject.databinding.HmFragmentSongDetailBinding;
+import algonquin.cst2335.androidfinalproject.hmsong.ui.adapters.FavoriteSongAdapter;
 
 public class SongDetailFragment extends Fragment {
 
@@ -79,35 +78,50 @@ public class SongDetailFragment extends Fragment {
     }
 
     private void saveSongToFavorites(Song song) {
-        // Save the selected song to the Room database
-        FavoriteSongDatabase database = SongApp.database;
-        FavoriteSong favoriteSong = new FavoriteSong();
-        favoriteSong.setTitle(song.getTitle());
-        favoriteSong.setDuration(song.getDuration());
-        favoriteSong.setAlbumName(song.getAlbumName());
-        favoriteSong.setAlbumCoverUrl(song.getAlbumCoverUrl());
+        // Use AsyncTask to perform database operation in the background
+        new AsyncTask<Void, Void, Long>() {
+            @Override
+            protected Long doInBackground(Void... voids) {
+                // Save the selected song to the Room database
+                FavoriteSongDatabase database = FavoriteSongDatabase.getInstance(requireContext());
+                FavoriteSong favoriteSong = new FavoriteSong();
+                favoriteSong.setTitle(song.getTitle());
+                favoriteSong.setDuration(song.getDuration());
+                favoriteSong.setAlbumName(song.getAlbumName());
+                favoriteSong.setAlbumCoverUrl(song.getAlbumCoverUrl());
 
-        long result = database.favoriteSongDao().saveFavoriteSong(favoriteSong);
-        if (result != -1) {
-            // Show a toast or Snackbar indicating success
-            // Example: showToast("Song saved to favorites");
-        } else {
-            // Show a toast or Snackbar indicating failure
-            // Example: showToast("Failed to save song to favorites");
-        }
+                // Perform the database operation on a background thread
+                return database.favoriteSongDao().saveFavoriteSong(favoriteSong);
+            }
 
-        // If the fragment was launched from the search screen, navigate back to the search screen
-        if (showSearch) {
-            navigateBack();
-        }
+            @Override
+            protected void onPostExecute(Long result) {
+                super.onPostExecute(result);
+
+                // Handle the result of the database operation
+                if (result != -1) {
+                    // Show a toast or Snackbar indicating success
+                    // Example: showToast("Song saved to favorites");
+                } else {
+                    // Show a toast or Snackbar indicating failure
+                    // Example: showToast("Failed to save song to favorites");
+                }
+
+                // If the fragment was launched from the search screen, navigate back to the search screen
+                if (showSearch) {
+                    navigateBack();
+                }
+            }
+        }.execute();
     }
+
 
     private void navigateBack() {
         // Replace the current fragment with the ArtistSearchFragment
         ArtistSearchFragment artistSearchFragment = new ArtistSearchFragment();
-        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragmentContainerSf, artistSearchFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+        getParentFragmentManager().beginTransaction()
+                .replace(R.id.fragmentContainerSf, artistSearchFragment)
+                .addToBackStack(null)
+                .commit();
     }
 }

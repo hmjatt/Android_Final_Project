@@ -50,13 +50,13 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
 
     class AlbumViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView ivAlbumCover;
-        private TextView tvAlbumTitle;
+        private TextView tvTitle;
+        private ImageView ivCover;
 
         public AlbumViewHolder(@NonNull View itemView) {
             super(itemView);
-            ivAlbumCover = itemView.findViewById(R.id.ivAlbumCover);
-            tvAlbumTitle = itemView.findViewById(R.id.tvAlbumTitle);
+            tvTitle = itemView.findViewById(R.id.tvAlbumTitle);
+            ivCover = itemView.findViewById(R.id.ivAlbumCover);
 
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
@@ -67,8 +67,8 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.AlbumViewHol
         }
 
         public void bind(Album album) {
-            Picasso.get().load(album.getCoverUrl()).into(ivAlbumCover);
-            tvAlbumTitle.setText(album.getTitle());
+            tvTitle.setText(album.getTitle());
+            Picasso.get().load(album.getCoverUrl()).into(ivCover);
         }
     }
 }

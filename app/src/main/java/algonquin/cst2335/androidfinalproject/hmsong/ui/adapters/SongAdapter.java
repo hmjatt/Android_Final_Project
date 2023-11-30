@@ -50,13 +50,15 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
 
     class SongViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView tvSongTitle;
+        private TextView tvTitle;
         private TextView tvDuration;
+        private TextView tvAlbumName;
 
         public SongViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvSongTitle = itemView.findViewById(R.id.tvSongTitle);
+            tvTitle = itemView.findViewById(R.id.tvSongTitle);
             tvDuration = itemView.findViewById(R.id.tvDuration);
+            tvAlbumName = itemView.findViewById(R.id.tvAlbumName);
 
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
@@ -67,8 +69,9 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.SongViewHolder
         }
 
         public void bind(Song song) {
-            tvSongTitle.setText(song.getTitle());
+            tvTitle.setText(song.getTitle());
             tvDuration.setText(song.getDuration());
+            tvAlbumName.setText(song.getAlbumName());
         }
     }
 }
