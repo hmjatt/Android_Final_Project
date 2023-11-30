@@ -39,6 +39,8 @@ import algonquin.cst2335.androidfinalproject.databinding.FragmentArtistSearchBin
 
 public class ArtistSearchFragment extends Fragment {
 
+    private static final String ARG_SHOW_SEARCH = "arg_show_search";
+    private boolean showSearch;  // Declare showSearch at the class level
 
     private EditText etSearch;
     private RecyclerView recyclerView;
@@ -89,9 +91,11 @@ public class ArtistSearchFragment extends Fragment {
             }
         });
 
+
         // Set up the "View Favorites" button
         Button viewFavoritesButton = view.findViewById(R.id.btnViewFavorites);
         viewFavoritesButton.setOnClickListener(v -> navigateToFavoriteSongsFragment());
+
 
 
         // Add an OnEditorActionListener to the EditText
@@ -228,11 +232,8 @@ public class ArtistSearchFragment extends Fragment {
 
                             // Set the song listener for the song adapter
                             songAdapter.setOnItemClickListener(song -> {
-
-
-
-                                // Launch the song detail fragment with the selected song
-                                SongDetailFragment songDetailFragment = SongDetailFragment.newInstance(song);
+                                // Launch the song detail fragment with the selected song and showSearch parameter
+                                SongDetailFragment songDetailFragment = SongDetailFragment.newInstance(song, showSearch);
 
                                 // Use FragmentTransaction to replace the current fragment with the song detail fragment
                                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
@@ -276,7 +277,21 @@ public class ArtistSearchFragment extends Fragment {
 
 
 
+    private void navigateToFavoriteSongsFragment(boolean showSearch) {
+        // Replace the current fragment with the fragment displaying favorite songs
+        FavoriteSongsFragment favoriteSongsFragment = new FavoriteSongsFragment();
 
+        // Pass the showSearch value to the new fragment
+        // Use the class-level variable showSearch
+        Bundle args = new Bundle();
+        args.putBoolean(ARG_SHOW_SEARCH, showSearch);
+        favoriteSongsFragment.setArguments(args);
+
+        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragmentContainerSf, favoriteSongsFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
 
 
     private void handleVolleyError(VolleyError error) {
