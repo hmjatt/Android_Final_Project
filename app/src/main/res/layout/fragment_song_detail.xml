@@ -20,19 +20,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tvSongFavSf"
-        android:layout_width="match_parent"
+    <Button
+        android:id="@+id/btnSaveToFavorites"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="Save to Favorites"
+        android:layout_below="@id/ivAlbumCoverSf"
         android:layout_margin="10dp"
-        android:text="Favourite"
-        android:textColor="#333333"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ivAlbumCoverSf"
         />
+
 
     <TextView
         android:id="@+id/tvSongTitleSf"
@@ -46,7 +47,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvSongFavSf" />
+        app:layout_constraintTop_toBottomOf="@+id/btnSaveToFavorites" />
 
     <TextView
         android:id="@+id/tvDurationSf"
@@ -68,7 +69,6 @@
         android:layout_margin="10dp"
         android:text="Album: "
         android:layout_below="@id/tvDurationSf"
-        android:textColor="#666666"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

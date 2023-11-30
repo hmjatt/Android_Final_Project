@@ -75,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
             fragmentClass = DictionaryFragment.class;
         } else if (menuItem.getItemId() == R.id.song_search) {
             fragmentClass = ArtistSearchFragment.class;
+        } else {
+            fragmentClass = ArtistSearchFragment.class;
         }
 
         if (fragmentClass != null) {

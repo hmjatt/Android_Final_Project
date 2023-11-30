@@ -2,9 +2,12 @@ package algonquin.cst2335.androidfinalproject.song;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,8 +39,6 @@ import algonquin.cst2335.androidfinalproject.databinding.FragmentArtistSearchBin
 
 public class ArtistSearchFragment extends Fragment {
 
-    // Declare the TextView
-    private TextView titleTextView;
 
     private EditText etSearch;
     private RecyclerView recyclerView;
@@ -57,11 +58,6 @@ public class ArtistSearchFragment extends Fragment {
         FragmentArtistSearchBinding binding = FragmentArtistSearchBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        // Initialize the TextView
-        titleTextView = view.findViewById(R.id.textTitle);
-
-        // Set the initial text
-        titleTextView.setText("ALBUMS");
 
         etSearch = binding.etSearch;
         recyclerView = binding.recyclerView;
@@ -93,7 +89,28 @@ public class ArtistSearchFragment extends Fragment {
             }
         });
 
+        // Set up the "View Favorites" button
+        Button viewFavoritesButton = view.findViewById(R.id.btnViewFavorites);
+        viewFavoritesButton.setOnClickListener(v -> navigateToFavoriteSongsFragment());
+
+
+        // Add an OnEditorActionListener to the EditText
+        etSearch.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE || event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+                // Perform the same action as the search button click
+                binding.btnSearch.performClick();
+                return true;
+            }
+            return false;
+        });
+
         return view;
+    }
+
+    private void navigateToFavoriteSongsFragment() {
+        // Implement logic to replace the current fragment with the fragment displaying favorite songs
+        // You can create a new fragment for displaying favorite songs and use FragmentTransaction
+        // Similar to how you navigate to the SongDetailFragment
     }
 
     private void searchArtists(String query) {
@@ -164,7 +181,7 @@ public class ArtistSearchFragment extends Fragment {
                             recyclerView.setAdapter(albumAdapter);
                             albumAdapter.notifyDataSetChanged();
 
-                            changeTitle("ALBUMS");
+
 
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
@@ -207,12 +224,12 @@ public class ArtistSearchFragment extends Fragment {
                             recyclerView.setAdapter(songAdapter);
                             songAdapter.notifyDataSetChanged();
 
-                            changeTitle("TRACK LIST");
+
 
                             // Set the song listener for the song adapter
                             songAdapter.setOnItemClickListener(song -> {
 
-                                changeTitle("SONG DETAILS");
+
 
                                 // Launch the song detail fragment with the selected song
                                 SongDetailFragment songDetailFragment = SongDetailFragment.newInstance(song);
@@ -235,12 +252,30 @@ public class ArtistSearchFragment extends Fragment {
         Volley.newRequestQueue(requireContext()).add(request);
     }
 
-    // Method to dynamically change the title
-    public void changeTitle(String newTitle) {
-        if (titleTextView != null) {
-            titleTextView.setText(newTitle);
+
+
+
+    // Initialize Room database
+    FavoriteSongDatabase database = SongApp.database;
+
+    // Inside saveSongToFavorites method
+    private void saveSongToFavorites(Song song) {
+        FavoriteSong favoriteSong = new FavoriteSong();
+        favoriteSong.setTitle(song.getTitle());
+        favoriteSong.setDuration(song.getDuration());
+        favoriteSong.setAlbumName(song.getAlbumName());
+        favoriteSong.setAlbumCoverUrl(song.getAlbumCoverUrl());
+
+        long result = database.favoriteSongDao().saveFavoriteSong(favoriteSong);
+        if (result != -1) {
+            showToast("Song saved to favorites");
+        } else {
+            showToast("Failed to save song to favorites");
         }
     }
+
+
+
 
 
 
