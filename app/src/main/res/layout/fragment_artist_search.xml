@@ -22,6 +22,20 @@
         android:layout_marginTop="8dp"
         android:text="Search" />
 
+    <!-- Add the title TextView -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="ALBUMS"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#191D35"
+        android:padding="10dp"
+        android:layout_margin="5dp"
+        android:gravity="center"
+        android:background="@drawable/image_border"
+        android:id="@+id/textTitle"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"

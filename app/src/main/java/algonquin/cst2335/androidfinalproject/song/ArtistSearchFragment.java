@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -35,6 +36,9 @@ import algonquin.cst2335.androidfinalproject.databinding.FragmentArtistSearchBin
 
 public class ArtistSearchFragment extends Fragment {
 
+    // Declare the TextView
+    private TextView titleTextView;
+
     private EditText etSearch;
     private RecyclerView recyclerView;
     private AlbumAdapter albumAdapter;
@@ -53,6 +57,12 @@ public class ArtistSearchFragment extends Fragment {
         FragmentArtistSearchBinding binding = FragmentArtistSearchBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
+        // Initialize the TextView
+        titleTextView = view.findViewById(R.id.textTitle);
+
+        // Set the initial text
+        titleTextView.setText("ALBUMS");
+
         etSearch = binding.etSearch;
         recyclerView = binding.recyclerView;
 
@@ -63,9 +73,6 @@ public class ArtistSearchFragment extends Fragment {
         albumAdapter = new AlbumAdapter(albumList, album -> searchTracks(album.getId(), album.getTitle(), album.getCoverUrl()));
 
         songAdapter = new SongAdapter(songList);
-
-
-
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(albumAdapter);
@@ -156,6 +163,9 @@ public class ArtistSearchFragment extends Fragment {
                             // Update the RecyclerView with albums
                             recyclerView.setAdapter(albumAdapter);
                             albumAdapter.notifyDataSetChanged();
+
+                            changeTitle("ALBUMS");
+
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
@@ -197,8 +207,13 @@ public class ArtistSearchFragment extends Fragment {
                             recyclerView.setAdapter(songAdapter);
                             songAdapter.notifyDataSetChanged();
 
+                            changeTitle("TRACK LIST");
+
                             // Set the song listener for the song adapter
                             songAdapter.setOnItemClickListener(song -> {
+
+                                changeTitle("SONG DETAILS");
+
                                 // Launch the song detail fragment with the selected song
                                 SongDetailFragment songDetailFragment = SongDetailFragment.newInstance(song);
 
@@ -219,6 +234,15 @@ public class ArtistSearchFragment extends Fragment {
 
         Volley.newRequestQueue(requireContext()).add(request);
     }
+
+    // Method to dynamically change the title
+    public void changeTitle(String newTitle) {
+        if (titleTextView != null) {
+            titleTextView.setText(newTitle);
+        }
+    }
+
+
 
     private void handleVolleyError(VolleyError error) {
         if (error.networkResponse != null) {
