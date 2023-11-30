@@ -1,0 +1,20 @@
+<!-- item_album.xml -->
+<!-- Replace with your layout content for each item in AlbumAdapter -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!-- Add your UI elements here -->
+    <TextView
+        android:id="@+id/tvAlbumTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Album Title"/>
+
+    <ImageView
+        android:id="@+id/ivAlbumCover"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+</RelativeLayout>

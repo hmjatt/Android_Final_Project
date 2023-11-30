@@ -6,6 +6,11 @@ android {
     namespace = "algonquin.cst2335.androidfinalproject"
     compileSdk = 34
 
+    buildFeatures{
+        viewBinding = true
+        dataBinding = true
+    }
+
     defaultConfig {
         applicationId = "algonquin.cst2335.androidfinalproject"
         minSdk = 22
@@ -29,7 +34,16 @@ android {
 }
 
 dependencies {
-    implementation ("com.google.android.material:material:1.0.0")
+
+    val room_version = "2.6.0"
+    implementation( "androidx.room:room-runtime:$room_version")
+    annotationProcessor( "androidx.room:room-compiler:$room_version")
+
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
+
+    implementation("com.android.volley:volley:1.2.1")
+
+    implementation ("com.squareup.picasso:picasso:2.71828")
 
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.10.0")
