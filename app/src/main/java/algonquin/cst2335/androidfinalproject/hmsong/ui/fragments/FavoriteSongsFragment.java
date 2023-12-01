@@ -1,6 +1,5 @@
 package algonquin.cst2335.androidfinalproject.hmsong.ui.fragments;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
@@ -11,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -73,7 +73,7 @@ public class FavoriteSongsFragment extends Fragment {
         favoriteSongAdapter.setOnItemClickListener(favoriteSong -> {
             // Create a bundle to pass the selected favorite song to the detail fragment
             Bundle args = new Bundle();
-            args.putParcelable("favoriteSong", (Parcelable) favoriteSong);
+            args.putParcelable("favoriteSong", favoriteSong);
 
             // Navigate to FavoriteSongDetailFragment
             FavoriteSongDetailFragment fragment = new FavoriteSongDetailFragment();
@@ -84,6 +84,8 @@ public class FavoriteSongsFragment extends Fragment {
                     .addToBackStack(null)
                     .commit();
         });
+
+
 
         return view;
     }

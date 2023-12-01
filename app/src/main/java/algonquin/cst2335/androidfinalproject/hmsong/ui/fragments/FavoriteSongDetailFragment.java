@@ -8,29 +8,42 @@ import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 
+import com.squareup.picasso.Picasso;
+
 import algonquin.cst2335.androidfinalproject.R;
+import algonquin.cst2335.androidfinalproject.databinding.HmItemFavoriteSongDetailBinding;
 import algonquin.cst2335.androidfinalproject.hmsong.model.FavoriteSong;
 
-// Inside FavoriteSongDetailFragment
 public class FavoriteSongDetailFragment extends Fragment {
 
     private FavoriteSong favoriteSong;
 
-    // Add necessary views
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.hm_item_favorite_song_detail, container, false);
+        HmItemFavoriteSongDetailBinding binding = HmItemFavoriteSongDetailBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
-        // Initialize views and set data
+        Bundle args = getArguments();
+        if (args != null) {
+            favoriteSong = args.getParcelable("favoriteSong");
+            populateUI(binding);
+        }
 
-        // Set up the "Delete" button click listener
         Button deleteButton = view.findViewById(R.id.btnDelete);
         deleteButton.setOnClickListener(v -> deleteFavoriteSong());
 
         return view;
+    }
+
+    private void populateUI(HmItemFavoriteSongDetailBinding binding) {
+        // Populate UI components using 'favoriteSong'
+        binding.tvSongTitle.setText(favoriteSong.getTitle());
+        binding.tvDuration.setText(favoriteSong.getDuration());
+        binding.tvAlbumName.setText(favoriteSong.getAlbumName());
+
+        // Use Picasso to load the album cover image
+        Picasso.get().load(favoriteSong.getAlbumCoverUrl()).into(binding.ivAlbumCover);
     }
 
     private void deleteFavoriteSong() {
