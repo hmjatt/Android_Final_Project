@@ -1,30 +1,39 @@
-// Add this class to the existing package
 package algonquin.cst2335.androidfinalproject.hmsong.ui.fragments;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 import algonquin.cst2335.androidfinalproject.R;
+import algonquin.cst2335.androidfinalproject.databinding.HmFragmentArtistSearchBinding;
 import algonquin.cst2335.androidfinalproject.databinding.HmFragmentFavoriteSongsBinding;
+import algonquin.cst2335.androidfinalproject.databinding.HmItemFavoriteSongBinding;
 import algonquin.cst2335.androidfinalproject.hmsong.data.database.FavoriteSongDatabase;
 import algonquin.cst2335.androidfinalproject.hmsong.model.FavoriteSong;
-import algonquin.cst2335.androidfinalproject.hmsong.ui.SongApp;
 import algonquin.cst2335.androidfinalproject.hmsong.ui.adapters.FavoriteSongAdapter;
+import algonquin.cst2335.androidfinalproject.hmsong.ui.adapters.SongAdapter;  // Import the correct class
 
-import java.util.List;
+// Other imports...
 
 public class FavoriteSongsFragment extends Fragment {
 
+    private FavoriteSongAdapter favoriteSongAdapter;
+    private List<FavoriteSong> favoriteSongsList;
+    private FavoriteSongDatabase database;
+
     private RecyclerView recyclerView;
-    private FavoriteSongAdapter adapter;
 
     public FavoriteSongsFragment() {
         // Required empty public constructor
@@ -33,54 +42,49 @@ public class FavoriteSongsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        HmFragmentFavoriteSongsBinding binding = HmFragmentFavoriteSongsBinding.inflate(inflater, container, false);
-        View view = inflater.inflate(R.layout.hm_fragment_favorite_songs, container, false);
+        HmItemFavoriteSongBinding binding = HmItemFavoriteSongBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
-        // Initialize the adapter
-        initializeAdapter();
+        recyclerView = binding.recyclerView;
 
-        recyclerView = binding.recyclerViewFavoriteSongs;
-        Button backButton = binding.btnBackFavoriteSongs;
+        // Initialize Room database
+        database = FavoriteSongDatabase.getInstance(requireContext());
 
-        // Initialize the RecyclerView and set its layout manager
+        favoriteSongsList = new ArrayList<>();
+
+        // Set up RecyclerView and adapter
+        favoriteSongAdapter = new FavoriteSongAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(favoriteSongAdapter);
 
-        // Initialize the adapter and set it to the RecyclerView
-        adapter = new FavoriteSongAdapter();
-        recyclerView.setAdapter(adapter);
+        // Use Executor to fetch favorite songs in the background
+        Executor executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            List<FavoriteSong> result = database.favoriteSongDao().getFavoriteSongs();
+            requireActivity().runOnUiThread(() -> {
+                // Update the UI with the fetched data
+                favoriteSongsList = result;
+                favoriteSongAdapter.setFavoriteSongs(favoriteSongsList);
+                favoriteSongAdapter.notifyDataSetChanged();
+            });
+        });
 
-        // Set up the back button click listener
-        backButton.setOnClickListener(v -> navigateToArtistSearchFragment());
+        // Set up item click listener to navigate to FavoriteSongDetailFragment
+        favoriteSongAdapter.setOnItemClickListener(favoriteSong -> {
+            // Create a bundle to pass the selected favorite song to the detail fragment
+            Bundle args = new Bundle();
+            args.putParcelable("favoriteSong", (Parcelable) favoriteSong);
 
-        // Load and display the list of favorite songs
-        loadFavoriteSongs();
+            // Navigate to FavoriteSongDetailFragment
+            FavoriteSongDetailFragment fragment = new FavoriteSongDetailFragment();
+            fragment.setArguments(args);
+
+            requireActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragmentContainerSf, fragment)
+                    .addToBackStack(null)
+                    .commit();
+        });
 
         return view;
-    }
-
-    private void loadFavoriteSongs() {
-        // Access the Room database to retrieve the list of favorite songs
-        FavoriteSongDatabase database = SongApp.database;
-        List<FavoriteSong> favoriteSongs = database.favoriteSongDao().getAllFavoriteSongs();
-
-        // Update the adapter with the list of favorite songs
-        adapter.submitList(favoriteSongs);
-    }
-
-    private void navigateToArtistSearchFragment() {
-        // Replace the current fragment with the ArtistSearchFragment
-        ArtistSearchFragment artistSearchFragment = new ArtistSearchFragment();
-        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragmentContainerSf, artistSearchFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
-
-    private void initializeAdapter() {
-     // Create an instance of FavoriteSongAdapter
-                adapter = new FavoriteSongAdapter();;
-
-        // Set the adapter to your RecyclerView
-        recyclerView.setAdapter(adapter);
     }
 }

@@ -14,8 +14,8 @@ public interface FavoriteSongDao {
     @Insert
     long saveFavoriteSong(FavoriteSong favoriteSong);
 
-    @Query("SELECT * FROM favorite_songs")
-    List<FavoriteSong> getAllFavoriteSongs();
+    @Query("SELECT * FROM FavoriteSong")
+    List<FavoriteSong> getFavoriteSongs();
 
-    // Add more queries as needed
+    // Additional methods as needed
 }

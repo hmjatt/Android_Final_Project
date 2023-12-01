@@ -10,12 +10,42 @@ public class Song implements Parcelable {
     private String albumName;
     private String albumCoverUrl;
 
-    // Constructors, getters, and setters
-
-   // Parcelable implementation
-    protected Song(Parcel in) {
-        // Read data from the parcel and initialize fields
+    public Song() {
+        // Default constructor
     }
+
+    protected Song(Parcel in) {
+        // Add null check for the entire Parcel
+        if (in != null) {
+            // Check for null values before reading
+            title = in.readString();
+            duration = in.readString();
+            albumName = in.readString();
+            albumCoverUrl = in.readString();
+
+            // Add null checks and assign default values if needed
+            if (title == null) {
+                title = "";
+            }
+            if (duration == null) {
+                duration = "";
+            }
+            if (albumName == null) {
+                albumName = "";
+            }
+            if (albumCoverUrl == null) {
+                albumCoverUrl = "";
+            }
+        } else {
+            // Initialize with default values if the Parcel is null
+            title = "";
+            duration = "";
+            albumName = "";
+            albumCoverUrl = "";
+        }
+    }
+
+
 
 
     public static final Creator<Song> CREATOR = new Creator<Song>() {
@@ -29,16 +59,6 @@ public class Song implements Parcelable {
             return new Song[size];
         }
     };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        // Write data to the parcel
-    }
 
     public String getTitle() {
         return title;
@@ -70,5 +90,18 @@ public class Song implements Parcelable {
 
     public void setAlbumCoverUrl(String albumCoverUrl) {
         this.albumCoverUrl = albumCoverUrl;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(title);
+        dest.writeString(duration);
+        dest.writeString(albumName);
+        dest.writeString(albumCoverUrl);
     }
 }
