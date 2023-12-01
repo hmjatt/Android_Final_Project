@@ -1,16 +1,18 @@
-// Add this class to the existing package
 package algonquin.cst2335.androidfinalproject.hmsong.ui.adapters;
 
+import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
+import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.Volley;
 
 import java.util.List;
 
@@ -18,9 +20,6 @@ import algonquin.cst2335.androidfinalproject.databinding.HmItemFavoriteSongBindi
 import algonquin.cst2335.androidfinalproject.hmsong.model.FavoriteSong;
 
 public class FavoriteSongAdapter extends ListAdapter<FavoriteSong, FavoriteSongAdapter.FavoriteSongViewHolder> {
-
-
-    private List<FavoriteSong> favoriteSongs;
 
     private static OnItemClickListener onItemClickListener;
 
@@ -31,9 +30,8 @@ public class FavoriteSongAdapter extends ListAdapter<FavoriteSong, FavoriteSongA
 
     // Set the click listener
     public void setOnItemClickListener(OnItemClickListener listener) {
-        this.onItemClickListener = listener;
+        onItemClickListener = listener;
     }
-
 
     // Public constructor
     public FavoriteSongAdapter() {
@@ -53,17 +51,13 @@ public class FavoriteSongAdapter extends ListAdapter<FavoriteSong, FavoriteSongA
         });
     }
 
-
-
     public void setFavoriteSongs(List<FavoriteSong> favoriteSongs) {
-        this.favoriteSongs = favoriteSongs;
-        notifyDataSetChanged();
+        submitList(favoriteSongs);
     }
 
     @NonNull
     @Override
     public FavoriteSongViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         HmItemFavoriteSongBinding binding = HmItemFavoriteSongBinding.inflate(inflater, parent, false);
         return new FavoriteSongViewHolder(binding);
@@ -84,7 +78,7 @@ public class FavoriteSongAdapter extends ListAdapter<FavoriteSong, FavoriteSongA
 
             // Set up click listener for the item
             itemView.setOnClickListener(v -> {
-                int position =  getBindingAdapterPosition();
+                int position = getBindingAdapterPosition();
                 if (position != RecyclerView.NO_POSITION && onItemClickListener != null) {
                     onItemClickListener.onItemClick(getItem(position));
                 }
@@ -92,26 +86,27 @@ public class FavoriteSongAdapter extends ListAdapter<FavoriteSong, FavoriteSongA
         }
 
         void bind(FavoriteSong favoriteSong) {
-            binding.tvTitle.setText(favoriteSong.getTitle());
+            binding.tvSongTitle.setText(favoriteSong.getTitle());
             binding.tvDuration.setText(favoriteSong.getDuration());
             binding.tvAlbumName.setText(favoriteSong.getAlbumName());
-//            binding.tvCover.setText(favoriteSong.getAlbumName());
-            Picasso.get().load(favoriteSong.getAlbumCoverUrl()).into(binding.ivCover);
 
-            // You can bind other views here if needed
+            // Creates an ImageRequest for loading the album cover image
+            ImageRequest imgReq = new ImageRequest
+                    (favoriteSong.getAlbumCoverUrl(),
+                            // Success listener for image loading
+                            responseImage -> {
+                                binding.ivAlbumCover.setImageBitmap(responseImage);
+                                Log.d("Image received", "Got the image");
+                            },
+                            1024, 1024, ImageView.ScaleType.CENTER, Bitmap.Config.RGB_565,
+                            // Error listener for image loading
+                            error -> {
+                                Log.d("Error", "Error loading image: " + error.getMessage());
+                            }
+                    );
+
+            // Adds the ImageRequest to the RequestQueue for fetching from the server
+            Volley.newRequestQueue(itemView.getContext()).add(imgReq);
         }
     }
-
-    private static final DiffUtil.ItemCallback<FavoriteSong> DIFF_CALLBACK = new DiffUtil.ItemCallback<FavoriteSong>() {
-        @Override
-        public boolean areItemsTheSame(@NonNull FavoriteSong oldItem, @NonNull FavoriteSong newItem) {
-            return oldItem.getId() == newItem.getId();
-        }
-
-        @Override
-        public boolean areContentsTheSame(@NonNull FavoriteSong oldItem, @NonNull FavoriteSong newItem) {
-            // You can customize this based on your requirements
-            return oldItem.equals(newItem);
-        }
-    };
 }

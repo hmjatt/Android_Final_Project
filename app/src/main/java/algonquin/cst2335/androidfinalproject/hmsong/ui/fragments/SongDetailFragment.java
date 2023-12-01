@@ -2,8 +2,10 @@ package algonquin.cst2335.androidfinalproject.hmsong.ui.fragments;
 
 import static algonquin.cst2335.androidfinalproject.hmsong.ui.SongApp.database;
 
-import android.os.AsyncTask;
+import android.graphics.Bitmap;
+
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,18 +16,16 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.android.volley.toolbox.ImageRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.snackbar.Snackbar;
-import com.squareup.picasso.Picasso;
+
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import algonquin.cst2335.androidfinalproject.R;
 import algonquin.cst2335.androidfinalproject.databinding.HmFragmentSongDetailBinding;
-import algonquin.cst2335.androidfinalproject.hmsong.data.database.FavoriteSongDatabase;
-import algonquin.cst2335.androidfinalproject.hmsong.model.FavoriteSong;
 import algonquin.cst2335.androidfinalproject.hmsong.model.Song;
-import algonquin.cst2335.androidfinalproject.hmsong.ui.adapters.FavoriteSongAdapter;
 
 public class SongDetailFragment extends Fragment {
 
@@ -59,7 +59,6 @@ public class SongDetailFragment extends Fragment {
         TextView tvAlbumName = binding.tvAlbumName;
         ImageView ivAlbumCover = binding.ivAlbumCover;
         Button btnSaveToFavorites = binding.btnSaveToFavorites;
-//        Button btnBack = binding.btnBackSongDetail;
 
         // Retrieve the arguments from the bundle
         if (getArguments() != null) {
@@ -72,18 +71,32 @@ public class SongDetailFragment extends Fragment {
             tvTitle.setText("Track: " + song.getTitle());
             tvDuration.setText("Duration: " + song.getDuration());
             tvAlbumName.setText("Album: " + song.getAlbumName());
-            Picasso.get().load(song.getAlbumCoverUrl()).into(ivAlbumCover);
 
-            // Use Picasso or Glide library to load the album cover image
-            // Example: Picasso.get().load(song.getAlbumCoverUrl()).into(ivAlbumCover);
+            // Creates an ImageRequest for loading the album cover image
+            ImageRequest imgReq = new ImageRequest
+                    (song.getAlbumCoverUrl(),
+                            // Success listener for image loading
+                            responseImage -> {
+                                ivAlbumCover.setImageBitmap(responseImage);
+                                Log.d("Image received", "Got the image");
+                            },
+                            1024, 1024, ImageView.ScaleType.CENTER, Bitmap.Config.RGB_565,
+                            // Error listener for image loading
+                            error -> {
+                                Log.d("Error", "Error loading image: " + error.getMessage());
+                            }
+                    );
+
+            // Add the ImageRequest to the Volley request queue
+            Volley.newRequestQueue(requireContext()).add(imgReq);
         }
 
         // Set up the "Save to Favorites" button click listener
         btnSaveToFavorites.setOnClickListener(v -> saveSongToFavorites(song));
 
-
         return view;
     }
+
 
 
     // Inside saveSongToFavorites method

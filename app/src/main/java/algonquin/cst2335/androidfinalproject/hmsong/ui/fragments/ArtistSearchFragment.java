@@ -1,6 +1,6 @@
 package algonquin.cst2335.androidfinalproject.hmsong.ui.fragments;
 
-import android.os.AsyncTask;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.Request;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
@@ -37,7 +39,6 @@ import algonquin.cst2335.androidfinalproject.databinding.HmFragmentArtistSearchB
 import algonquin.cst2335.androidfinalproject.hmsong.data.database.FavoriteSongDatabase;
 import algonquin.cst2335.androidfinalproject.hmsong.model.Album;
 import algonquin.cst2335.androidfinalproject.hmsong.model.Artist;
-import algonquin.cst2335.androidfinalproject.hmsong.model.FavoriteSong;
 import algonquin.cst2335.androidfinalproject.hmsong.model.Song;
 import algonquin.cst2335.androidfinalproject.hmsong.ui.adapters.AlbumAdapter;
 import algonquin.cst2335.androidfinalproject.hmsong.ui.adapters.SongAdapter;
@@ -74,12 +75,10 @@ public class ArtistSearchFragment extends Fragment {
         songList = new ArrayList<>();
 
         albumAdapter = new AlbumAdapter(albumList, album -> searchTracks(album.getId(), album.getTitle(), album.getCoverUrl()));
-
         songAdapter = new SongAdapter(songList);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(albumAdapter);
-
 
         // Set up the search button click listener
         binding.btnSearch.setOnClickListener(v -> {
@@ -116,8 +115,6 @@ public class ArtistSearchFragment extends Fragment {
 
         return view;
     }
-
-
 
     private void navigateToFavoriteSongsFragment() {
         FavoriteSongsFragment favoriteSongsFragment = new FavoriteSongsFragment();
@@ -227,16 +224,27 @@ public class ArtistSearchFragment extends Fragment {
                                 String albumName = albumTitle;
                                 String albumCover = albumCoverUrl;
 
-                                // Use the CREATOR to create a new instance of Song from a Parcel
-                                Song song = Song.CREATOR.createFromParcel(null); // You might need to obtain a Parcel instance or use null depending on your needs
+                                Song song = new Song();
                                 song.setTitle(songTitle);
                                 song.setDuration(duration);
                                 song.setAlbumName(albumName);
                                 song.setAlbumCoverUrl(albumCover);
-
                                 songList.add(song);
 
-
+                                // Adds the ImageRequest to the RequestQueue for fetching from the server
+                                ImageRequest imgReq = new ImageRequest(
+                                        song.getAlbumCoverUrl(),
+                                        // Success listener for image loading
+                                        responseImage -> {
+                                            // Do nothing, as the image will be set in the adapter
+                                            Log.d("Image received", "Got the image");
+                                        },
+                                        1024, 1024, ImageView.ScaleType.CENTER, Bitmap.Config.RGB_565,
+                                        // Error listener for image loading
+                                        error -> {
+                                            Log.d("Error", "Error loading image: " + error.getMessage());
+                                        }
+                                );
 
                             }
 
@@ -250,15 +258,13 @@ public class ArtistSearchFragment extends Fragment {
                                 SongDetailFragment songDetailFragment = SongDetailFragment.newInstance(song, showSearch);
 
                                 // Save the selected song to favorites before navigating to the detail fragment
-                                saveSongToFavorites(song);
+//                                saveSongToFavorites(song);
 
                                 // Use FragmentTransaction to replace the current fragment with the song detail fragment
                                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
                                 transaction.replace(R.id.fragmentContainerSf, songDetailFragment);
                                 transaction.addToBackStack(null);
                                 transaction.commit();
-
-
                             });
 
                         } catch (JSONException e) {
@@ -270,43 +276,6 @@ public class ArtistSearchFragment extends Fragment {
 
         Volley.newRequestQueue(requireContext()).add(request);
     }
-
-    // Inside saveSongToFavorites method
-    private void saveSongToFavorites(Song song) {
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... voids) {
-                // Create FavoriteSong object from Song
-                FavoriteSong favoriteSong = new FavoriteSong(
-                        song.getTitle(),
-                        song.getDuration(),
-                        song.getAlbumName(),
-                        song.getAlbumCoverUrl()
-                );
-
-                // Save to database
-                long result = database.favoriteSongDao().saveFavoriteSong(favoriteSong);
-
-                if (result != -1) {
-                    // Call showToast on the main thread
-                    requireActivity().runOnUiThread(() -> showToast("Song saved to favorites"));
-                } else {
-                    // Call showToast on the main thread
-                    requireActivity().runOnUiThread(() -> showToast("Failed to save song to favorites"));
-                }
-
-                return null;
-            }
-        }.execute();
-    }
-
-// Additional modifications as needed
-
-
-
-
-
-
 
     private void handleVolleyError(VolleyError error) {
         if (error.networkResponse != null) {
