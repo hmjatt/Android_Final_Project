@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import com.squareup.picasso.Picasso;
+
 import algonquin.cst2335.androidfinalproject.R;
 import algonquin.cst2335.androidfinalproject.databinding.HmFragmentSongDetailBinding;
 import algonquin.cst2335.androidfinalproject.hmsong.data.database.FavoriteSongDatabase;
@@ -50,7 +52,7 @@ public class SongDetailFragment extends Fragment {
         TextView tvAlbumName = binding.tvAlbumName;
         ImageView ivAlbumCover = binding.ivAlbumCover;
         Button btnSaveToFavorites = binding.btnSaveToFavorites;
-        Button btnBack = binding.btnBackSongDetail;
+//        Button btnBack = binding.btnBackSongDetail;
 
         // Retrieve the arguments from the bundle
         if (getArguments() != null) {
@@ -63,6 +65,7 @@ public class SongDetailFragment extends Fragment {
             tvTitle.setText(song.getTitle());
             tvDuration.setText(song.getDuration());
             tvAlbumName.setText(song.getAlbumName());
+            Picasso.get().load(song.getAlbumCoverUrl()).into(ivAlbumCover);
 
             // Use Picasso or Glide library to load the album cover image
             // Example: Picasso.get().load(song.getAlbumCoverUrl()).into(ivAlbumCover);
@@ -72,7 +75,7 @@ public class SongDetailFragment extends Fragment {
         btnSaveToFavorites.setOnClickListener(v -> saveSongToFavorites(song));
 
         // Set up the "Back" button click listener
-        btnBack.setOnClickListener(v -> navigateBack());
+//        btnBack.setOnClickListener(v -> navigateBack());
 
         return view;
     }
@@ -108,20 +111,20 @@ public class SongDetailFragment extends Fragment {
                 }
 
                 // If the fragment was launched from the search screen, navigate back to the search screen
-                if (showSearch) {
-                    navigateBack();
-                }
+//                if (showSearch) {
+//                    navigateBack();
+//                }
             }
         }.execute();
     }
 
 
-    private void navigateBack() {
-        // Replace the current fragment with the ArtistSearchFragment
-        ArtistSearchFragment artistSearchFragment = new ArtistSearchFragment();
-        getParentFragmentManager().beginTransaction()
-                .replace(R.id.fragmentContainerSf, artistSearchFragment)
-                .addToBackStack(null)
-                .commit();
-    }
+//    private void navigateBack() {
+//        // Replace the current fragment with the ArtistSearchFragment
+//        ArtistSearchFragment artistSearchFragment = new ArtistSearchFragment();
+//        getParentFragmentManager().beginTransaction()
+//                .replace(R.id.fragmentContainerSf, artistSearchFragment)
+//                .addToBackStack(null)
+//                .commit();
+//    }
 }

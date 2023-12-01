@@ -8,16 +8,7 @@
         android:id="@+id/recyclerViewFavoriteSongs"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/btnBackFavoriteSongs"
         android:padding="16dp"/>
 
     <!-- Back button to navigate back -->
-    <Button
-        android:id="@+id/btnBackFavoriteSongs"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp"
-        android:text="Back"/>
 </RelativeLayout>

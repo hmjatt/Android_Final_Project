@@ -25,6 +25,7 @@
         android:id="@+id/songText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
         android:background="@drawable/image_border"
         android:padding="6dp"
         android:text="Song Name"
@@ -39,7 +40,7 @@
 
     <TextView
         android:id="@+id/tvSongTitle"
-        android:layout_width="230dp"
+        android:layout_width="280dp"
         android:layout_height="wrap_content"
         android:text="Song Title"
         android:textAlignment="center"
@@ -58,6 +59,7 @@
         android:text="Duration"
         android:textAlignment="center"
         android:textSize="16dp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/tvAlbumName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -72,6 +74,7 @@
         android:text="Album Name"
         android:textAlignment="center"
         android:textSize="16dp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
