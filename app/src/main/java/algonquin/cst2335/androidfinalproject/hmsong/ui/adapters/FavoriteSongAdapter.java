@@ -8,6 +8,8 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 import algonquin.cst2335.androidfinalproject.databinding.HmItemFavoriteSongBinding;
@@ -67,6 +69,9 @@ public class FavoriteSongAdapter extends ListAdapter<FavoriteSong, FavoriteSongA
             binding.tvTitle.setText(favoriteSong.getTitle());
             binding.tvDuration.setText(favoriteSong.getDuration());
             binding.tvAlbumName.setText(favoriteSong.getAlbumName());
+//            binding.tvCover.setText(favoriteSong.getAlbumName());
+            Picasso.get().load(favoriteSong.getAlbumCoverUrl()).into(binding.tvCover);
+
             // You can bind other views here if needed
         }
     }
