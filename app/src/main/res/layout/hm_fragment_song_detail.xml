@@ -20,8 +20,8 @@
 
         <ImageView
             android:id="@+id/ivAlbumCover"
-            android:layout_width="250dp"
-            android:layout_height="250dp"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             app:layout_constraintBottom_toTopOf="@+id/tvSongTitle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -50,6 +50,7 @@
             android:layout_height="wrap_content"
             android:text="Duration"
             android:textSize="16sp"
+            android:textStyle="bold"
             android:textAlignment="center"
             app:layout_constraintBottom_toTopOf="@+id/tvAlbumName"
             app:layout_constraintEnd_toEndOf="parent"
@@ -64,6 +65,7 @@
             android:layout_height="wrap_content"
             android:text="Album Name"
             android:textSize="16sp"
+            android:textStyle="bold"
             android:textAlignment="center"
             app:layout_constraintBottom_toTopOf="@+id/btnSaveToFavorites"
             app:layout_constraintEnd_toEndOf="parent"
