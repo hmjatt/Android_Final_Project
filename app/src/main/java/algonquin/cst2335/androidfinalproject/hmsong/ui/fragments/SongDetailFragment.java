@@ -1,5 +1,7 @@
 package algonquin.cst2335.androidfinalproject.hmsong.ui.fragments;
 
+import static algonquin.cst2335.androidfinalproject.hmsong.ui.SongApp.database;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,6 +16,9 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 import algonquin.cst2335.androidfinalproject.R;
 import algonquin.cst2335.androidfinalproject.databinding.HmFragmentSongDetailBinding;
@@ -79,38 +84,34 @@ public class SongDetailFragment extends Fragment {
 
         return view;
     }
+
+
+    // Inside saveSongToFavorites method
     private void saveSongToFavorites(Song song) {
-        // Use AsyncTask to perform database operation in the background
-        new AsyncTask<Void, Void, Long>() {
-            @Override
-            protected Long doInBackground(Void... voids) {
-                // Save the selected song to the Room database
-                FavoriteSongDatabase database = FavoriteSongDatabase.getInstance(requireContext());
-                FavoriteSong favoriteSong = new FavoriteSong();
-                favoriteSong.setTitle(song.getTitle());
-                favoriteSong.setDuration(song.getDuration());
-                favoriteSong.setAlbumName(song.getAlbumName());
-                favoriteSong.setAlbumCoverUrl(song.getAlbumCoverUrl());
+        Executor executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            // Create FavoriteSong object from Song
+            algonquin.cst2335.androidfinalproject.hmsong.model.FavoriteSong favoriteSong =
+                    new algonquin.cst2335.androidfinalproject.hmsong.model.FavoriteSong(
+                            song.getTitle(),
+                            song.getDuration(),
+                            song.getAlbumName(),
+                            song.getAlbumCoverUrl()
+                    );
 
-                // Perform the database operation on a background thread
-                return database.favoriteSongDao().saveFavoriteSong(favoriteSong);
-            }
+            // Save to database
+            long result = database.favoriteSongDao().saveFavoriteSong(favoriteSong);
 
-            @Override
-            protected void onPostExecute(Long result) {
-                super.onPostExecute(result);
-
-                // Handle the result of the database operation
+            requireActivity().runOnUiThread(() -> {
                 if (result != -1) {
-                    // Show a toast indicating success
                     showToast("Song saved to favorites");
                 } else {
-                    // Show a Snackbar indicating failure
-                    showSnackbar("Failed to save song to favorites");
+                    showToast("Failed to save song to favorites");
                 }
-            }
-        }.execute();
+            });
+        });
     }
+
 
     private void showToast(String message) {
         // Display a toast

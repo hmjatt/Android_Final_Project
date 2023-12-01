@@ -6,8 +6,9 @@ import androidx.room.RoomDatabase;
 
 import algonquin.cst2335.androidfinalproject.hmsong.model.FavoriteSong;
 
-@Database(entities = {FavoriteSong.class}, version = 1, exportSchema = false)
+@Database(entities = {FavoriteSong.class}, version = 2)
 public abstract class FavoriteSongDatabase extends RoomDatabase {
+
     public abstract FavoriteSongDao favoriteSongDao();
 
     private static FavoriteSongDatabase instance;

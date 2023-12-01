@@ -1,19 +1,39 @@
-// FavoriteSong.java
 package algonquin.cst2335.androidfinalproject.hmsong.model;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "favorite_songs")
+@Entity
 public class FavoriteSong {
 
     @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
     private long id;
 
+    @ColumnInfo(name = "TitleColumn")
     private String title;
+
+    @ColumnInfo(name = "DurationColumn")
     private String duration;
+
+    @ColumnInfo(name = "AlbumNameColumn")
     private String albumName;
+
+    @ColumnInfo(name = "AlbumCoverUrlColumn")
     private String albumCoverUrl;
+
+    // Constructors, getters, and setters as needed
+
+    public FavoriteSong(String title, String duration, String albumName, String albumCoverUrl) {
+        this.title = title;
+        this.duration = duration;
+        this.albumName = albumName;
+        this.albumCoverUrl = albumCoverUrl;
+    }
+
+    // Other methods as needed
+
 
     public long getId() {
         return id;
@@ -54,4 +74,5 @@ public class FavoriteSong {
     public void setAlbumCoverUrl(String albumCoverUrl) {
         this.albumCoverUrl = albumCoverUrl;
     }
+
 }

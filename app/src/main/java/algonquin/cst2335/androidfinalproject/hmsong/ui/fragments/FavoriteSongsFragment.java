@@ -45,6 +45,8 @@ public class FavoriteSongsFragment extends Fragment {
         // Initialize Room database
         database = FavoriteSongDatabase.getInstance(requireContext());
 
+
+
         // Use AsyncTask to fetch favorite songs in the background
         new FetchFavoriteSongsTask().execute();
 

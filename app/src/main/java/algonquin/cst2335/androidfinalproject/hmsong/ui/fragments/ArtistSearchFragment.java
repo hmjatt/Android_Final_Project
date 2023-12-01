@@ -37,6 +37,7 @@ import algonquin.cst2335.androidfinalproject.databinding.HmFragmentArtistSearchB
 import algonquin.cst2335.androidfinalproject.hmsong.data.database.FavoriteSongDatabase;
 import algonquin.cst2335.androidfinalproject.hmsong.model.Album;
 import algonquin.cst2335.androidfinalproject.hmsong.model.Artist;
+import algonquin.cst2335.androidfinalproject.hmsong.model.FavoriteSong;
 import algonquin.cst2335.androidfinalproject.hmsong.model.Song;
 import algonquin.cst2335.androidfinalproject.hmsong.ui.adapters.AlbumAdapter;
 import algonquin.cst2335.androidfinalproject.hmsong.ui.adapters.SongAdapter;
@@ -79,6 +80,7 @@ public class ArtistSearchFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(albumAdapter);
 
+
         // Set up the search button click listener
         binding.btnSearch.setOnClickListener(v -> {
             String query = etSearch.getText().toString().trim();
@@ -114,6 +116,8 @@ public class ArtistSearchFragment extends Fragment {
 
         return view;
     }
+
+
 
     private void navigateToFavoriteSongsFragment() {
         FavoriteSongsFragment favoriteSongsFragment = new FavoriteSongsFragment();
@@ -231,6 +235,9 @@ public class ArtistSearchFragment extends Fragment {
                                 song.setAlbumCoverUrl(albumCover);
 
                                 songList.add(song);
+
+
+
                             }
 
                             // Update the RecyclerView with songs
@@ -250,6 +257,8 @@ public class ArtistSearchFragment extends Fragment {
                                 transaction.replace(R.id.fragmentContainerSf, songDetailFragment);
                                 transaction.addToBackStack(null);
                                 transaction.commit();
+
+
                             });
 
                         } catch (JSONException e) {
@@ -268,11 +277,12 @@ public class ArtistSearchFragment extends Fragment {
             @Override
             protected Void doInBackground(Void... voids) {
                 // Create FavoriteSong object from Song
-                algonquin.cst2335.androidfinalproject.hmsong.model.FavoriteSong favoriteSong = new algonquin.cst2335.androidfinalproject.hmsong.model.FavoriteSong();
-                favoriteSong.setTitle(song.getTitle());
-                favoriteSong.setDuration(song.getDuration());
-                favoriteSong.setAlbumName(song.getAlbumName());
-                favoriteSong.setAlbumCoverUrl(song.getAlbumCoverUrl());
+                FavoriteSong favoriteSong = new FavoriteSong(
+                        song.getTitle(),
+                        song.getDuration(),
+                        song.getAlbumName(),
+                        song.getAlbumCoverUrl()
+                );
 
                 // Save to database
                 long result = database.favoriteSongDao().saveFavoriteSong(favoriteSong);
@@ -289,6 +299,10 @@ public class ArtistSearchFragment extends Fragment {
             }
         }.execute();
     }
+
+// Additional modifications as needed
+
+
 
 
 
