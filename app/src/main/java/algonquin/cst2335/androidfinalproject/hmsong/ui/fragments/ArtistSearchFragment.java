@@ -37,7 +37,6 @@ import algonquin.cst2335.androidfinalproject.databinding.HmFragmentArtistSearchB
 import algonquin.cst2335.androidfinalproject.hmsong.data.database.FavoriteSongDatabase;
 import algonquin.cst2335.androidfinalproject.hmsong.model.Album;
 import algonquin.cst2335.androidfinalproject.hmsong.model.Artist;
-import algonquin.cst2335.androidfinalproject.hmsong.data.database.FavoriteSong;
 import algonquin.cst2335.androidfinalproject.hmsong.model.Song;
 import algonquin.cst2335.androidfinalproject.hmsong.ui.adapters.AlbumAdapter;
 import algonquin.cst2335.androidfinalproject.hmsong.ui.adapters.SongAdapter;

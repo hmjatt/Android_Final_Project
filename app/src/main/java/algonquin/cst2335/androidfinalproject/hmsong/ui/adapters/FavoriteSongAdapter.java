@@ -3,6 +3,8 @@ package algonquin.cst2335.androidfinalproject.hmsong.ui.adapters;
 
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
@@ -19,6 +21,19 @@ public class FavoriteSongAdapter extends ListAdapter<FavoriteSong, FavoriteSongA
 
 
     private List<FavoriteSong> favoriteSongs;
+
+    private static OnItemClickListener onItemClickListener;
+
+    // Define an interface to handle item clicks
+    public interface OnItemClickListener {
+        void onItemClick(FavoriteSong favoriteSong);
+    }
+
+    // Set the click listener
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.onItemClickListener = listener;
+    }
+
 
     // Public constructor
     public FavoriteSongAdapter() {
@@ -38,6 +53,8 @@ public class FavoriteSongAdapter extends ListAdapter<FavoriteSong, FavoriteSongA
         });
     }
 
+
+
     public void setFavoriteSongs(List<FavoriteSong> favoriteSongs) {
         this.favoriteSongs = favoriteSongs;
         notifyDataSetChanged();
@@ -46,6 +63,7 @@ public class FavoriteSongAdapter extends ListAdapter<FavoriteSong, FavoriteSongA
     @NonNull
     @Override
     public FavoriteSongViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         HmItemFavoriteSongBinding binding = HmItemFavoriteSongBinding.inflate(inflater, parent, false);
         return new FavoriteSongViewHolder(binding);
@@ -56,13 +74,21 @@ public class FavoriteSongAdapter extends ListAdapter<FavoriteSong, FavoriteSongA
         holder.bind(getItem(position));
     }
 
-    static class FavoriteSongViewHolder extends RecyclerView.ViewHolder {
+    class FavoriteSongViewHolder extends RecyclerView.ViewHolder {
 
         private final HmItemFavoriteSongBinding binding;
 
         FavoriteSongViewHolder(HmItemFavoriteSongBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
+
+            // Set up click listener for the item
+            itemView.setOnClickListener(v -> {
+                int position =  getBindingAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && onItemClickListener != null) {
+                    onItemClickListener.onItemClick(getItem(position));
+                }
+            });
         }
 
         void bind(FavoriteSong favoriteSong) {
@@ -70,7 +96,7 @@ public class FavoriteSongAdapter extends ListAdapter<FavoriteSong, FavoriteSongA
             binding.tvDuration.setText(favoriteSong.getDuration());
             binding.tvAlbumName.setText(favoriteSong.getAlbumName());
 //            binding.tvCover.setText(favoriteSong.getAlbumName());
-            Picasso.get().load(favoriteSong.getAlbumCoverUrl()).into(binding.tvCover);
+            Picasso.get().load(favoriteSong.getAlbumCoverUrl()).into(binding.ivCover);
 
             // You can bind other views here if needed
         }

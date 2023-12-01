@@ -8,9 +8,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 
 import algonquin.cst2335.androidfinalproject.R;
@@ -62,9 +64,9 @@ public class SongDetailFragment extends Fragment {
 
         // Set the song details to the views
         if (song != null) {
-            tvTitle.setText(song.getTitle());
-            tvDuration.setText(song.getDuration());
-            tvAlbumName.setText(song.getAlbumName());
+            tvTitle.setText("Track: " + song.getTitle());
+            tvDuration.setText("Duration: " + song.getDuration());
+            tvAlbumName.setText("Album: " + song.getAlbumName());
             Picasso.get().load(song.getAlbumCoverUrl()).into(ivAlbumCover);
 
             // Use Picasso or Glide library to load the album cover image
@@ -74,12 +76,9 @@ public class SongDetailFragment extends Fragment {
         // Set up the "Save to Favorites" button click listener
         btnSaveToFavorites.setOnClickListener(v -> saveSongToFavorites(song));
 
-        // Set up the "Back" button click listener
-//        btnBack.setOnClickListener(v -> navigateBack());
 
         return view;
     }
-
     private void saveSongToFavorites(Song song) {
         // Use AsyncTask to perform database operation in the background
         new AsyncTask<Void, Void, Long>() {
@@ -103,28 +102,26 @@ public class SongDetailFragment extends Fragment {
 
                 // Handle the result of the database operation
                 if (result != -1) {
-                    // Show a toast or Snackbar indicating success
-                    // Example: showToast("Song saved to favorites");
+                    // Show a toast indicating success
+                    showToast("Song saved to favorites");
                 } else {
-                    // Show a toast or Snackbar indicating failure
-                    // Example: showToast("Failed to save song to favorites");
+                    // Show a Snackbar indicating failure
+                    showSnackbar("Failed to save song to favorites");
                 }
-
-                // If the fragment was launched from the search screen, navigate back to the search screen
-//                if (showSearch) {
-//                    navigateBack();
-//                }
             }
         }.execute();
     }
 
+    private void showToast(String message) {
+        // Display a toast
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+    }
 
-//    private void navigateBack() {
-//        // Replace the current fragment with the ArtistSearchFragment
-//        ArtistSearchFragment artistSearchFragment = new ArtistSearchFragment();
-//        getParentFragmentManager().beginTransaction()
-//                .replace(R.id.fragmentContainerSf, artistSearchFragment)
-//                .addToBackStack(null)
-//                .commit();
-//    }
+    private void showSnackbar(String message) {
+        // Display a Snackbar
+        Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show();
+    }
+
+
+
 }
