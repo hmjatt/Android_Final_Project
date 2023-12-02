@@ -58,6 +58,7 @@
     <string name="album_label">"Album: "</string>
     <string name="enter_artist_name_and_press_search">Enter artist name and press search</string>
     <string name="please_select_an_app_from_the_toolbar">Please select an app from the toolbar</string>
+    <string name="song_restored">The song has been restored</string>
 
     <!-- Harmeet values end -->
 

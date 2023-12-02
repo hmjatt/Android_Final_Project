@@ -1,13 +1,10 @@
 package algonquin.cst2335.androidfinalproject.hmsong.ui.fragments;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -20,20 +17,12 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 import algonquin.cst2335.androidfinalproject.R;
-import algonquin.cst2335.androidfinalproject.databinding.HmFragmentArtistSearchBinding;
 import algonquin.cst2335.androidfinalproject.databinding.HmFragmentFavoriteSongsBinding;
-import algonquin.cst2335.androidfinalproject.databinding.HmItemFavoriteSongBinding;
 import algonquin.cst2335.androidfinalproject.hmsong.data.database.FavoriteSongDatabase;
 import algonquin.cst2335.androidfinalproject.hmsong.model.FavoriteSong;
 import algonquin.cst2335.androidfinalproject.hmsong.ui.adapters.FavoriteSongAdapter;
 
-// Other imports...
-
-public class FavoriteSongsFragment extends Fragment {
-
-//    private static final String ARG_SHOW_SEARCH = "arg_show_search";
-//
-//    private EditText etSearch;
+public class FavoriteSongsFragment extends Fragment implements FavoriteSongDetailFragment.OnUndoDeleteListener {
 
     private FavoriteSongAdapter favoriteSongAdapter;
     private List<FavoriteSong> favoriteSongsList;
@@ -52,11 +41,6 @@ public class FavoriteSongsFragment extends Fragment {
         View view = binding.getRoot();
 
         recyclerView = binding.recyclerViewFs;
-
-        // Set up RecyclerView and adapter
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(favoriteSongAdapter);
-
 
         // Initialize Room database
         database = FavoriteSongDatabase.getInstance(requireContext());
@@ -86,16 +70,38 @@ public class FavoriteSongsFragment extends Fragment {
             Bundle args = new Bundle();
             args.putParcelable("favoriteSong", favoriteSong);
             fragment.setArguments(args);
+            fragment.setUndoDeleteListener(this); // Set the listener in the detail fragment
 
             FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.fragmentContainerSf, fragment);
             transaction.addToBackStack(null);
             transaction.commit();
-
         });
 
-
-
         return view;
+    }
+
+    // Implementation of the OnUndoDeleteListener interface
+    @Override
+    public void onUndoDelete() {
+        // Reload the list of favorite songs when undo is performed
+        reloadFavoriteSongs();
+    }
+
+    // Method to reload the list of favorite songs
+    private void reloadFavoriteSongs() {
+        Executor executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            List<FavoriteSong> result = database.favoriteSongDao().getFavoriteSongs();
+            requireActivity().runOnUiThread(() -> {
+                // Update the UI with the fetched data after undo
+                favoriteSongsList = result;
+                favoriteSongAdapter.setFavoriteSongs(favoriteSongsList);
+                favoriteSongAdapter.notifyDataSetChanged();
+
+                // Show a Toast message when a song is restored
+                Toast.makeText(requireContext(), R.string.song_restored, Toast.LENGTH_SHORT).show();
+            });
+        });
     }
 }
