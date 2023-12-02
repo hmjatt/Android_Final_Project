@@ -20,6 +20,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.squareup.picasso.Picasso;
 
 import algonquin.cst2335.androidfinalproject.R;
+import algonquin.cst2335.androidfinalproject.databinding.HmFragmentSongDetailBinding;
 import algonquin.cst2335.androidfinalproject.databinding.HmItemFavoriteSongDetailBinding;
 import algonquin.cst2335.androidfinalproject.hmsong.model.FavoriteSong;
 
@@ -30,7 +31,7 @@ public class FavoriteSongDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        HmItemFavoriteSongDetailBinding binding = HmItemFavoriteSongDetailBinding.inflate(inflater, container, false);
+        HmFragmentSongDetailBinding binding = HmFragmentSongDetailBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
         Bundle args = getArguments();
@@ -46,7 +47,7 @@ public class FavoriteSongDetailFragment extends Fragment {
     }
 
 
-    private void populateUI(HmItemFavoriteSongDetailBinding binding) {
+    private void populateUI(HmFragmentSongDetailBinding binding) {
         binding.tvSongTitle.setText(getString(R.string.track_label) + favoriteSong.getTitle());
         binding.tvDuration.setText(getString(R.string.duration_label) + favoriteSong.getDuration());
         binding.tvAlbumName.setText(getString(R.string.album_label) + favoriteSong.getAlbumName());

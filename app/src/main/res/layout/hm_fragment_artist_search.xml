@@ -67,10 +67,15 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="130dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
+        android:layout_marginTop="130dp"
+        android:background="@drawable/hm_image_border"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
+        android:padding="5dp">
 
         <!-- Add a RecyclerView for displaying list of  results -->
         <androidx.recyclerview.widget.RecyclerView
@@ -94,6 +99,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <!-- You can set other attributes as needed -->
+
+        <TextView
+            android:id="@+id/tvNoArtistSelected"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/enter_artist_name_and_press_search"
+            android:textAlignment="center"
+            android:textSize="40dp"
+            android:textStyle="bold"
+            android:visibility="gone"/>
     </FrameLayout>
 
 

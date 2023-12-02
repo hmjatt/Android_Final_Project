@@ -17,5 +17,8 @@ public interface FavoriteSongDao {
     @Query("SELECT * FROM FavoriteSong")
     List<FavoriteSong> getFavoriteSongs();
 
+    @Query("SELECT * FROM FavoriteSong WHERE TitleColumn = :title AND DurationColumn = :duration AND AlbumNameColumn = :albumName LIMIT 1")
+    FavoriteSong getFavoriteSongByDetails(String title, String duration, String albumName);
+
     // Additional methods as needed
 }

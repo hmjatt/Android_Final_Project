@@ -1,16 +1,18 @@
 package algonquin.cst2335.androidfinalproject.hmsong.ui.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Parcelable;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -18,16 +20,18 @@ import java.util.concurrent.Executors;
 
 import algonquin.cst2335.androidfinalproject.R;
 import algonquin.cst2335.androidfinalproject.databinding.HmFragmentArtistSearchBinding;
-import algonquin.cst2335.androidfinalproject.databinding.HmFragmentFavoriteSongsBinding;
 import algonquin.cst2335.androidfinalproject.databinding.HmItemFavoriteSongBinding;
 import algonquin.cst2335.androidfinalproject.hmsong.data.database.FavoriteSongDatabase;
 import algonquin.cst2335.androidfinalproject.hmsong.model.FavoriteSong;
 import algonquin.cst2335.androidfinalproject.hmsong.ui.adapters.FavoriteSongAdapter;
-import algonquin.cst2335.androidfinalproject.hmsong.ui.adapters.SongAdapter;  // Import the correct class
 
 // Other imports...
 
 public class FavoriteSongsFragment extends Fragment {
+
+    private static final String ARG_SHOW_SEARCH = "arg_show_search";
+
+    private EditText etSearch;
 
     private FavoriteSongAdapter favoriteSongAdapter;
     private List<FavoriteSong> favoriteSongsList;
@@ -42,10 +46,23 @@ public class FavoriteSongsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        HmItemFavoriteSongBinding binding = HmItemFavoriteSongBinding.inflate(inflater, container, false);
+        HmFragmentArtistSearchBinding binding = HmFragmentArtistSearchBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
         recyclerView = binding.recyclerView;
+
+        // Initialize SharedPreferences
+        SharedPreferences sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE);
+
+        // Retrieve the last searched term from SharedPreferences
+        String lastSearchedTerm = sharedPreferences.getString("searchTerm", "");
+
+        // Replace '+' with space for a more readable display
+        lastSearchedTerm = lastSearchedTerm.replace("+", " ");
+
+        // Use the last searched term to set the EditText
+        etSearch = binding.etSearch;
+        etSearch.setText(lastSearchedTerm);
 
         // Initialize Room database
         database = FavoriteSongDatabase.getInstance(requireContext());

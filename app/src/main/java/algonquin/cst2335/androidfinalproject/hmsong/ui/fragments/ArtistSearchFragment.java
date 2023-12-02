@@ -43,6 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import algonquin.cst2335.androidfinalproject.R;
+import algonquin.cst2335.androidfinalproject.databinding.ActivityMainBinding;
 import algonquin.cst2335.androidfinalproject.databinding.HmFragmentArtistSearchBinding;
 import algonquin.cst2335.androidfinalproject.hmsong.data.database.FavoriteSongDatabase;
 import algonquin.cst2335.androidfinalproject.hmsong.model.Album;
@@ -74,6 +75,12 @@ public class ArtistSearchFragment extends Fragment {
         HmFragmentArtistSearchBinding binding = HmFragmentArtistSearchBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
+        // Grab the no app selected textview
+        TextView tvNoArtistSelected = binding.tvNoArtistSelected;
+
+        // Show no app selected textview When no app is selected
+        tvNoArtistSelected.setVisibility(View.VISIBLE);
+
         // Initialize SharedPreferences
         SharedPreferences sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE);
 
@@ -100,6 +107,11 @@ public class ArtistSearchFragment extends Fragment {
 
         // Set up the search button click listener
         binding.btnSearch.setOnClickListener(v -> {
+
+            // Show no app selected textview When no app is selected
+            tvNoArtistSelected.setVisibility(View.GONE);
+
+
             String query = etSearch.getText().toString().trim();
 
             try {
@@ -140,17 +152,38 @@ public class ArtistSearchFragment extends Fragment {
     }
 
     private void navigateToFavoriteSongsFragment() {
-        FavoriteSongsFragment favoriteSongsFragment = new FavoriteSongsFragment();
-        Bundle args = new Bundle();
-        args.putBoolean(ARG_SHOW_SEARCH, true); // Set the boolean value, true or false based on your requirement
-        favoriteSongsFragment.setArguments(args);
+        new Thread(() -> {
+            // Check if the list of favorite songs is empty
+            if (!database.favoriteSongDao().getFavoriteSongs().isEmpty()) {
+                // The list of favorite songs is not empty, navigate to the FavoriteSongsFragment
+                runOnUiThread(() -> {
+                    FavoriteSongsFragment favoriteSongsFragment = new FavoriteSongsFragment();
+                    Bundle args = new Bundle();
+                    args.putBoolean(ARG_SHOW_SEARCH, false);
+                    favoriteSongsFragment.setArguments(args);
 
-
-        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragmentContainerSf, favoriteSongsFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+                    FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                    transaction.replace(R.id.fragmentContainerSf, favoriteSongsFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                });
+            } else {
+                showToast("No favorite songs found.");
+            }
+        }).start();
     }
+
+    private void showToast(String message) {
+        runOnUiThread(() -> Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show());
+    }
+
+    private void runOnUiThread(Runnable action) {
+        if (getActivity() != null) {
+            getActivity().runOnUiThread(action);
+        }
+    }
+
+
 
     private void searchArtists(String query) {
         String url = "https://api.deezer.com/search/artist/?q=" + query;
@@ -267,9 +300,6 @@ public class ArtistSearchFragment extends Fragment {
                                 // Launch the song detail fragment with the selected song and showSearch parameter
                                 SongDetailFragment songDetailFragment = SongDetailFragment.newInstance(song);
 
-                                // Save the selected song to favorites before navigating to the detail fragment
-//                                saveSongToFavorites(song);
-
                                 // Use FragmentTransaction to replace the current fragment with the song detail fragment
                                 FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
                                 transaction.replace(R.id.fragmentContainerSf, songDetailFragment);
@@ -299,9 +329,6 @@ public class ArtistSearchFragment extends Fragment {
         }
     }
 
-    private void showToast(String message) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
-    }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
