@@ -1,10 +1,15 @@
 package algonquin.cst2335.androidfinalproject.hmsong.ui.fragments;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -13,6 +18,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -46,7 +53,6 @@ import algonquin.cst2335.androidfinalproject.hmsong.ui.adapters.SongAdapter;
 public class ArtistSearchFragment extends Fragment {
 
     private static final String ARG_SHOW_SEARCH = "arg_show_search";
-    private boolean showSearch;
 
     private EditText etSearch;
     private RecyclerView recyclerView;
@@ -67,9 +73,20 @@ public class ArtistSearchFragment extends Fragment {
         HmFragmentArtistSearchBinding binding = HmFragmentArtistSearchBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        etSearch = binding.etSearch;
-        recyclerView = binding.recyclerView;
+        // Initialize SharedPreferences
+        SharedPreferences sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE);
 
+        // Retrieve the last searched term from SharedPreferences
+        String lastSearchedTerm = sharedPreferences.getString("searchTerm", "");
+
+        // Replace '+' with space for a more readable display
+        lastSearchedTerm = lastSearchedTerm.replace("+", " ");
+
+        // Use the last searched term to set the EditText
+        etSearch = binding.etSearch;
+        etSearch.setText(lastSearchedTerm);
+
+        recyclerView = binding.recyclerView;
         artistList = new ArrayList<>();
         albumList = new ArrayList<>();
         songList = new ArrayList<>();
@@ -88,6 +105,8 @@ public class ArtistSearchFragment extends Fragment {
                 query = URLEncoder.encode(query, "UTF-8");
 
                 if (!query.isEmpty()) {
+                    // Save the current search term to SharedPreferences
+                    sharedPreferences.edit().putString("searchTerm", query).apply();
                     searchArtists(query);
                 }
 
@@ -113,14 +132,18 @@ public class ArtistSearchFragment extends Fragment {
         // Initialize Room database
         database = FavoriteSongDatabase.getInstance(requireContext());
 
+        // Set up the "Help" menu item click listener
+        setHasOptionsMenu(true);
+
         return view;
     }
 
     private void navigateToFavoriteSongsFragment() {
         FavoriteSongsFragment favoriteSongsFragment = new FavoriteSongsFragment();
         Bundle args = new Bundle();
-        args.putBoolean(ARG_SHOW_SEARCH, showSearch);
+        args.putBoolean(ARG_SHOW_SEARCH, true); // Set the boolean value, true or false based on your requirement
         favoriteSongsFragment.setArguments(args);
+
 
         FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
         transaction.replace(R.id.fragmentContainerSf, favoriteSongsFragment);
@@ -231,20 +254,6 @@ public class ArtistSearchFragment extends Fragment {
                                 song.setAlbumCoverUrl(albumCover);
                                 songList.add(song);
 
-                                // Adds the ImageRequest to the RequestQueue for fetching from the server
-                                ImageRequest imgReq = new ImageRequest(
-                                        song.getAlbumCoverUrl(),
-                                        // Success listener for image loading
-                                        responseImage -> {
-                                            // Do nothing, as the image will be set in the adapter
-                                            Log.d("Image received", "Got the image");
-                                        },
-                                        1024, 1024, ImageView.ScaleType.CENTER, Bitmap.Config.RGB_565,
-                                        // Error listener for image loading
-                                        error -> {
-                                            Log.d("Error", "Error loading image: " + error.getMessage());
-                                        }
-                                );
 
                             }
 
@@ -255,7 +264,7 @@ public class ArtistSearchFragment extends Fragment {
                             // Set the song listener for the song adapter
                             songAdapter.setOnItemClickListener(song -> {
                                 // Launch the song detail fragment with the selected song and showSearch parameter
-                                SongDetailFragment songDetailFragment = SongDetailFragment.newInstance(song, showSearch);
+                                SongDetailFragment songDetailFragment = SongDetailFragment.newInstance(song);
 
                                 // Save the selected song to favorites before navigating to the detail fragment
 //                                saveSongToFavorites(song);
@@ -291,5 +300,27 @@ public class ArtistSearchFragment extends Fragment {
 
     private void showToast(String message) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.hm_menu_help, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_help) {
+            showHelpDialog();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void showHelpDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle(R.string.help_dialog_message)
+                .setMessage(R.string.help_dialog_message)
+                .setPositiveButton(android.R.string.ok, null)
+                .show();
     }
 }

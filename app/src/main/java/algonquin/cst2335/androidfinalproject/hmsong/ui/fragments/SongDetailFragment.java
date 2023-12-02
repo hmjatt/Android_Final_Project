@@ -30,23 +30,23 @@ import algonquin.cst2335.androidfinalproject.hmsong.model.Song;
 public class SongDetailFragment extends Fragment {
 
     private static final String ARG_SONG = "arg_song";
-    private static final String ARG_SHOW_SEARCH = "arg_show_search";
+//    private static final String ARG_SHOW_SEARCH = "arg_show_search";
 
     private Song song;
-    private boolean showSearch;
 
     public SongDetailFragment() {
         // Required empty public constructor
     }
 
-    public static SongDetailFragment newInstance(Song song, boolean showSearch) {
+    public static SongDetailFragment newInstance(Song song) {
         SongDetailFragment fragment = new SongDetailFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_SONG, song);
-        args.putBoolean(ARG_SHOW_SEARCH, showSearch);
+//        args.putBoolean(ARG_SHOW_SEARCH);
         fragment.setArguments(args);
         return fragment;
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,7 +63,7 @@ public class SongDetailFragment extends Fragment {
         // Retrieve the arguments from the bundle
         if (getArguments() != null) {
             song = getArguments().getParcelable(ARG_SONG);
-            showSearch = getArguments().getBoolean(ARG_SHOW_SEARCH, false);
+//            showSearch = getArguments().getBoolean(ARG_SHOW_SEARCH, false);
         }
 
         // Set the song details to the views

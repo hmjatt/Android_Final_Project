@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--STRINGS-->
+<!--FR/STRINGS-->
 <resources>
-    <string name="drawer_open">Open navigation drawer</string>
-    <string name="drawer_close">Close navigation drawer</string>
-    <string name="app_name">Android Final Project</string>
 
+    <string name="drawer_open">Ouvrir le tiroir de navigation</string>
+    <string name="drawer_close">Fermer le tiroir de navigation</string>
+    <string name="app_name">Projet final Android</string>
 
-    <!-- Harmeet values start -->
     <string name="delete_confirmation_title">Confirmer la suppression</string>
     <string name="delete_confirmation_message">Voulez-vous supprimer cette chanson?</string>
     <string name="yes">Oui</string>
@@ -14,13 +13,8 @@
     <string name="song_deleted">Chanson supprimée</string>
     <string name="undo">Annuler</string>
     <string name="undo_clicked">Annulation cliquée</string>
-
     <string name="help_dialog_message">Instructions for how to use the app...</string>
-    <string name="hello_blank_fragment">Blank Fragment</string>
 
-    <!-- Harmeet values end -->
-
-
-
+    <string name="hello_blank_fragment">Fragment vierge</string>
 
 </resources>
