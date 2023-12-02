@@ -82,43 +82,50 @@ public class SongDetailFragment extends Fragment {
 
 
 
-    // Inside saveSongToFavorites method
     private void saveSongToFavorites(Song song) {
         Executor executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> {
-            // Create FavoriteSong object from Song
-            algonquin.cst2335.androidfinalproject.hmsong.model.FavoriteSong favoriteSong =
-                    new algonquin.cst2335.androidfinalproject.hmsong.model.FavoriteSong(
-                            song.getTitle(),
-                            song.getDuration(),
-                            song.getAlbumName(),
-                            song.getAlbumCoverUrl()
-                    );
+            // Check if the song already exists in the favorites
+            if (!isSongAlreadyInFavorites(song)) {
+                // Create FavoriteSong object from Song
+                algonquin.cst2335.androidfinalproject.hmsong.model.FavoriteSong favoriteSong =
+                        new algonquin.cst2335.androidfinalproject.hmsong.model.FavoriteSong(
+                                song.getTitle(),
+                                song.getDuration(),
+                                song.getAlbumName(),
+                                song.getAlbumCoverUrl()
+                        );
 
-            // Save to database
-            long result = database.favoriteSongDao().saveFavoriteSong(favoriteSong);
+                // Save to database
+                long result = database.favoriteSongDao().saveFavoriteSong(favoriteSong);
 
-            requireActivity().runOnUiThread(() -> {
-                if (result != -1) {
-                    showToast("Song saved to favorites");
-                } else {
-                    showToast("Failed to save song to favorites");
-                }
-            });
+                requireActivity().runOnUiThread(() -> {
+                    if (result != -1) {
+                        showToast("Song saved to favorites");
+                    } else {
+                        showToast("Failed to save song to favorites");
+                    }
+                });
+            } else {
+                requireActivity().runOnUiThread(() -> showToast("Song is already in favorites"));
+            }
         });
     }
+
+    private boolean isSongAlreadyInFavorites(Song song) {
+        // Check if the song with the same title, duration, and album name already exists in favorites
+        return database.favoriteSongDao().getFavoriteSongByDetails(
+                song.getTitle(),
+                song.getDuration(),
+                song.getAlbumName()) != null;
+    }
+
+
 
 
     private void showToast(String message) {
         // Display a toast
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
     }
-//
-//    private void showSnackbar(String message) {
-//        // Display a Snackbar
-//        Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show();
-//    }
-
-
 
 }

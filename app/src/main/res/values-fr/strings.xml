@@ -54,6 +54,9 @@
     <string name="track_label">"Piste: "</string>
     <string name="duration_label">"Durée: "</string>
     <string name="album_label">"Album: "</string>
+    <string name="enter_artist_name_and_press_search">Entrez le nom de l\'artiste et appuyez sur Rechercher</string>
+    <string name="please_select_an_app_from_the_toolbar">Veuillez sélectionner une application dans la barre d\'outils</string>
+    <string name="song_restored">la chanson a été restaurée</string>
 
     <!-- Harmeet values end -->
 

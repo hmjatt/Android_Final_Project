@@ -3,6 +3,9 @@ package algonquin.cst2335.androidfinalproject;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +30,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Grab the no app selected textview
+        TextView tvNoAppSelected = findViewById(R.id.tvNoAppSelected);
+
+        // Show no app selected textview When no app is selected
+        tvNoAppSelected.setVisibility(View.VISIBLE);
 
         // Set a Toolbar to replace the ActionBar.
         toolbar = findViewById(R.id.toolbar);
@@ -67,6 +76,12 @@ public class MainActivity extends AppCompatActivity {
         Fragment fragment = null;
         Class fragmentClass = null;
 
+        // Grab the no app selected textview
+        TextView tvNoAppSelected = findViewById(R.id.tvNoAppSelected);
+
+        // Hide no app selected textview When an app is selected
+        tvNoAppSelected.setVisibility(View.GONE);
+
         if (menuItem.getItemId() == R.id.sunrise_sunset_lookup) {
             fragmentClass = SunriseSunsetFragment.class;
         } else if (menuItem.getItemId() == R.id.recipe_search) {
@@ -99,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
             mDrawer.closeDrawers();
         }
     }
+
 
 
     @Override

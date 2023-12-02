@@ -13,6 +13,8 @@ public abstract class FavoriteSongDatabase extends RoomDatabase {
 
     private static FavoriteSongDatabase instance;
 
+
+
     // Create a singleton instance of the database
     public static synchronized FavoriteSongDatabase getInstance(android.content.Context context) {
         if (instance == null) {
