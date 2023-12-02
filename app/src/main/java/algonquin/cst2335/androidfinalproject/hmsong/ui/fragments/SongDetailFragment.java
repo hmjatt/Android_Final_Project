@@ -19,18 +19,19 @@ import androidx.fragment.app.Fragment;
 import com.android.volley.toolbox.ImageRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.material.snackbar.Snackbar;
+import com.squareup.picasso.Picasso;
 
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import algonquin.cst2335.androidfinalproject.R;
 import algonquin.cst2335.androidfinalproject.databinding.HmFragmentSongDetailBinding;
 import algonquin.cst2335.androidfinalproject.hmsong.model.Song;
 
 public class SongDetailFragment extends Fragment {
 
     private static final String ARG_SONG = "arg_song";
-//    private static final String ARG_SHOW_SEARCH = "arg_show_search";
 
     private Song song;
 
@@ -42,7 +43,6 @@ public class SongDetailFragment extends Fragment {
         SongDetailFragment fragment = new SongDetailFragment();
         Bundle args = new Bundle();
         args.putParcelable(ARG_SONG, song);
-//        args.putBoolean(ARG_SHOW_SEARCH);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,32 +63,15 @@ public class SongDetailFragment extends Fragment {
         // Retrieve the arguments from the bundle
         if (getArguments() != null) {
             song = getArguments().getParcelable(ARG_SONG);
-//            showSearch = getArguments().getBoolean(ARG_SHOW_SEARCH, false);
         }
 
         // Set the song details to the views
         if (song != null) {
-            tvTitle.setText("Track: " + song.getTitle());
-            tvDuration.setText("Duration: " + song.getDuration());
-            tvAlbumName.setText("Album: " + song.getAlbumName());
+            tvTitle.setText(getString(R.string.track_label) + song.getTitle());
+            tvDuration.setText(getString(R.string.duration_label) + song.getDuration());
+            tvAlbumName.setText(getString(R.string.album_label) + song.getAlbumName());
+            Picasso.get().load(song.getAlbumCoverUrl()).into(ivAlbumCover);
 
-            // Creates an ImageRequest for loading the album cover image
-            ImageRequest imgReq = new ImageRequest
-                    (song.getAlbumCoverUrl(),
-                            // Success listener for image loading
-                            responseImage -> {
-                                ivAlbumCover.setImageBitmap(responseImage);
-                                Log.d("Image received", "Got the image");
-                            },
-                            1024, 1024, ImageView.ScaleType.CENTER, Bitmap.Config.RGB_565,
-                            // Error listener for image loading
-                            error -> {
-                                Log.d("Error", "Error loading image: " + error.getMessage());
-                            }
-                    );
-
-            // Add the ImageRequest to the Volley request queue
-            Volley.newRequestQueue(requireContext()).add(imgReq);
         }
 
         // Set up the "Save to Favorites" button click listener
@@ -130,11 +113,11 @@ public class SongDetailFragment extends Fragment {
         // Display a toast
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
     }
-
-    private void showSnackbar(String message) {
-        // Display a Snackbar
-        Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show();
-    }
+//
+//    private void showSnackbar(String message) {
+//        // Display a Snackbar
+//        Snackbar.make(requireView(), message, Snackbar.LENGTH_SHORT).show();
+//    }
 
 
 

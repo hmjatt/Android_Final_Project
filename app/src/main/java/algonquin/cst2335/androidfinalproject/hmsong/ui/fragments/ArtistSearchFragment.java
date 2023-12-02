@@ -16,6 +16,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -317,10 +318,19 @@ public class ArtistSearchFragment extends Fragment {
     }
 
     private void showHelpDialog() {
+        // Inflate the custom layout
+        View dialogView = getLayoutInflater().inflate(R.layout.hm_help_dialog_layout, null);
+
+        // Set title and message
+        TextView titleTextView = dialogView.findViewById(R.id.dialog_title);
+        titleTextView.setText(R.string.help_dialog_title);
+
+        // Create and show the AlertDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle(R.string.help_dialog_message)
-                .setMessage(R.string.help_dialog_message)
+        builder.setView(dialogView)
                 .setPositiveButton(android.R.string.ok, null)
                 .show();
     }
+
+
 }

@@ -1,9 +1,4 @@
-<!-- item_song.xml -->
-<!-- Replace with your layout content for each item in SongAdapter -->
-
-
-
-
+<!-- hm_item_favorite_song.xml -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -18,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="6dp"
-        android:background="@drawable/rounded_corner"
+        android:background="@drawable/hm_rounded_corner"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="6dp">
@@ -41,9 +36,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:background="@drawable/image_border"
+            android:background="@drawable/hm_image_border"
             android:padding="8dp"
-            android:text="Track"
+            android:text="@string/track"
             android:textSize="20dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/tvSongTitle"
@@ -59,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:text="Song Title"
+            android:text="@string/song_title"
             android:textAlignment="center"
             android:textSize="16dp"
             android:textStyle="bold"
@@ -74,7 +69,7 @@
             android:id="@+id/tvDuration"
             android:layout_width="230dp"
             android:layout_height="wrap_content"
-            android:text="Duration"
+            android:text="@string/duration"
             android:textAlignment="center"
             android:textSize="16dp"
             android:visibility="gone"
@@ -89,7 +84,7 @@
             android:id="@+id/tvAlbumName"
             android:layout_width="230dp"
             android:layout_height="wrap_content"
-            android:text="Album Name"
+            android:text="@string/album_name"
             android:textAlignment="center"
             android:textSize="16dp"
             android:visibility="gone"
