@@ -1,20 +1,19 @@
-<!-- item_album.xml -->
-<!-- Replace with your layout content for each item in AlbumAdapter -->
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="3dp"
-    android:background="@drawable/rounded_corner">
+    android:background="@drawable/hm_rounded_corner">
 
     <!-- Add your UI elements here -->
     <TextView
         android:id="@+id/albumText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/image_border"
-        android:text="Album"
+        android:background="@drawable/hm_image_border"
+        android:text="@string/album"
         android:textStyle="bold"
         android:padding="8dp"
         android:textSize="20dp"
@@ -30,7 +29,7 @@
         android:layout_width="230dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
-        android:text="Album"
+        android:text="@string/album_title"
         android:textSize="16dp"
         android:textStyle="bold"
         android:textAlignment="center"

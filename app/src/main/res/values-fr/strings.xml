@@ -1,0 +1,60 @@
+<!--FR/STRINGS-->
+<resources>
+    <string name="drawer_open">Ouvrir le tiroir de navigation</string>
+    <string name="drawer_close">Fermer le tiroir de navigation</string>
+    <string name="app_name">Projet final Android</string>
+    <string name="sunrise_sunset_lookup">Recherche lever et coucher du soleil</string>
+    <string name="recipe_search">Recherche de recettes</string>
+    <string name="dictionary">Dictionnaire</string>
+    <string name="song_search">Recherche de chansons</string>
+
+    <!-- Harmeet values start -->
+    <string name="delete_confirmation_title">Confirmer la suppression</string>
+    <string name="delete_confirmation_message">Voulez-vous supprimer cette chanson?</string>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
+    <string name="song_deleted">Chanson supprimée</string>
+    <string name="undo">Annuler</string>
+    <string name="undo_clicked">Annulation cliquée</string>
+    <string name="help_dialog_title">Comment utiliser l\'application</string>
+
+    <string name="help_dialog_message_line1">Pour utiliser l\'application :</string>
+    <string name="help_dialog_message_line2">1. Rechercher des artistes :</string>
+    <string name="help_dialog_message_line3">- Entrez le nom de l\'artiste dans le champ de recherche.</string>
+    <string name="help_dialog_message_line4">- Cliquez sur le bouton de recherche.</string>
+    <string name="help_dialog_message_line5">2. Voir les chansons de l\'artiste :</string>
+    <string name="help_dialog_message_line6">- Cliquez sur l\'artiste dans les résultats de recherche.</string>
+    <string name="help_dialog_message_line7">- La liste des chansons sera affichée.</string>
+    <string name="help_dialog_message_line8">3. Voir les détails d\'une chanson :</string>
+    <string name="help_dialog_message_line9">- Cliquez sur une chanson dans la liste.</string>
+    <string name="help_dialog_message_line10">- Les détails tels que le titre, la durée, le nom de l\'album et la pochette seront affichés.</string>
+    <string name="help_dialog_message_line11">4. Enregistrer une chanson dans les favoris :</string>
+    <string name="help_dialog_message_line12">- Sur la page des détails de la chanson, cliquez sur le bouton "Enregistrer dans les favoris".</string>
+    <string name="help_dialog_message_line13">5. Voir les chansons favorites :</string>
+    <string name="help_dialog_message_line14">- Cliquez sur le bouton favoris pour voir la liste des chansons enregistrées.</string>
+    <string name="help_dialog_message_line15">- Sélectionnez une chanson pour voir ses détails.</string>
+    <string name="help_dialog_message_line16">- Utilisez le bouton de suppression pour retirer une chanson des favoris.</string>
+    <string name="help_dialog_message_line17">6. Historique de recherche :</string>
+    <string name="help_dialog_message_line18">- L\'application enregistre votre terme de recherche.</string>
+    <string name="help_dialog_message_line19">- Le terme de recherche précédent sera affiché dans le champ de recherche au démarrage.</string>
+
+
+    <string name="hello_blank_fragment">Fragment vierge</string>
+    <string name="album">Album</string>
+    <string name="album_title">Titre de l\'album</string>
+    <string name="song_title">Titre de la chanson</string>
+    <string name="duration">Durée</string>
+    <string name="album_name">Nom de l\'album</string>
+    <string name="delete">Supprimer</string>
+    <string name="track">Piste</string>
+    <string name="save_to_favorites">Enregistrer dans les favoris</string>
+    <string name="enter_artist_name">Entrez le nom de l\'artiste</string>
+    <string name="search">Recherche</string>
+    <string name="view_favorites">Afficher les favoris</string>
+    <string name="track_label">"Piste: "</string>
+    <string name="duration_label">"Durée: "</string>
+    <string name="album_label">"Album: "</string>
+
+    <!-- Harmeet values end -->
+
+</resources>

@@ -1,8 +1,62 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?><!--strings.xml-->
 <resources>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="app_name">Android Final Project</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="sunrise_sunset_lookup">Sunrise &amp; Sunset Lookup</string>
+    <string name="recipe_search">Recipe Search</string>
+    <string name="dictionary">Dictionary</string>
+    <string name="song_search">Song Search</string>
+
+    <!-- Harmeet values start -->
+    <string name="delete_confirmation_title">Confirm Deletion</string>
+    <string name="delete_confirmation_message">Do you want to delete this song?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="song_deleted">Song deleted</string>
+    <string name="undo">Undo</string>
+    <string name="undo_clicked">Undo clicked</string>
+    <string name="help_dialog_title">How to use App</string>
+
+
+    <string name="help_dialog_message_line1">To use the application:</string>
+    <string name="help_dialog_message_line2">1. Search for artists:</string>
+    <string name="help_dialog_message_line3">- Enter the artist\'s name in the search field.</string>
+    <string name="help_dialog_message_line4">- Click the search button.</string>
+    <string name="help_dialog_message_line5">2. View artist\'s songs:</string>
+    <string name="help_dialog_message_line6">- Click on the artist from the search results.</string>
+    <string name="help_dialog_message_line7">- The list of songs will be displayed.</string>
+    <string name="help_dialog_message_line8">3. View song details:</string>
+    <string name="help_dialog_message_line9">- Click on a song from the list.</string>
+    <string name="help_dialog_message_line10">- Details such as title, duration, album name, and album cover will be shown.</string>
+    <string name="help_dialog_message_line11">4. Save a song to favorites:</string>
+    <string name="help_dialog_message_line12">- On the song details page, click the "Save to Favorites" button.</string>
+    <string name="help_dialog_message_line13">5. View favorite songs:</string>
+    <string name="help_dialog_message_line14">- Click on the favorites button to see the list of saved songs.</string>
+    <string name="help_dialog_message_line15">- Select a song to view its details.</string>
+    <string name="help_dialog_message_line16">- Use the delete button to remove a song from favorites.</string>
+    <string name="help_dialog_message_line17">6. Search history:</string>
+    <string name="help_dialog_message_line18">- The application saves your search term.</string>
+    <string name="help_dialog_message_line19">- The previous search term will be displayed in the search field on startup.</string>
+
+
+
+    <string name="hello_blank_fragment">Blank Fragment</string>
+    <string name="album">Album</string>
+    <string name="album_title">Album Title</string>
+    <string name="song_title">Song Title</string>
+    <string name="duration">Duration</string>
+    <string name="album_name">Album Name</string>
+    <string name="delete">Delete</string>
+    <string name="track">Track</string>
+    <string name="save_to_favorites">Save to favorites</string>
+    <string name="enter_artist_name">Enter artist name</string>
+    <string name="search">Search</string>
+    <string name="view_favorites">View Favorites</string>
+    <string name="track_label">"Track: "</string>
+    <string name="duration_label">"Duration: "</string>
+    <string name="album_label">"Album: "</string>
+
+    <!-- Harmeet values end -->
+
 </resources>

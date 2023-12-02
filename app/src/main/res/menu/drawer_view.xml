@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--drawer_view.xml-->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/sunrise_sunset_lookup"
             android:icon="@drawable/sunrise"
-            android:title="Sunrise &amp; Sunset Lookup" />
+            android:title="@string/sunrise_sunset_lookup" />
         <item
             android:id="@+id/recipe_search"
             android:icon="@drawable/recipe"
-            android:title="Recipe Search" />
+            android:title="@string/recipe_search" />
         <item
             android:id="@+id/dictionary"
             android:icon="@drawable/dictionary"
-            android:title="Dictionary" />
+            android:title="@string/dictionary" />
         <item
             android:id="@+id/song_search"
             android:icon="@drawable/song"
-            android:title="Song Search" />
+            android:title="@string/song_search" />
     </group>
 </menu>

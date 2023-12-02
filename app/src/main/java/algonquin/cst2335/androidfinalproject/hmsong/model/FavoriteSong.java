@@ -1,11 +1,15 @@
 package algonquin.cst2335.androidfinalproject.hmsong.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
-public class FavoriteSong {
+public class FavoriteSong implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
@@ -34,6 +38,26 @@ public class FavoriteSong {
 
     // Other methods as needed
 
+
+    protected FavoriteSong(Parcel in) {
+        id = in.readLong();
+        title = in.readString();
+        duration = in.readString();
+        albumName = in.readString();
+        albumCoverUrl = in.readString();
+    }
+
+    public static final Creator<FavoriteSong> CREATOR = new Creator<FavoriteSong>() {
+        @Override
+        public FavoriteSong createFromParcel(Parcel in) {
+            return new FavoriteSong(in);
+        }
+
+        @Override
+        public FavoriteSong[] newArray(int size) {
+            return new FavoriteSong[size];
+        }
+    };
 
     public long getId() {
         return id;
@@ -75,4 +99,17 @@ public class FavoriteSong {
         this.albumCoverUrl = albumCoverUrl;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(title);
+        dest.writeString(duration);
+        dest.writeString(albumName);
+        dest.writeString(albumCoverUrl);
+    }
 }
