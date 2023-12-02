@@ -1,6 +1,7 @@
 package algonquin.cst2335.androidfinalproject.hmsong.ui.adapters;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -86,12 +87,28 @@ public class FavoriteSongAdapter extends ListAdapter<FavoriteSong, FavoriteSongA
                     if (!savedSongIds.contains(clickedSong.getId())) {
                         onItemClickListener.onItemClick(clickedSong);
                         savedSongIds.add(clickedSong.getId());
+
+                        // Add log statement
+                        Log.d("FavoriteSongAdapter", "Item clicked: " + clickedSong.getTitle());
                     }
                 }
             });
         }
 
         void bind(FavoriteSong favoriteSong) {
+
+            itemView.setOnClickListener(v -> {
+                int position = getBindingAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && onItemClickListener != null) {
+                    onItemClickListener.onItemClick(getItem(position));
+
+                    // Add logs to check if onItemClick is triggered
+                    Log.d("FavoriteSongAdapter", "Item clicked at position: " + position);
+                    Log.d("FavoriteSongAdapter", "Clicked song: " + getItem(position).getTitle());
+                }
+            });
+
+
             binding.tvSongTitle.setText(favoriteSong.getTitle());
             binding.tvDuration.setText(favoriteSong.getDuration());
             binding.tvAlbumName.setText(favoriteSong.getAlbumName());

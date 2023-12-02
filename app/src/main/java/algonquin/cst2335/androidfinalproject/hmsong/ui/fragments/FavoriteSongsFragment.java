@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -20,6 +21,7 @@ import java.util.concurrent.Executors;
 
 import algonquin.cst2335.androidfinalproject.R;
 import algonquin.cst2335.androidfinalproject.databinding.HmFragmentArtistSearchBinding;
+import algonquin.cst2335.androidfinalproject.databinding.HmFragmentFavoriteSongsBinding;
 import algonquin.cst2335.androidfinalproject.databinding.HmItemFavoriteSongBinding;
 import algonquin.cst2335.androidfinalproject.hmsong.data.database.FavoriteSongDatabase;
 import algonquin.cst2335.androidfinalproject.hmsong.model.FavoriteSong;
@@ -29,9 +31,9 @@ import algonquin.cst2335.androidfinalproject.hmsong.ui.adapters.FavoriteSongAdap
 
 public class FavoriteSongsFragment extends Fragment {
 
-    private static final String ARG_SHOW_SEARCH = "arg_show_search";
-
-    private EditText etSearch;
+//    private static final String ARG_SHOW_SEARCH = "arg_show_search";
+//
+//    private EditText etSearch;
 
     private FavoriteSongAdapter favoriteSongAdapter;
     private List<FavoriteSong> favoriteSongsList;
@@ -46,23 +48,15 @@ public class FavoriteSongsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        HmFragmentArtistSearchBinding binding = HmFragmentArtistSearchBinding.inflate(inflater, container, false);
+        HmFragmentFavoriteSongsBinding binding = HmFragmentFavoriteSongsBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        recyclerView = binding.recyclerView;
+        recyclerView = binding.recyclerViewFs;
 
-        // Initialize SharedPreferences
-        SharedPreferences sharedPreferences = requireActivity().getPreferences(Context.MODE_PRIVATE);
+        // Set up RecyclerView and adapter
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(favoriteSongAdapter);
 
-        // Retrieve the last searched term from SharedPreferences
-        String lastSearchedTerm = sharedPreferences.getString("searchTerm", "");
-
-        // Replace '+' with space for a more readable display
-        lastSearchedTerm = lastSearchedTerm.replace("+", " ");
-
-        // Use the last searched term to set the EditText
-        etSearch = binding.etSearch;
-        etSearch.setText(lastSearchedTerm);
 
         // Initialize Room database
         database = FavoriteSongDatabase.getInstance(requireContext());
@@ -88,18 +82,16 @@ public class FavoriteSongsFragment extends Fragment {
 
         // Set up item click listener to navigate to FavoriteSongDetailFragment
         favoriteSongAdapter.setOnItemClickListener(favoriteSong -> {
-            // Create a bundle to pass the selected favorite song to the detail fragment
+            FavoriteSongDetailFragment fragment = new FavoriteSongDetailFragment();
             Bundle args = new Bundle();
             args.putParcelable("favoriteSong", favoriteSong);
-
-            // Navigate to FavoriteSongDetailFragment
-            FavoriteSongDetailFragment fragment = new FavoriteSongDetailFragment();
             fragment.setArguments(args);
 
-            requireActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.fragmentContainerSf, fragment)
-                    .addToBackStack(null)
-                    .commit();
+            FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragmentContainerSf, fragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+
         });
 
 
