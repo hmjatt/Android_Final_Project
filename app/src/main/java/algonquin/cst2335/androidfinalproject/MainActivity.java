@@ -1,3 +1,4 @@
+
 package algonquin.cst2335.androidfinalproject;
 
 import android.content.Intent;
@@ -6,7 +7,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -21,14 +21,31 @@ import algonquin.cst2335.androidfinalproject.CF_recipe.RecipeSearchFragment;
 import algonquin.cst2335.androidfinalproject.hmsong.ui.activities.SongSearchActivity;
 import algonquin.cst2335.androidfinalproject.SK_sunrise.SunriseSunsetFragment;
 
+/**
+ * The MainActivity class is the main entry point of the application.
+ * It manages the navigation drawer and handles the selection of different app features.
+ *
+ * @author Chris Francis
+ * @author Harmeet Matharoo
+ * @author Iuliia Obukhova
+ * @author Sahyun Kang
+ * @version 1.0
+ */
 public class MainActivity extends AppCompatActivity {
+
     private DrawerLayout mDrawer;
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
     private boolean isSongSearchActivityLaunched = false;
 
-
+    /**
+     * Called when the activity is first created.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
+     *                           then this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
+     *                           Note: Otherwise, it is null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,10 +77,20 @@ public class MainActivity extends AppCompatActivity {
         setupDrawerContent(nvDrawer);
     }
 
+    /**
+     * Set up the ActionBarDrawerToggle for the navigation drawer.
+     *
+     * @return The configured ActionBarDrawerToggle.
+     */
     private ActionBarDrawerToggle setupDrawerToggle() {
         return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open, R.string.drawer_close);
     }
 
+    /**
+     * Set up the navigation drawer content.
+     *
+     * @param navigationView The NavigationView to set up.
+     */
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
                 menuItem -> {
@@ -72,6 +99,11 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Handle the selection of items in the navigation drawer.
+     *
+     * @param menuItem The selected MenuItem.
+     */
     public void selectDrawerItem(MenuItem menuItem) {
         Fragment fragment = null;
         Class fragmentClass = null;
@@ -105,7 +137,6 @@ public class MainActivity extends AppCompatActivity {
             return; // Return to avoid further execution of the method
         }
 
-
         if (fragmentClass != null) {
             try {
                 fragment = (Fragment) fragmentClass.newInstance();
@@ -128,7 +159,12 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * Handle options item selection.
+     *
+     * @param item The selected MenuItem.
+     * @return True if the event was handled, false otherwise.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (drawerToggle.onOptionsItemSelected(item)) {
@@ -137,6 +173,13 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Called after onRestoreInstanceState(Bundle), onRestart(), or onPause(), for your activity to start interacting with the user.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
+     *                           then this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
+     *                           Note: Otherwise, it is null.
+     */
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);

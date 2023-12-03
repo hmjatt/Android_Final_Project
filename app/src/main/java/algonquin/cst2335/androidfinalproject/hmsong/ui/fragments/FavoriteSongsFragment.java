@@ -22,6 +22,12 @@ import algonquin.cst2335.androidfinalproject.hmsong.data.database.FavoriteSongDa
 import algonquin.cst2335.androidfinalproject.hmsong.model.FavoriteSong;
 import algonquin.cst2335.androidfinalproject.hmsong.ui.adapters.FavoriteSongAdapter;
 
+/**
+ * Fragment to display a list of favorite songs and handle song deletion and restoration.
+ *
+ * @version 1.0
+ * @author Harmeet Matharoo
+ */
 public class FavoriteSongsFragment extends Fragment implements FavoriteSongDetailFragment.OnUndoDeleteListener {
 
     private FavoriteSongAdapter favoriteSongAdapter;
@@ -30,6 +36,9 @@ public class FavoriteSongsFragment extends Fragment implements FavoriteSongDetai
 
     private RecyclerView recyclerView;
 
+    /**
+     * Default constructor for the FavoriteSongsFragment.
+     */
     public FavoriteSongsFragment() {
         // Required empty public constructor
     }

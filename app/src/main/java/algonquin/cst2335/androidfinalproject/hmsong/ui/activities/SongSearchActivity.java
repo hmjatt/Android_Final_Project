@@ -1,19 +1,16 @@
+
 package algonquin.cst2335.androidfinalproject.hmsong.ui.activities;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -23,14 +20,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -62,10 +56,18 @@ import algonquin.cst2335.androidfinalproject.hmsong.ui.adapters.SongAdapter;
 import algonquin.cst2335.androidfinalproject.hmsong.ui.fragments.FavoriteSongsFragment;
 import algonquin.cst2335.androidfinalproject.hmsong.ui.fragments.SongDetailFragment;
 
+
+/**
+ * The SongSearchActivity class is responsible for handling song search functionality.
+ * It allows users to search for artists, view their albums, and explore the tracks in each album.
+ * Users can also view their favorite songs and get help information.
+ *
+ * @author Harmeet Matharoo
+ * @version 1.0
+ */
 public class SongSearchActivity extends AppCompatActivity {
 
     private static final String ARG_SHOW_SEARCH = "arg_show_search";
-//    private ActionBarDrawerToggle drawerToggle;
     private EditText etSearch;
     private RecyclerView recyclerView;
     private AlbumAdapter albumAdapter;
@@ -76,6 +78,13 @@ public class SongSearchActivity extends AppCompatActivity {
     private FavoriteSongDatabase database;
     private Toolbar toolbar;
 
+    /**
+     * Called when the activity is first created.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
+     *                           then this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
+     *                           Note: Otherwise, it is null.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -167,7 +176,6 @@ public class SongSearchActivity extends AppCompatActivity {
             Drawable newdrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 80, 80, true));
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeAsUpIndicator(newdrawable);
-
         }
 
         // Add a TouchListener to the main layout to hide the keyboard when touched
@@ -187,24 +195,29 @@ public class SongSearchActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * Called after onRestoreInstanceState(Bundle), onRestart(), or onPause(), for your activity to start interacting with the user.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down,
+     *                           then this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle).
+     *                           Note: Otherwise, it is null.
+     */
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         // Sync the toggle state after onRestoreInstanceState has occurred.
-//        drawerToggle.syncState();
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         // Pass any configuration change to the drawer toggles
-//        drawerToggle.onConfigurationChanged(newConfig);
     }
 
-
-
-
+    /**
+     * Navigate to the FavoriteSongsFragment if the list of favorite songs is not empty.
+     * Display a message if no favorite songs are found.
+     */
     private void navigateToFavoriteSongsFragment() {
         hideKeyboard();
         new Thread(() -> {
@@ -228,10 +241,21 @@ public class SongSearchActivity extends AppCompatActivity {
         }).start();
     }
 
+    /**
+     * Display a toast message on the UI thread.
+     *
+     * @param message The message to display.
+     */
     private void showToast(String message) {
         runOnUiThread(() -> Toast.makeText(this, message, Toast.LENGTH_SHORT).show());
     }
 
+    /**
+     * Search for artists based on the provided query.
+     * Update the UI with the retrieved artist information.
+     *
+     * @param query The artist search query.
+     */
     private void searchArtists(String query) {
         hideKeyboard();
 
@@ -253,7 +277,7 @@ public class SongSearchActivity extends AppCompatActivity {
                                     Artist artist = new Artist(artistId);
                                     artistList.add(artist);
 
-                                    // search for albums using the artist id
+                                    // Search for albums using the artist id
                                     searchAlbums(artistId);
 
                                 } else {
@@ -273,6 +297,12 @@ public class SongSearchActivity extends AppCompatActivity {
         Volley.newRequestQueue(this).add(request);
     }
 
+    /**
+     * Search for albums based on the provided artist id.
+     * Update the UI with the retrieved album information.
+     *
+     * @param artistId The id of the artist.
+     */
     private void searchAlbums(String artistId) {
         String url = "https://api.deezer.com/artist/" + artistId + "/albums";
 
@@ -312,6 +342,14 @@ public class SongSearchActivity extends AppCompatActivity {
         Volley.newRequestQueue(this).add(request);
     }
 
+    /**
+     * Search for tracks based on the provided album id.
+     * Update the UI with the retrieved track information.
+     *
+     * @param albumId       The id of the album.
+     * @param albumTitle    The title of the album.
+     * @param albumCoverUrl The URL of the album cover.
+     */
     private void searchTracks(String albumId, String albumTitle, String albumCoverUrl) {
         String url = "https://api.deezer.com/album/" + albumId + "/tracks";
 
@@ -364,6 +402,11 @@ public class SongSearchActivity extends AppCompatActivity {
         Volley.newRequestQueue(this).add(request);
     }
 
+    /**
+     * Handle Volley errors and display appropriate messages.
+     *
+     * @param error The VolleyError to handle.
+     */
     private void handleVolleyError(VolleyError error) {
         if (error.networkResponse != null) {
             int statusCode = error.networkResponse.statusCode;
@@ -375,13 +418,25 @@ public class SongSearchActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Create the options menu in the toolbar.
+     *
+     * @param menu The menu to create.
+     * @return True to display the menu, false otherwise.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.hm_menu_help, menu);
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.hm_menu_help, menu);
         return true;
     }
 
+    /**
+     * Handle options item selection in the toolbar.
+     *
+     * @param item The selected MenuItem.
+     * @return True if the event was handled, false otherwise.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
@@ -404,7 +459,9 @@ public class SongSearchActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * Navigate back to the MainActivity.
+     */
     private void navigateBackToMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -412,8 +469,9 @@ public class SongSearchActivity extends AppCompatActivity {
         finish();
     }
 
-
-
+    /**
+     * Show the help dialog to provide additional information.
+     */
     private void showHelpDialog() {
         // Inflate the custom layout
         View dialogView = getLayoutInflater().inflate(R.layout.hm_help_dialog_layout, null);
