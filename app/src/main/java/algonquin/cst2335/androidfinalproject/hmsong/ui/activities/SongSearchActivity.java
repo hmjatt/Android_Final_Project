@@ -167,11 +167,6 @@ public class SongSearchActivity extends AppCompatActivity {
 
     }
 
-//    private ActionBarDrawerToggle setupDrawerToggle() {
-//        // Make sure you pass in a valid toolbar reference.
-//        // ActionBarDrawToggle() does not require it and will not render the hamburger icon without it.
-//        return new ActionBarDrawerToggle(this, mDrawer, toolbar, R.string.drawer_open, R.string.drawer_close);
-//    }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -186,23 +181,8 @@ public class SongSearchActivity extends AppCompatActivity {
         // Pass any configuration change to the drawer toggles
         drawerToggle.onConfigurationChanged(newConfig);
     }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        if (drawerToggle.onOptionsItemSelected(item)) {
-//            return true;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        if (item.getItemId() == R.id.menu_help) {
-//            showHelpDialog();
-//            return true;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
+
+
 
 
     private void navigateToFavoriteSongsFragment() {
@@ -378,6 +358,16 @@ public class SongSearchActivity extends AppCompatActivity {
         inflater.inflate(R.menu.hm_menu_help, menu);
         return true;
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_help) {
+            showHelpDialog();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     private void showHelpDialog() {
         // Inflate the custom layout
