@@ -17,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -80,8 +81,6 @@ public class SongSearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         HmActivitySongSearchBinding binding = HmActivitySongSearchBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-
 
         // Grab the no app selected textview
         TextView tvNoArtistSelected = binding.tvNoArtistSelected;
@@ -167,6 +166,22 @@ public class SongSearchActivity extends AppCompatActivity {
             getSupportActionBar().setHomeAsUpIndicator(newdrawable);
 
         }
+
+        // Add a TouchListener to the main layout to hide the keyboard when touched
+        View mainLayout = findViewById(R.id.song_activity_main_ele); // Replace with the ID of your main layout
+        mainLayout.setOnTouchListener((v, event) -> {
+            hideKeyboard();
+            return false;
+        });
+    }
+
+    // Add this method to hide the keyboard
+    private void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        View view = getCurrentFocus();
+        if (view != null) {
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
 
@@ -188,6 +203,7 @@ public class SongSearchActivity extends AppCompatActivity {
 
 
     private void navigateToFavoriteSongsFragment() {
+        hideKeyboard();
         new Thread(() -> {
             // Check if the list of favorite songs is empty
             if (!database.favoriteSongDao().getFavoriteSongs().isEmpty()) {
@@ -214,6 +230,8 @@ public class SongSearchActivity extends AppCompatActivity {
     }
 
     private void searchArtists(String query) {
+        hideKeyboard();
+
         String url = "https://api.deezer.com/search/artist/?q=" + query;
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
