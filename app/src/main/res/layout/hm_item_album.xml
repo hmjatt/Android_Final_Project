@@ -33,6 +33,7 @@
         android:textSize="16dp"
         android:textStyle="bold"
         android:textAlignment="center"
+        android:textColor="#EAE7FA"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

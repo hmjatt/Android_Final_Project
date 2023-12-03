@@ -3,14 +3,10 @@ package algonquin.cst2335.androidfinalproject.hmsong.ui.fragments;
 import static algonquin.cst2335.androidfinalproject.hmsong.ui.SongApp.database;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
@@ -25,6 +21,12 @@ import algonquin.cst2335.androidfinalproject.R;
 import algonquin.cst2335.androidfinalproject.databinding.HmItemFavoriteSongDetailBinding;
 import algonquin.cst2335.androidfinalproject.hmsong.model.FavoriteSong;
 
+/**
+ * Fragment to display details of a favorite song and provide the option to delete it.
+ *
+ * @version 1.0
+ * @author Harmeet Matharoo
+ */
 public class FavoriteSongDetailFragment extends Fragment {
 
     private FavoriteSong favoriteSong;
@@ -43,12 +45,9 @@ public class FavoriteSongDetailFragment extends Fragment {
         this.undoDeleteListener = listener;
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d("FavSongDetailFragment", "onCreateView");
-
         // Inflate the layout for this fragment
         HmItemFavoriteSongDetailBinding binding = HmItemFavoriteSongDetailBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
@@ -59,27 +58,15 @@ public class FavoriteSongDetailFragment extends Fragment {
             favoriteSong = args.getParcelable("favoriteSong");
 
             if (favoriteSong != null) {
-                // Log details
-                Log.d("FavoriteSongDetail", "Title: " + favoriteSong.getTitle());
-                Log.d("FavoriteSongDetail", "Duration: " + favoriteSong.getDuration());
-                Log.d("FavoriteSongDetail", "Album Name: " + favoriteSong.getAlbumName());
-                Log.d("FavoriteSongDetail", "Album Cover URL: " + favoriteSong.getAlbumCoverUrl());
-
                 // Set the details in the layout
                 binding.tvSongTitle.setText(getString(R.string.track_label) + favoriteSong.getTitle());
-                binding.tvDuration.setText(getString(R.string.duration_label) + favoriteSong.getDuration());
                 binding.tvAlbumName.setText(getString(R.string.album_label) + favoriteSong.getAlbumName());
                 Picasso.get().load(favoriteSong.getAlbumCoverUrl()).into(binding.ivAlbumCover);
 
-                // Populate UI (not necessary in onCreateView)
-                // populateUI(binding);
-            } else {
-                // Log if favoriteSong is null
-                Log.e("FavoriteSongDetail", "FavoriteSong is null");
+                // Format the duration and set it in the layout
+                String formattedDuration = formatDuration(Long.parseLong(favoriteSong.getDuration()));
+                binding.tvDuration.setText(getString(R.string.duration_label) + formattedDuration);
             }
-        } else {
-            // Log if arguments are null or do not contain "favoriteSong" key
-            Log.e("FavoriteSongDetail", "Arguments are null or do not contain 'favoriteSong'");
         }
 
         // Set up delete button click listener
@@ -89,6 +76,9 @@ public class FavoriteSongDetailFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Shows a confirmation dialog for deleting the favorite song.
+     */
     private void showDeleteConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setTitle(R.string.delete_confirmation_title)
@@ -96,26 +86,17 @@ public class FavoriteSongDetailFragment extends Fragment {
                 .setPositiveButton(R.string.yes, (dialog, which) -> deleteSong())
                 .setNegativeButton(R.string.no, null)
                 .show();
-
-        // Add log statement
-        Log.d("FavSongDetailFragment", "Delete confirmation dialog shown");
     }
 
+    /**
+     * Deletes the favorite song from the database and shows a Snackbar with the option to undo.
+     */
     private void deleteSong() {
-
-        // Log statement to check if the method is being called
-        Log.d("FavSongDetailFragment", "deleteSong() called");
-
-        // Log details of the favoriteSong being deleted
-        Log.d("FavSongDetailFragment", "Deleting Song - Title: " + favoriteSong.getTitle() + ", ID: " + favoriteSong.getId());
-
-
         // Check if the favoriteSong is not null
         if (favoriteSong != null) {
             // Use Room database to delete the song
             Executor executor = Executors.newSingleThreadExecutor();
             executor.execute(() -> {
-
                 // Store the deleted song temporarily
                 deletedFavoriteSong = favoriteSong;
 
@@ -124,9 +105,6 @@ public class FavoriteSongDetailFragment extends Fragment {
 
                 // Update UI on the main thread
                 requireActivity().runOnUiThread(() -> {
-                    // Add log statement
-                    Log.d("FavSongDetailFragment", "Song deleted: " + favoriteSong.getTitle());
-
                     // Show a Snackbar with the option to undo
                     Snackbar snackbar = Snackbar.make(requireView(), R.string.song_deleted, Snackbar.LENGTH_LONG);
                     snackbar.setAction(R.string.undo, v -> undoDelete());
@@ -140,7 +118,9 @@ public class FavoriteSongDetailFragment extends Fragment {
         }
     }
 
-
+    /**
+     * Undoes the delete operation by inserting the deleted song back into the favorites.
+     */
     private void undoDelete() {
         // Check if there is a deleted song to undo
         if (deletedFavoriteSong != null) {
@@ -150,9 +130,6 @@ public class FavoriteSongDetailFragment extends Fragment {
                 // Insert the deleted song back into the favorites
                 long newSongId = database.favoriteSongDao().saveFavoriteSong(deletedFavoriteSong);
 
-                // Log details of the undo operation
-                Log.d("FavSongDetailFragment", "Undo Delete - Title: " + deletedFavoriteSong.getTitle() + ", ID: " + newSongId);
-
                 // Reset the deletedFavoriteSong variable
                 deletedFavoriteSong = null;
 
@@ -161,14 +138,18 @@ public class FavoriteSongDetailFragment extends Fragment {
                     undoDeleteListener.onUndoDelete();
                 }
             });
-        } else {
-            // Log if there is no deleted song to undo
-            Log.d("FavSongDetailFragment", "No deleted song to undo");
         }
     }
 
-
-
-
-
+    /**
+     * Helper method to format the duration from seconds to "mm:ss" format.
+     *
+     * @param durationInSeconds The duration in seconds.
+     * @return The formatted duration string.
+     */
+    private String formatDuration(long durationInSeconds) {
+        long minutes = durationInSeconds / 60;
+        long seconds = durationInSeconds % 60;
+        return String.format("%02d:%02d", minutes, seconds);
+    }
 }

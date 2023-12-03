@@ -1,7 +1,6 @@
 package algonquin.cst2335.androidfinalproject.hmsong.ui.adapters;
 
 import android.annotation.SuppressLint;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -19,19 +18,37 @@ import java.util.Set;
 import algonquin.cst2335.androidfinalproject.databinding.HmItemFavoriteSongBinding;
 import algonquin.cst2335.androidfinalproject.hmsong.model.FavoriteSong;
 
+/**
+ * Adapter class for displaying a list of favorite songs in a RecyclerView.
+ * Utilizes the ListAdapter with DiffUtil for efficient updates.
+ *
+ * @author Harmeet Matharoo
+ * @version 1.0
+ */
 public class FavoriteSongAdapter extends ListAdapter<FavoriteSong, FavoriteSongAdapter.FavoriteSongViewHolder> {
 
     private static OnItemClickListener onItemClickListener;
     private final Set<Long> savedSongIds = new HashSet<>();
 
+    /**
+     * Interface definition for a callback to be invoked when an item in the list is clicked.
+     */
     public interface OnItemClickListener {
         void onItemClick(FavoriteSong favoriteSong);
     }
 
+    /**
+     * Sets the click listener for items in the adapter.
+     *
+     * @param listener The listener to be notified when an item is clicked.
+     */
     public void setOnItemClickListener(OnItemClickListener listener) {
         onItemClickListener = listener;
     }
 
+    /**
+     * Constructor for the FavoriteSongAdapter.
+     */
     public FavoriteSongAdapter() {
         super(new DiffUtil.ItemCallback<FavoriteSong>() {
             @Override
@@ -47,6 +64,11 @@ public class FavoriteSongAdapter extends ListAdapter<FavoriteSong, FavoriteSongA
         });
     }
 
+    /**
+     * Sets the list of favorite songs and updates the saved song IDs.
+     *
+     * @param favoriteSongs The list of favorite songs to be displayed.
+     */
     public void setFavoriteSongs(List<FavoriteSong> favoriteSongs) {
         submitList(favoriteSongs);
         updateSavedSongIds(favoriteSongs);
@@ -72,10 +94,18 @@ public class FavoriteSongAdapter extends ListAdapter<FavoriteSong, FavoriteSongA
         holder.bind(getItem(position));
     }
 
+    /**
+     * ViewHolder class for the RecyclerView, representing individual favorite song items.
+     */
     class FavoriteSongViewHolder extends RecyclerView.ViewHolder {
 
         private final HmItemFavoriteSongBinding binding;
 
+        /**
+         * Constructor for the FavoriteSongViewHolder.
+         *
+         * @param binding The data binding for the ViewHolder.
+         */
         FavoriteSongViewHolder(HmItemFavoriteSongBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
@@ -88,26 +118,23 @@ public class FavoriteSongAdapter extends ListAdapter<FavoriteSong, FavoriteSongA
                         onItemClickListener.onItemClick(clickedSong);
                         savedSongIds.add(clickedSong.getId());
 
-                        // Add log statement
-                        Log.d("FavoriteSongAdapter", "Item clicked: " + clickedSong.getTitle());
                     }
                 }
             });
         }
 
+        /**
+         * Binds the data of a favorite song to the ViewHolder.
+         *
+         * @param favoriteSong The favorite song to be displayed.
+         */
         void bind(FavoriteSong favoriteSong) {
-
             itemView.setOnClickListener(v -> {
                 int position = getBindingAdapterPosition();
                 if (position != RecyclerView.NO_POSITION && onItemClickListener != null) {
                     onItemClickListener.onItemClick(getItem(position));
-
-                    // Add logs to check if onItemClick is triggered
-                    Log.d("FavoriteSongAdapter", "Item clicked at position: " + position);
-                    Log.d("FavoriteSongAdapter", "Clicked song: " + getItem(position).getTitle());
                 }
             });
-
 
             binding.tvSongTitle.setText(favoriteSong.getTitle());
             binding.tvDuration.setText(favoriteSong.getDuration());

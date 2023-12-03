@@ -6,8 +6,17 @@ import androidx.room.Room;
 
 import algonquin.cst2335.androidfinalproject.hmsong.data.database.FavoriteSongDatabase;
 
+/**
+ * Application class for the Song App, responsible for initializing the Room database.
+ *
+ * @version 1.0
+ * @author Harmeet Matharoo
+ */
 public class SongApp extends Application {
 
+    /**
+     * The Room database instance for storing favorite songs.
+     */
     public static FavoriteSongDatabase database;
 
     @Override

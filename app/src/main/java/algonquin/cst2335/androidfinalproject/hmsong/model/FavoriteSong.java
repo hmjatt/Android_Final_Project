@@ -1,3 +1,4 @@
+// FavoriteSong.java
 package algonquin.cst2335.androidfinalproject.hmsong.model;
 
 import android.os.Parcel;
@@ -8,6 +9,12 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+/**
+ * Represents a favorite song with details such as title, duration, album name, and album cover URL.
+ *
+ * @version 1.0
+ * @author Harmeet Matharoo
+ */
 @Entity
 public class FavoriteSong implements Parcelable {
 
@@ -27,17 +34,20 @@ public class FavoriteSong implements Parcelable {
     @ColumnInfo(name = "AlbumCoverUrlColumn")
     private String albumCoverUrl;
 
-    // Constructors, getters, and setters as needed
-
+    /**
+     * Constructs a FavoriteSong with the specified details.
+     *
+     * @param title          The title of the favorite song.
+     * @param duration       The duration of the favorite song.
+     * @param albumName      The album name of the favorite song.
+     * @param albumCoverUrl  The URL of the album cover for the favorite song.
+     */
     public FavoriteSong(String title, String duration, String albumName, String albumCoverUrl) {
         this.title = title;
         this.duration = duration;
         this.albumName = albumName;
         this.albumCoverUrl = albumCoverUrl;
     }
-
-    // Other methods as needed
-
 
     protected FavoriteSong(Parcel in) {
         id = in.readLong();

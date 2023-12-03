@@ -31,6 +31,7 @@
             android:layout_height="wrap_content"
             android:text="@string/song_title"
             android:textSize="18sp"
+            android:textColor="#EAE7FA"
             android:textStyle="bold"
             android:textAlignment="center"
             app:layout_constraintBottom_toTopOf="@+id/tvDuration"
@@ -46,6 +47,7 @@
             android:layout_height="wrap_content"
             android:text="@string/duration"
             android:textSize="16sp"
+            android:textColor="#EAE7FA"
             android:textStyle="bold"
             android:textAlignment="center"
             app:layout_constraintBottom_toTopOf="@+id/tvAlbumName"
@@ -63,6 +65,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:textAlignment="center"
+            android:textColor="#EAE7FA"
             app:layout_constraintBottom_toTopOf="@+id/btnDelete"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -84,14 +87,6 @@
             app:layout_constraintVertical_bias="0.5" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-<!--    <androidx.recyclerview.widget.RecyclerView-->
-<!--        android:id="@+id/recyclerView"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:padding="8dp"-->
-<!--        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
-<!--        android:visibility="visible" />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

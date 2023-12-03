@@ -1,8 +1,12 @@
+// Song.java
 package algonquin.cst2335.androidfinalproject.hmsong.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/**
+ * Represents a song with details such as title, duration, album name, and album cover URL.
+ */
 public class Song implements Parcelable {
 
     private String title;
@@ -10,8 +14,8 @@ public class Song implements Parcelable {
     private String albumName;
     private String albumCoverUrl;
 
+    // Default constructor
     public Song() {
-        // Default constructor
     }
 
     protected Song(Parcel in) {
@@ -44,9 +48,6 @@ public class Song implements Parcelable {
             albumCoverUrl = "";
         }
     }
-
-
-
 
     public static final Creator<Song> CREATOR = new Creator<Song>() {
         @Override

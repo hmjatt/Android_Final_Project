@@ -1,14 +1,28 @@
+// Album.java
 package algonquin.cst2335.androidfinalproject.hmsong.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/**
+ * Represents an Album with an ID, title, and cover URL.
+ *
+ * @version 1.0
+ * @author Harmeet Matharoo
+ */
 public class Album implements Parcelable {
 
     private String id;
     private String title;
     private String coverUrl;
 
+    /**
+     * Constructs an Album with the specified ID, title, and cover URL.
+     *
+     * @param id       The ID of the album.
+     * @param title    The title of the album.
+     * @param coverUrl The URL of the album cover.
+     */
     public Album(String id, String title, String coverUrl) {
         this.id = id;
         this.title = title;
@@ -33,14 +47,29 @@ public class Album implements Parcelable {
         }
     };
 
+    /**
+     * Gets the ID of the album.
+     *
+     * @return The ID of the album.
+     */
     public String getId() {
         return id;
     }
 
+    /**
+     * Gets the title of the album.
+     *
+     * @return The title of the album.
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * Gets the URL of the album cover.
+     *
+     * @return The URL of the album cover.
+     */
     public String getCoverUrl() {
         return coverUrl;
     }
