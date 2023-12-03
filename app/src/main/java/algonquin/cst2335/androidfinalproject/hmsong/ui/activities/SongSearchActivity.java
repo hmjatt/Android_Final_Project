@@ -155,6 +155,9 @@ public class SongSearchActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Set the title for the toolbar
+        setTitle(R.string.song_search);
+
         ActionBar actionBar = getSupportActionBar();
 
         // add home icon to toolbar
