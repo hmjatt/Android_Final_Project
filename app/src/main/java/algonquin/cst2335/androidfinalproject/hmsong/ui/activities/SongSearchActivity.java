@@ -5,6 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -23,6 +28,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -43,6 +49,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+import algonquin.cst2335.androidfinalproject.MainActivity;
 import algonquin.cst2335.androidfinalproject.R;
 import algonquin.cst2335.androidfinalproject.databinding.HmActivitySongSearchBinding;
 import algonquin.cst2335.androidfinalproject.hmsong.data.database.FavoriteSongDatabase;
@@ -57,8 +64,7 @@ import algonquin.cst2335.androidfinalproject.hmsong.ui.fragments.SongDetailFragm
 public class SongSearchActivity extends AppCompatActivity {
 
     private static final String ARG_SHOW_SEARCH = "arg_show_search";
-//    private DrawerLayout mDrawer;
-    private ActionBarDrawerToggle drawerToggle;
+//    private ActionBarDrawerToggle drawerToggle;
     private EditText etSearch;
     private RecyclerView recyclerView;
     private AlbumAdapter albumAdapter;
@@ -67,7 +73,6 @@ public class SongSearchActivity extends AppCompatActivity {
     private List<Album> albumList;
     private List<Song> songList;
     private FavoriteSongDatabase database;
-
     private Toolbar toolbar;
 
     @Override
@@ -76,20 +81,7 @@ public class SongSearchActivity extends AppCompatActivity {
         HmActivitySongSearchBinding binding = HmActivitySongSearchBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Set up the Toolbar
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        // Find our drawer view
-//        mDrawer = findViewById(R.id.drawer_layout);
-//        drawerToggle = setupDrawerToggle();
-
-        // Setup toggle to display hamburger icon with nice animation
-//        drawerToggle.setDrawerIndicatorEnabled(true);
-//        drawerToggle.syncState();
-
-        // Tie DrawerLayout events to the ActionBarToggle
-//        mDrawer.addDrawerListener(drawerToggle);
 
         // Grab the no app selected textview
         TextView tvNoArtistSelected = binding.tvNoArtistSelected;
@@ -160,11 +152,21 @@ public class SongSearchActivity extends AppCompatActivity {
         // Initialize Room database
         database = FavoriteSongDatabase.getInstance(this);
 
+        // Set up the Toolbar
+        toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-//        drawerToggle = setupDrawerToggle();
+        ActionBar actionBar = getSupportActionBar();
 
+        // add home icon to toolbar
+        if(actionBar != null){
+            Drawable homeIcon = ResourcesCompat.getDrawable(getResources(), R.drawable.hm_home, getTheme());
+            Bitmap bitmap = ((BitmapDrawable) homeIcon).getBitmap();
+            Drawable newdrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(bitmap, 80, 80, true));
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(newdrawable);
+
+        }
     }
 
 
@@ -179,7 +181,7 @@ public class SongSearchActivity extends AppCompatActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         // Pass any configuration change to the drawer toggles
-        drawerToggle.onConfigurationChanged(newConfig);
+//        drawerToggle.onConfigurationChanged(newConfig);
     }
 
 
@@ -361,12 +363,27 @@ public class SongSearchActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.action_help) {
+        // Handle item selection
+        if (item.getItemId() == android.R.id.home) {
+            // Handle the home button press
+            navigateBackToMainActivity();
+            return true;
+        } else if (item.getItemId() == R.id.action_help) {  // Correct resource ID for the action help
             showHelpDialog();
             return true;
+        } else {
+            return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
     }
+
+
+    private void navigateBackToMainActivity() {
+        // You can use Intent to navigate back to the MainActivity
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish(); // Finish the current activity
+    }
+
 
 
     private void showHelpDialog() {
