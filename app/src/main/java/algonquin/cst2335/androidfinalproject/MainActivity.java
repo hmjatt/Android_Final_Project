@@ -1,6 +1,6 @@
 package algonquin.cst2335.androidfinalproject;
 
-import android.content.res.Configuration;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,11 +13,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+
 import com.google.android.material.navigation.NavigationView;
 
 import algonquin.cst2335.androidfinalproject.IO_dictionary.DictionaryFragment;
 import algonquin.cst2335.androidfinalproject.CF_recipe.RecipeSearchFragment;
-import algonquin.cst2335.androidfinalproject.hmsong.ui.fragments.ArtistSearchFragment;
+import algonquin.cst2335.androidfinalproject.hmsong.ui.activities.SongSearchActivity;
 import algonquin.cst2335.androidfinalproject.SK_sunrise.SunriseSunsetFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -63,12 +64,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupDrawerContent(NavigationView navigationView) {
         navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                        selectDrawerItem(menuItem);
-                        return true;
-                    }
+                menuItem -> {
+                    selectDrawerItem(menuItem);
+                    return true;
                 });
     }
 
@@ -89,19 +87,28 @@ public class MainActivity extends AppCompatActivity {
         } else if (menuItem.getItemId() == R.id.dictionary) {
             fragmentClass = DictionaryFragment.class;
         } else if (menuItem.getItemId() == R.id.song_search) {
-            fragmentClass = ArtistSearchFragment.class;
-        } else {
-            fragmentClass = ArtistSearchFragment.class;
+            // Launch SongSearchActivity directly
+
+            fragmentClass = SongSearchActivity.class;
+            startActivity(new Intent(this, fragmentClass));
+            return; // Return to avoid further execution of the method
         }
+//        else {
+//            // Launch SongSearchActivity directly
+//            fragmentClass = SongSearchActivity.class;
+//            startActivity(new Intent(this, fragmentClass));
+//            return; // Return to avoid further execution of the method
+//        }
 
         if (fragmentClass != null) {
             try {
                 fragment = (Fragment) fragmentClass.newInstance();
             } catch (Exception e) {
                 e.printStackTrace();
-                return;
             }
+        }
 
+        if (fragment != null) {
             // Insert the fragment by replacing any existing fragment
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.flContent, fragment).commit();
@@ -116,7 +123,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (drawerToggle.onOptionsItemSelected(item)) {
@@ -129,11 +135,5 @@ public class MainActivity extends AppCompatActivity {
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
         drawerToggle.syncState();
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        drawerToggle.onConfigurationChanged(newConfig);
     }
 }

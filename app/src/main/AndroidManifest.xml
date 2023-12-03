@@ -24,6 +24,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".hmsong.ui.activities.SongSearchActivity"
+            android:theme="@style/Base.Theme.AndroidFinalProject"
+            android:exported="true">
+            <!-- Remove the theme attribute -->
+        </activity>
+
+
+
+
     </application>
 
 </manifest>
