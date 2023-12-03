@@ -68,9 +68,13 @@ public class SongDetailFragment extends Fragment {
         // Set the song details to the views
         if (song != null) {
             tvTitle.setText(getString(R.string.track_label) + song.getTitle());
-            tvDuration.setText(getString(R.string.duration_label) + song.getDuration());
             tvAlbumName.setText(getString(R.string.album_label) + song.getAlbumName());
             Picasso.get().load(song.getAlbumCoverUrl()).into(ivAlbumCover);
+
+            // Format the duration and set it in the layout
+            String formattedDuration = formatDuration(Long.parseLong(song.getDuration()));
+            binding.tvDuration.setText(getString(R.string.duration_label) + formattedDuration);
+
 
         }
 
@@ -120,7 +124,13 @@ public class SongDetailFragment extends Fragment {
                 song.getAlbumName()) != null;
     }
 
+    // Add a helper method to format the duration
+    private String formatDuration(long durationInSeconds) {
+        long minutes = durationInSeconds / 60;
+        long seconds = durationInSeconds % 60;
 
+        return String.format("%02d:%02d", minutes, seconds);
+    }
 
 
     private void showToast(String message) {

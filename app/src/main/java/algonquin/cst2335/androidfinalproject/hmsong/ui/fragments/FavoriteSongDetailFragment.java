@@ -67,9 +67,13 @@ public class FavoriteSongDetailFragment extends Fragment {
 
                 // Set the details in the layout
                 binding.tvSongTitle.setText(getString(R.string.track_label) + favoriteSong.getTitle());
-                binding.tvDuration.setText(getString(R.string.duration_label) + favoriteSong.getDuration());
                 binding.tvAlbumName.setText(getString(R.string.album_label) + favoriteSong.getAlbumName());
                 Picasso.get().load(favoriteSong.getAlbumCoverUrl()).into(binding.ivAlbumCover);
+
+                // Format the duration and set it in the layout
+                String formattedDuration = formatDuration(Long.parseLong(favoriteSong.getDuration()));
+                binding.tvDuration.setText(getString(R.string.duration_label) + formattedDuration);
+
 
                 // Populate UI (not necessary in onCreateView)
                 // populateUI(binding);
@@ -140,6 +144,13 @@ public class FavoriteSongDetailFragment extends Fragment {
         }
     }
 
+    // Add a helper method to format the duration
+    private String formatDuration(long durationInSeconds) {
+        long minutes = durationInSeconds / 60;
+        long seconds = durationInSeconds % 60;
+
+        return String.format("%02d:%02d", minutes, seconds);
+    }
 
     private void undoDelete() {
         // Check if there is a deleted song to undo
