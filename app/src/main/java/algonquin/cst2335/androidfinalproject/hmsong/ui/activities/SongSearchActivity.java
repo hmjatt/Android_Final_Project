@@ -387,9 +387,16 @@ public class SongSearchActivity extends AppCompatActivity {
         // Handle item selection
         if (item.getItemId() == android.R.id.home) {
             // Handle the home button press
-            navigateBackToMainActivity();
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                // If there are fragments in the back stack, pop the fragment
+                getSupportFragmentManager().popBackStack();
+            } else {
+                // If the back stack is empty, navigate to MainActivity
+                navigateBackToMainActivity();
+            }
             return true;
-        } else if (item.getItemId() == R.id.action_help) {  // Correct resource ID for the action help
+        } else if (item.getItemId() == R.id.action_help) {
+            // Correct resource ID for the action help
             showHelpDialog();
             return true;
         } else {
@@ -397,11 +404,6 @@ public class SongSearchActivity extends AppCompatActivity {
         }
     }
 
-
-    @Override
-    public void onBackPressed() {
-        navigateBackToMainActivity();
-    }
 
     private void navigateBackToMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
