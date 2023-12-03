@@ -395,11 +395,16 @@ public class SongSearchActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onBackPressed() {
+        navigateBackToMainActivity();
+    }
+
     private void navigateBackToMainActivity() {
-        // You can use Intent to navigate back to the MainActivity
         Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         startActivity(intent);
-        finish(); // Finish the current activity
+        finish();
     }
 
 

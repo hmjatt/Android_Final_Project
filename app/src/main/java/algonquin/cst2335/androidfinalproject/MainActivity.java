@@ -26,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
     private ActionBarDrawerToggle drawerToggle;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
+    private boolean isSongSearchActivityLaunched = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,18 +89,22 @@ public class MainActivity extends AppCompatActivity {
         } else if (menuItem.getItemId() == R.id.dictionary) {
             fragmentClass = DictionaryFragment.class;
         } else if (menuItem.getItemId() == R.id.song_search) {
-            // Launch SongSearchActivity directly
-
-            fragmentClass = SongSearchActivity.class;
-            startActivity(new Intent(this, fragmentClass));
+            // Launch SongSearchActivity only if not already launched
+            if (!isSongSearchActivityLaunched) {
+                fragmentClass = SongSearchActivity.class;
+                Intent intent = new Intent(this, fragmentClass);
+                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+                isSongSearchActivityLaunched = true;
+            } else {
+                // If already launched, bring it to the front
+                Intent intent = new Intent(this, SongSearchActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent);
+            }
             return; // Return to avoid further execution of the method
         }
-//        else {
-//            // Launch SongSearchActivity directly
-//            fragmentClass = SongSearchActivity.class;
-//            startActivity(new Intent(this, fragmentClass));
-//            return; // Return to avoid further execution of the method
-//        }
+
 
         if (fragmentClass != null) {
             try {
