@@ -159,7 +159,7 @@ public class SunriseSunsetFragment extends Fragment {
         if (itemId == R.id.action_favorites) {
             // Replace the current fragment with FavoritesFragment
             requireActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.content, new FavoritesFragment())
+                    .replace(R.id.fragmentContainer, new FavoritesFragment())
                     .addToBackStack(null)
                     .commit();
             return true;

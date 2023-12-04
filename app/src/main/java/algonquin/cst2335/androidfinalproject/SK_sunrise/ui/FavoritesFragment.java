@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+
 import java.util.List;
 
 import algonquin.cst2335.androidfinalproject.R;
@@ -21,7 +22,6 @@ import algonquin.cst2335.androidfinalproject.SK_sunrise.viewmodel.SunriseSunsetV
 public class FavoritesFragment extends Fragment {
     private SunriseSunsetViewModel viewModel;
     private RecyclerView recyclerViewFavorites;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -34,7 +34,7 @@ public class FavoritesFragment extends Fragment {
         recyclerViewFavorites.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerViewFavorites.setAdapter(adapter);
 
-        viewModel = new ViewModelProvider(this).get(SunriseSunsetViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(SunriseSunsetViewModel.class);
 
         // Observe changes in the favorite locations and update the adapter
         viewModel.getAllLocations().observe(getViewLifecycleOwner(), new Observer<List<Location>>() {
