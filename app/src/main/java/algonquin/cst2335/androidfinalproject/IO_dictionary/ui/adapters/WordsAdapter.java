@@ -16,6 +16,7 @@ import algonquin.cst2335.androidfinalproject.R;
 public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.WordViewHolder> {
 
     private List<Word> words;
+    private OnWordClickListener listener;
 
     public WordsAdapter(List<Word> words, OnWordClickListener listener) {
         this.words = words;
@@ -41,10 +42,10 @@ public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.WordViewHold
         return words.size();
     }
 
-    private OnWordClickListener listener;
-
     public interface OnWordClickListener {
         void onWordClick(Word word);
+
+
     }
 
     class WordViewHolder extends RecyclerView.ViewHolder {
@@ -53,17 +54,23 @@ public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.WordViewHold
 
         WordViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvWord = itemView.findViewById(R.id.recyclerViewWords);
+            tvWord = itemView.findViewById(R.id.textViewWords);
         }
 
         void bind(Word word) {
             tvWord.setText(word.getWord());
+            // Add code to bind data to additional views if needed
+            // For example, ImageView, additional TextViews, etc.
+
             itemView.setOnClickListener(v -> {
                 // Log a message when a word is clicked
                 Log.d("WordsAdapter", "Word clicked: " + word.getWord());
 
                 // Notify the listener about the click event
                 listener.onWordClick(word);
+
+
+
             });
         }
     }

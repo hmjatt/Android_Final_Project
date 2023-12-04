@@ -1,6 +1,10 @@
+// DictionaryActivity.java
+
 package algonquin.cst2335.androidfinalproject.IO_dictionary.ui.activities;
 
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -8,33 +12,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import com.google.android.material.navigation.NavigationView;
 
-import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.fragments.SavedWordsFragment;
+import algonquin.cst2335.androidfinalproject.IO_dictionary.model.Word;
+import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.adapters.WordsAdapter;
+import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.fragments.WordDetailFragment;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.fragments.WordFragment;
 import algonquin.cst2335.androidfinalproject.R;
 
-public class DictionaryActivity extends AppCompatActivity {
+public class DictionaryActivity extends AppCompatActivity implements WordsAdapter.OnWordClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.io_activity_dictionay);
-
-//        NavigationView navigationView = findViewById(R.id.nvDictionary);
-//
-//        // Set up navigation item selected listener
-//        navigationView.setNavigationItemSelectedListener(item -> {
-//            switch (item.getItemId()) {
-//                case R.id.nav_search:
-//                    replaceFragment(new WordFragment());
-//                    break;
-//                case R.id.nav_saved_words:
-//                    replaceFragment(new SavedWordsFragment());
-//                    break;
-//            }
-//            return true;
-//        });
 
         // Display the default fragment when the activity is created
         replaceFragment(new WordFragment());
@@ -57,5 +47,27 @@ public class DictionaryActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onWordClick(Word word) {
+        // Handle item click, load WordDetailFragment with the selected word
+        // Use a callback or communication method to communicate with the activity
+        // and load the WordDetailFragment.
+        // For now, use logs to test the click event.
+        Log.d("DictionaryActivity", "Word clicked: " + word.getWord());
+
+        // Replace the current fragment with WordDetailFragment
+        WordDetailFragment wordDetailFragment = new WordDetailFragment();
+
+        // Pass the selected word to WordDetailFragment using arguments
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(WordDetailFragment.ARG_SELECTED_WORD, (Parcelable) word);
+        wordDetailFragment.setArguments(bundle);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.flContent, wordDetailFragment)
+                .addToBackStack(null)
+                .commit();
     }
 }

@@ -28,10 +28,10 @@ public class SavedWordsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.io_fragment_saved_words, container, false);
+        View view = inflater.inflate(R.layout.io_activity_dictionay, container, false);
 
         // Initialize RecyclerView
-        recyclerView = view.findViewById(R.id.recyclerViewSavedWords);
+        recyclerView = view.findViewById(R.id.dictionaryRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
 // Use DummyData class to get dummy saved words

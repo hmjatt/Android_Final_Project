@@ -20,6 +20,12 @@ public class DefinitionsAdapter extends RecyclerView.Adapter<DefinitionsAdapter.
 
     private List<Definition> definitions = new ArrayList<>();
 
+    // Constructor to accept initial data
+    public DefinitionsAdapter(List<Definition> definitions) {
+        this.definitions = definitions;
+    }
+
+
     @NonNull
     @Override
     public DefinitionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
