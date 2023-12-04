@@ -40,7 +40,7 @@
         android:layout_marginBottom="8dp"
         android:background="@drawable/hm_image_border"
         android:padding="8dp"
-        android:text="Word"
+        android:text="Definition"
         android:textSize="24dp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/tvWordDetail"

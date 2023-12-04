@@ -53,7 +53,7 @@ public class SavedWordsAdapter extends RecyclerView.Adapter<SavedWordsAdapter.Sa
 
         SavedWordViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvSavedWord = itemView.findViewById(R.id.recyclerViewSavedWords);
+            tvSavedWord = itemView.findViewById(R.id.textViewSavedWords);
         }
 
         void bind(SavedWord savedWord) {

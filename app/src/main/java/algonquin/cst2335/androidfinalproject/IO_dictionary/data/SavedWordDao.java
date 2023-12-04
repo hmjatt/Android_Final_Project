@@ -23,4 +23,8 @@ public interface SavedWordDao {
     @Query("SELECT * FROM saved_word_table")
     List<SavedWord> getAllSavedWords();
 
+    @Query("SELECT * FROM saved_word_table WHERE id = :savedWordId")
+    SavedWord getSavedWordById(int savedWordId);
+
+
 }

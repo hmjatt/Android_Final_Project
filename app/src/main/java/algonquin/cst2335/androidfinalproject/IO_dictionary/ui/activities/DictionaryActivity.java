@@ -1,11 +1,11 @@
-// DictionaryActivity.java
-
 package algonquin.cst2335.androidfinalproject.IO_dictionary.ui.activities;
 
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import algonquin.cst2335.androidfinalproject.IO_dictionary.model.Word;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.adapters.WordsAdapter;
+import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.fragments.SavedWordsFragment;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.fragments.WordDetailFragment;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.fragments.WordFragment;
 import algonquin.cst2335.androidfinalproject.R;
@@ -28,6 +29,21 @@ public class DictionaryActivity extends AppCompatActivity implements WordsAdapte
 
         // Display the default fragment when the activity is created
         replaceFragment(new WordFragment());
+
+        // Set up click listener for "View Saved Words" button
+        Button btnViewSavedWords = findViewById(R.id.btnViewSavedWords);
+        btnViewSavedWords.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Handle the button click, for example, navigate to the SavedWordsFragment
+                SavedWordsFragment savedWordsFragment = new SavedWordsFragment();
+                // Use FragmentManager to replace the current fragment with SavedWordsFragment
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.flContent, savedWordsFragment)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
     }
 
     private void replaceFragment(Fragment fragment) {
