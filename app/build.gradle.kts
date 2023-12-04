@@ -40,6 +40,9 @@ dependencies {
     implementation( "androidx.room:room-runtime:$room_version")
     annotationProcessor( "androidx.room:room-compiler:$room_version")
 
+    implementation ("com.google.code.gson:gson:2.8.8")
+
+
     implementation("androidx.recyclerview:recyclerview:1.3.2")
 
     implementation("com.android.volley:volley:1.2.1")

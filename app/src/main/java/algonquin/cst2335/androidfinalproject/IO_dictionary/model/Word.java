@@ -6,24 +6,37 @@ import android.os.Parcelable;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.google.gson.reflect.TypeToken;
+
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity(tableName = "word_table")
 public class Word implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
-    private String word;
-    private String definition;
 
-    public Word(String word, String definition) {
+    private String word;
+
+    public void setDefinitions(List<String> definitions) {
+        this.definitions = definitions;
+    }
+
+    private List<String> definitions;  // Assuming definitions is a list of strings
+
+
+    public Word(String word) {
         this.word = word;
-        this.definition = definition;
+        this.definitions = new ArrayList<>();  // Initialize the list here
     }
 
     protected Word(Parcel in) {
-        id = in.readInt();
         word = in.readString();
-        definition = in.readString();
+        definitions = in.createStringArrayList();
     }
+
+
 
     public static final Creator<Word> CREATOR = new Creator<Word>() {
         @Override
@@ -37,28 +50,16 @@ public class Word implements Parcelable {
         }
     };
 
-    public int getId() {
-        return id;
-    }
-
     public String getWord() {
         return word;
     }
 
-    public String getDefinition() {
-        return definition;
+    public List<String> getDefinitions() {
+        return definitions;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setWord(String word) {
-        this.word = word;
-    }
-
-    public void setDefinition(String definition) {
-        this.definition = definition;
+    public void addDefinition(String definition) {
+        definitions.add(definition);
     }
 
     @Override
@@ -68,8 +69,15 @@ public class Word implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(id);
         dest.writeString(word);
-        dest.writeString(definition);
+        dest.writeStringList(definitions);
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

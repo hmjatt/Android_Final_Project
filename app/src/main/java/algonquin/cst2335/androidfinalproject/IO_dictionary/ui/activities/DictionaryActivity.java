@@ -4,19 +4,18 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonArrayRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,6 +24,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import algonquin.cst2335.androidfinalproject.IO_dictionary.model.Definition;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.model.Word;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.adapters.WordsAdapter;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.fragments.SavedWordsFragment;
@@ -45,8 +45,22 @@ public class DictionaryActivity extends AppCompatActivity implements WordsAdapte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.io_activity_dictionay);
 
+        // Assuming you have a RecyclerView with the ID "recyclerViewWords" in your layout
+        RecyclerView recyclerView = findViewById(R.id.dictionaryRecycler);
+
+        // Create an empty list of words or fetch it from somewhere
+        List<Word> initialWordList = new ArrayList<>();
+
+        // Initialize the adapter and set it to the RecyclerView
+        wordsAdapter = new WordsAdapter(initialWordList, this);
+        recyclerView.setAdapter(wordsAdapter);
+
+        // Set a LinearLayoutManager to your RecyclerView
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
         // Display the default fragment when the activity is created
-        replaceFragment(new WordFragment());
+//        replaceFragment(new WordFragment());
 
         // Set up EditText and Button
         searchEditText = findViewById(R.id.searchWords);
@@ -89,6 +103,8 @@ public class DictionaryActivity extends AppCompatActivity implements WordsAdapte
         wordsAdapter.setWords(words);
     }
 
+
+
     public void makeApiRequest(String searchTerm) {
         String apiUrl = "https://api.dictionaryapi.dev/api/v2/entries/en/" + searchTerm;
 // Log the API request
@@ -98,7 +114,7 @@ public class DictionaryActivity extends AppCompatActivity implements WordsAdapte
         // Handle the JSON response and update the RecyclerView with definitions
         // Example code (you need to implement your own networking logic):
 
-        JsonObjectRequest request = new JsonObjectRequest(
+        JsonArrayRequest request = new JsonArrayRequest(
                 Request.Method.GET,
                 apiUrl,
                 null,
@@ -122,32 +138,81 @@ public class DictionaryActivity extends AppCompatActivity implements WordsAdapte
         DictionaryVolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(request);
     }
 
-    private List<Word> parseJsonResponse(JSONObject jsonResponse) {
+
+
+
+
+
+
+
+    private List<Word> parseJsonResponse(JSONArray jsonResponse) {
         // Parse the JSON response and create a list of Word objects
-        // Example code (you need to implement your own parsing logic):
         List<Word> words = new ArrayList<>();
+
         try {
-            // Check if the response has an array of definitions
-            JSONArray definitionsArray = jsonResponse.getJSONArray("definitions");
+            for (int i = 0; i < jsonResponse.length(); i++) {
+                JSONObject definitionObject = jsonResponse.getJSONObject(i);
 
-            for (int i = 0; i < definitionsArray.length(); i++) {
-                JSONObject definitionObject = definitionsArray.getJSONObject(i);
+                // Extract the word
+                String wordText = definitionObject.getString("word");
 
-                // Extract relevant information from the definitionObject
-                String word = definitionObject.getString("word");
-                String definition = definitionObject.getString("definition");
+                Log.d("word", "API response received: " + wordText);
 
-                // Create a Word object and add it to the list
-                Word wordObject = new Word(word, definition);
-                words.add(wordObject);
+                // Check if the response has an array of meanings
+                if (definitionObject.has("meanings")) {
+                    JSONArray meaningsArray = definitionObject.getJSONArray("meanings");
+
+                    Log.d("meanings", "API response received: " + meaningsArray);
+
+                    // Iterate through meanings
+                    for (int j = 0; j < meaningsArray.length(); j++) {
+                        JSONObject meaningObject = meaningsArray.getJSONObject(j);
+
+                        Log.d("meaning", "API response received: " + meaningObject);
+
+                        // Check if the meaningObject has an array of definitions
+                        if (meaningObject.has("definitions")) {
+                            JSONArray definitionsArray = meaningObject.getJSONArray("definitions");
+
+                            Log.d("defs", "API response received: " + definitionsArray);
+
+                            // Create a Word object
+                            Word word = new Word(wordText);
+
+                            // Iterate through definitions
+                            for (int k = 0; k < definitionsArray.length(); k++) {
+                                JSONObject definition = definitionsArray.getJSONObject(k);
+
+                                // Extract definition text
+                                String definitionText = definition.getString("definition");
+
+                                Log.d("defT", "API response received: " + definitionText);
+
+
+                                // Extract definition text
+//                                String defin = definition.getString("definition");
+
+
+
+
+
+                                // Add the definition to the Word object
+                                word.addDefinition(definitionText);
+                            }
+
+                            // Add the Word object to the list
+                            words.add(word);
+                        }
+                    }
+                }
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        // Parse the JSON response and add words to the list
         return words;
     }
+
 
     @Override
     public void onWordClick(Word word) {
