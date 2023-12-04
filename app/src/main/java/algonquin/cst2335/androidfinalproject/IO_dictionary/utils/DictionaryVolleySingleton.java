@@ -1,16 +1,21 @@
-// io_dictionary.utils.DictionaryVolleySingleton
+// DictionaryVolleySingleton.java
 package algonquin.cst2335.androidfinalproject.IO_dictionary.utils;
 
 import android.content.Context;
+
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
 public class DictionaryVolleySingleton {
+
     private static DictionaryVolleySingleton instance;
     private RequestQueue requestQueue;
+    private static Context context;
 
     private DictionaryVolleySingleton(Context context) {
-        requestQueue = Volley.newRequestQueue(context.getApplicationContext());
+        this.context = context;
+        requestQueue = getRequestQueue();
     }
 
     public static synchronized DictionaryVolleySingleton getInstance(Context context) {
@@ -21,6 +26,13 @@ public class DictionaryVolleySingleton {
     }
 
     public RequestQueue getRequestQueue() {
+        if (requestQueue == null) {
+            requestQueue = Volley.newRequestQueue(context.getApplicationContext());
+        }
         return requestQueue;
+    }
+
+    public <T> void addToRequestQueue(Request<T> req) {
+        getRequestQueue().add(req);
     }
 }
