@@ -18,8 +18,7 @@ import com.google.android.material.navigation.NavigationView;
 
 import algonquin.cst2335.androidfinalproject.IO_dictionary.DictionaryFragment;
 import algonquin.cst2335.androidfinalproject.CF_recipe.RecipeSearchFragment;
-import algonquin.cst2335.androidfinalproject.hmsong.ui.activities.SongSearchActivity;
-import algonquin.cst2335.androidfinalproject.SK_sunrise.SunriseSunsetFragment;
+
 
 /**
  * The MainActivity class is the main entry point of the application.
