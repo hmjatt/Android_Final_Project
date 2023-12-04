@@ -11,13 +11,19 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import algonquin.cst2335.androidfinalproject.IO_dictionary.model.Definition;
-import algonquin.cst2335.androidfinalproject.IO_dictionary.model.DummyData;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.model.SavedWord;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.adapters.SavedWordDefinitionAdapter;
+import algonquin.cst2335.androidfinalproject.IO_dictionary.utils.DictionaryVolleySingleton;
 import algonquin.cst2335.androidfinalproject.R;
+
+import com.android.volley.Request;
+import com.android.volley.toolbox.JsonArrayRequest;
+
+import org.json.JSONArray;
 
 public class SavedWordDefinitionFragment extends Fragment {
 
@@ -38,9 +44,6 @@ public class SavedWordDefinitionFragment extends Fragment {
         recyclerView = view.findViewById(R.id.dictionaryRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Use DummyData class to get dummy definitions
-        List<Definition> dummyDefinitions = DummyData.getDummySavedWordDefinitions();
-
         // Retrieve the saved word ID from arguments
         savedWordId = getArguments().getInt(ARG_SAVED_WORD_ID);
 
@@ -48,32 +51,48 @@ public class SavedWordDefinitionFragment extends Fragment {
         definitionsAdapter = new SavedWordDefinitionAdapter();
         recyclerView.setAdapter(definitionsAdapter);
 
-        // Logging the dummy definitions
-        for (Definition definition : dummyDefinitions) {
-            Log.d("DummySavedData", "Dummy Saved Definition: " + definition.getDefinition());
-        }
+        // Make API request to get saved word definitions
+        makeApiRequest(savedWordId);
 
         tvSavedWordDetail = fragmentDefinition.findViewById(R.id.tvSavedWordDetail);
-
-        // Use the saved word ID to retrieve the saved word from the database
-        SavedWord savedWord = getSavedWordById(savedWordId);
-
-        if (savedWord != null) {
-            // Display the saved word in the TextView
-            tvSavedWordDetail.setText(savedWord.getSavedWord());
-        }
-
-        // Set the definitions in the adapter
-        definitionsAdapter.setDefinitions(dummyDefinitions);
 
         return view;
     }
 
-    // Implement methods to retrieve saved word and associated definitions from the database
-    private SavedWord getSavedWordById(int savedWordId) {
-        // Query the database using the saved word ID
-        // Use the SavedWordDao to retrieve the saved word by ID
-        // Replace with actual database query
-        return null;
+    private void makeApiRequest(int savedWordId) {
+        // Make an API request to get definitions for the saved word
+        String apiUrl = "https://api.example.com/definitions?savedWordId=" + savedWordId;
+
+        JsonArrayRequest request = new JsonArrayRequest(
+                Request.Method.GET,
+                apiUrl,
+                null,
+                response -> {
+                    // Parse the JSON response and update the RecyclerView
+                    List<Definition> definitions = parseJsonResponse(response);
+                    updateRecyclerView(definitions);
+                },
+                error -> {
+                    // Handle error if needed
+                    Log.e("SavedWordDefFragment", "Error making API request: " + error.getMessage());
+                }
+        );
+
+        // Add the request to the Volley queue
+        DictionaryVolleySingleton.getInstance(requireContext()).addToRequestQueue(request);
     }
+
+    private List<Definition> parseJsonResponse(JSONArray jsonResponse) {
+        // Parse the JSON response and create a list of Definition objects
+        // Implement your parsing logic based on the actual JSON structure
+        List<Definition> definitions = new ArrayList<>();
+        // Parse the JSON response and add definitions to the list
+        return definitions;
+    }
+
+    private void updateRecyclerView(List<Definition> definitions) {
+        definitionsAdapter.setDefinitions(definitions);
+    }
+
+    // Other methods as before...
 }

@@ -11,10 +11,10 @@ public class DictionaryVolleySingleton {
 
     private static DictionaryVolleySingleton instance;
     private RequestQueue requestQueue;
-    private static Context context;
+    private static Context applicationContext; // Change to applicationContext
 
     private DictionaryVolleySingleton(Context context) {
-        this.context = context;
+        this.applicationContext = context.getApplicationContext(); // Use applicationContext
         requestQueue = getRequestQueue();
     }
 
@@ -27,7 +27,7 @@ public class DictionaryVolleySingleton {
 
     public RequestQueue getRequestQueue() {
         if (requestQueue == null) {
-            requestQueue = Volley.newRequestQueue(context.getApplicationContext());
+            requestQueue = Volley.newRequestQueue(applicationContext);
         }
         return requestQueue;
     }

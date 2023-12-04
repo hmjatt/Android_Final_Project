@@ -1,29 +1,30 @@
-// WordFragment.java
-
 package algonquin.cst2335.androidfinalproject.IO_dictionary.ui.fragments;
 
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.EditText;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
+import com.android.volley.Request;
+import com.android.volley.toolbox.JsonObjectRequest;
+import org.json.JSONObject;
+import java.util.ArrayList;
 import java.util.List;
-
 import algonquin.cst2335.androidfinalproject.IO_dictionary.model.Word;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.adapters.WordsAdapter;
+import algonquin.cst2335.androidfinalproject.IO_dictionary.utils.DictionaryVolleySingleton;
 import algonquin.cst2335.androidfinalproject.R;
-import algonquin.cst2335.androidfinalproject.IO_dictionary.model.DummyData;
 
 public class WordFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private WordsAdapter wordsAdapter;
+    private EditText searchEditText;
 
     public WordFragment() {
         // Required empty public constructor
@@ -37,26 +38,8 @@ public class WordFragment extends Fragment {
         recyclerView = view.findViewById(R.id.dictionaryRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Use DummyData class to get dummy words
-        List<Word> dummyWords = DummyData.getDummyWords();
-
-        wordsAdapter = new WordsAdapter(dummyWords, word -> {
-            Log.d("WordFragment", "Word clicked: " + word.getWord());
-
-            WordDetailFragment wordDetailFragment = new WordDetailFragment();
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(WordDetailFragment.ARG_SELECTED_WORD, word); // Pass the word directly
-            wordDetailFragment.setArguments(bundle);
-
-            getParentFragmentManager().beginTransaction()
-                    .replace(R.id.flContent, wordDetailFragment)
-                    .addToBackStack(null)
-                    .commit();
-        });
-
         recyclerView.setAdapter(wordsAdapter);
 
         return view;
     }
-
 }

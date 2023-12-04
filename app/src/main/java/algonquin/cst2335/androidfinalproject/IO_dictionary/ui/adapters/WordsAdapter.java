@@ -23,6 +23,12 @@ public class WordsAdapter extends RecyclerView.Adapter<WordsAdapter.WordViewHold
         this.listener = listener;
     }
 
+
+    public void setWords(List<Word> words) {
+        this.words = words;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public WordViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

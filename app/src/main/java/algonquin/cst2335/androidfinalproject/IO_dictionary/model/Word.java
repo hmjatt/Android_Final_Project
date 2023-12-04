@@ -12,14 +12,17 @@ public class Word implements Parcelable {
     @PrimaryKey(autoGenerate = true)
     private int id;
     private String word;
+    private String definition;
 
-    public Word(String word) {
+    public Word(String word, String definition) {
         this.word = word;
+        this.definition = definition;
     }
 
     protected Word(Parcel in) {
         id = in.readInt();
         word = in.readString();
+        definition = in.readString();
     }
 
     public static final Creator<Word> CREATOR = new Creator<Word>() {
@@ -42,12 +45,20 @@ public class Word implements Parcelable {
         return word;
     }
 
+    public String getDefinition() {
+        return definition;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
 
     public void setWord(String word) {
         this.word = word;
+    }
+
+    public void setDefinition(String definition) {
+        this.definition = definition;
     }
 
     @Override
@@ -59,5 +70,6 @@ public class Word implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(id);
         dest.writeString(word);
+        dest.writeString(definition);
     }
 }
