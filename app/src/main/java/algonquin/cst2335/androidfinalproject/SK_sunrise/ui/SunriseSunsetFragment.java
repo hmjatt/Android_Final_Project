@@ -156,14 +156,14 @@ public class SunriseSunsetFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
 
-        if (itemId == R.id.action_favorites) {
+        if (itemId == R.id.location_action_favorites) {
             // Replace the current fragment with FavoritesFragment
-            requireActivity().getSupportFragmentManager().beginTransaction()
+            getParentFragmentManager().beginTransaction()
                     .replace(R.id.fragmentContainer, new FavoritesFragment())
                     .addToBackStack(null)
                     .commit();
             return true;
-        } else if (itemId == R.id.action_help) {
+        } else if (itemId == R.id.location_action_help) {
             // Handle the Help menu item click
             showHelpDialog();
             return true;
