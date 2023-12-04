@@ -1,11 +1,11 @@
-<!-- hm_fragment_song_detail -->
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- hm_item_favorite_song_detail.xml -->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    android:orientation="vertical"
-    android:layout_marginTop="130dp">
+    android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -31,9 +31,9 @@
             android:layout_height="wrap_content"
             android:text="@string/song_title"
             android:textSize="18sp"
+            android:textColor="#EAE7FA"
             android:textStyle="bold"
             android:textAlignment="center"
-            android:textColor="#EAE7FA"
             app:layout_constraintBottom_toTopOf="@+id/tvDuration"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -47,9 +47,9 @@
             android:layout_height="wrap_content"
             android:text="@string/duration"
             android:textSize="16sp"
+            android:textColor="#EAE7FA"
             android:textStyle="bold"
             android:textAlignment="center"
-            android:textColor="#EAE7FA"
             app:layout_constraintBottom_toTopOf="@+id/tvAlbumName"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -66,7 +66,7 @@
             android:textStyle="bold"
             android:textAlignment="center"
             android:textColor="#EAE7FA"
-            app:layout_constraintBottom_toTopOf="@+id/btnSaveToFavorites"
+            app:layout_constraintBottom_toTopOf="@+id/btnDelete"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -74,10 +74,10 @@
             app:layout_constraintVertical_bias="0.5" />
 
         <Button
-            android:id="@+id/btnSaveToFavorites"
+            android:id="@+id/btnDelete"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text="@string/save_to_favorites"
+            android:text="@string/delete"
             android:textColor="@android:color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -87,5 +87,6 @@
             app:layout_constraintVertical_bias="0.5" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
