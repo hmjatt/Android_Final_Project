@@ -33,7 +33,8 @@ public class SavedWordsFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Initialize and set up the SavedWordsAdapter
-        savedWordsAdapter = new SavedWordsAdapter(savedWord -> {
+        savedWordsAdapter = new SavedWordsAdapter(new ArrayList<>(), savedWord -> {
+
             Log.d("SavedWordsFragment", "Saved Word clicked: " + savedWord.getSavedWord());
 
             SavedWordDefinitionFragment savedWordDetailFragment = new SavedWordDefinitionFragment();

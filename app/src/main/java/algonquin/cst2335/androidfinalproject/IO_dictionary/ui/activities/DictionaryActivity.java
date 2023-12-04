@@ -91,8 +91,8 @@ public class DictionaryActivity extends AppCompatActivity implements WordsAdapte
 
     public void makeApiRequest(String searchTerm) {
         String apiUrl = "https://api.dictionaryapi.dev/api/v2/entries/en/" + searchTerm;
-
-        Log.d("DictionaryActivity", "Search button clicked");
+// Log the API request
+        Log.d("DictionaryActivity", "Making API request to: " + apiUrl);
 
         // Make API request using Volley or other networking library
         // Handle the JSON response and update the RecyclerView with definitions
@@ -103,14 +103,20 @@ public class DictionaryActivity extends AppCompatActivity implements WordsAdapte
                 apiUrl,
                 null,
                 response -> {
+                    // Log the API response
+                    Log.d("DictionaryActivity", "API response received: " + response.toString());
+
                     // Parse the JSON response and update the RecyclerView
                     List<Word> words = parseJsonResponse(response);
                     updateRecyclerView(words);
                 },
                 error -> {
+                    // Log the API error
+                    Log.e("DictionaryActivity", "Error making API request: " + error.getMessage());
+
                     // Handle error if needed
                 }
-        );
+                );
 
         // Update the RecyclerView with definitions
         DictionaryVolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(request);

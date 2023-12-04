@@ -24,6 +24,11 @@ public class SavedWordsAdapter extends RecyclerView.Adapter<SavedWordsAdapter.Sa
         this.listener = listener;
     }
 
+    public void setSavedWords(List<SavedWord> savedWords) {
+        this.savedWords = savedWords;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public SavedWordViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
