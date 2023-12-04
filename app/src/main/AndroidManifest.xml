@@ -29,12 +29,12 @@
             android:theme="@style/Base.Theme.AndroidFinalProject"
             android:launchMode="singleTop"
             android:exported="true">
-            <!-- Remove the theme attribute -->
         </activity>
-
-
-
-
+        <activity
+            android:name=".IO_dictionary.ui.activities.DictionaryActivity"
+            android:theme="@style/Base.Theme.AndroidFinalProject"
+            android:launchMode="singleTop"
+            android:exported="true">
+        </activity>
     </application>
-
 </manifest>
