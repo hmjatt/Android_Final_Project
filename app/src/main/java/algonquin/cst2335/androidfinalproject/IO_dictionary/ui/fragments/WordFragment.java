@@ -3,6 +3,7 @@ package algonquin.cst2335.androidfinalproject.IO_dictionary.ui.fragments;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.adapters.WordsAdap
 import algonquin.cst2335.androidfinalproject.IO_dictionary.utils.DictionaryVolleySingleton;
 import algonquin.cst2335.androidfinalproject.R;
 
+// WordFragment.java
+
 public class WordFragment extends Fragment {
 
     private RecyclerView recyclerView;
@@ -32,11 +35,17 @@ public class WordFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.io_recycleview_dictionary, container, false);
+        View view = inflater.inflate(R.layout.io_activity_dictionay, container, false);
 
         // Initialize RecyclerView
-        recyclerView = view.findViewById(R.id.dictionaryRecyclerView);
+        recyclerView = view.findViewById(R.id.dictionaryRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // Initialize the WordsAdapter with a dummy listener for now
+        wordsAdapter = new WordsAdapter(new ArrayList<>(), word -> {
+            // Handle word click, you can replace this with your logic
+            Log.d("WordFragment", "Word clicked: " + word.getWord());
+        });
 
         recyclerView.setAdapter(wordsAdapter);
 

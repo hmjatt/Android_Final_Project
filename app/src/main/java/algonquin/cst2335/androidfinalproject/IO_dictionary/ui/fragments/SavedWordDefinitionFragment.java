@@ -30,18 +30,19 @@ public class SavedWordDefinitionFragment extends Fragment {
     public static final String ARG_SAVED_WORD_ID = "saved_word_id";
 
     private int savedWordId;
+
     private TextView tvSavedWordDetail;
     private RecyclerView recyclerView;
     private SavedWordDefinitionAdapter definitionsAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.io_recycleview_dictionary, container, false);
+        View view = inflater.inflate(R.layout.io_activity_dictionay, container, false);
 
         View fragmentDefinition = inflater.inflate(R.layout.io_fragment_saved_word_definition, container, false);
 
         // Initialize views
-        recyclerView = view.findViewById(R.id.dictionaryRecyclerView);
+        recyclerView = view.findViewById(R.id.dictionaryRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Retrieve the saved word ID from arguments
