@@ -48,4 +48,10 @@ public class SunriseSunsetAdapter extends RecyclerView.Adapter<SunriseSunsetAdap
             locationName = itemView.findViewById(R.id.tvLocationName);
         }
     }
+
+    public void updateData(List<Location> newLocations) {
+        locationList.clear();
+        locationList.addAll(newLocations);
+        notifyDataSetChanged();
+    }
 }

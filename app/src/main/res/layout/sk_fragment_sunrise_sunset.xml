@@ -8,14 +8,14 @@
     <EditText
         android:id="@+id/etLatitude"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:hint="Latitude" />
 
     <!-- EditText for Longitude -->
     <EditText
         android:id="@+id/etLongitude"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:hint="Longitude" />
 
     <!-- Button to Perform Lookup -->
@@ -39,4 +39,11 @@
         android:layout_height="wrap_content"
         android:text="Save to Favorites" />
 
+    <!-- Fragment container -->
+    <FrameLayout
+        android:id="@+id/fragmentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/btnSave"
+        android:layout_marginTop="16dp" />
 </LinearLayout>

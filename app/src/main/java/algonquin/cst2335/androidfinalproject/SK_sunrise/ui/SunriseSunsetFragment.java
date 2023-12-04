@@ -1,16 +1,23 @@
 package algonquin.cst2335.androidfinalproject.SK_sunrise.ui;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -36,6 +43,7 @@ public class SunriseSunsetFragment extends Fragment {
 
     private SunriseSunsetViewModel viewModel;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.sk_fragment_sunrise_sunset, container, false);
@@ -54,7 +62,9 @@ public class SunriseSunsetFragment extends Fragment {
         etLatitude.setText(String.valueOf(savedLocation.getLatitude()));
         etLongitude.setText(String.valueOf(savedLocation.getLongitude()));
 
+        viewModel = new ViewModelProvider(this).get(SunriseSunsetViewModel.class);
 
+        setHasOptionsMenu(true);  // Enable onCreateOptionsMenu callback
         return view;
     }
 
@@ -97,16 +107,20 @@ public class SunriseSunsetFragment extends Fragment {
     }
 
     private void saveToFavorites() {
-        double latitude = Double.parseDouble(etLatitude.getText().toString());
-        double longitude = Double.parseDouble(etLongitude.getText().toString());
+        if (viewModel != null) {
+            double latitude = Double.parseDouble(etLatitude.getText().toString());
+            double longitude = Double.parseDouble(etLongitude.getText().toString());
 
-        Location location = new Location(latitude, longitude);
+            Location location = new Location(latitude, longitude);
 
-        // Insert the location into the database using ViewModel
-        viewModel.insertLocation(location);
+            // Insert the location into the database using ViewModel
+            viewModel.insertLocation(location);
 
-        // Provide appropriate feedback using Toast or Snackbar
-        Toast.makeText(requireContext(), "Location saved to favorites", Toast.LENGTH_SHORT).show();
+            // Provide appropriate feedback using Toast or Snackbar
+            Toast.makeText(requireContext(), "Location saved to favorites", Toast.LENGTH_SHORT).show();
+        } else {
+            Log.e("MyApp", "viewModel is null");
+        }
     }
 
 
@@ -124,6 +138,47 @@ public class SunriseSunsetFragment extends Fragment {
             // Handle any parsing errors or missing data
             Toast.makeText(requireContext(), "Error parsing sunrise/sunset data", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.sk_menu_location_search, menu);
+
+        // Get the SearchView from the menu item
+        MenuItem searchItem = menu.findItem(R.id.location_action_search);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+
+        // Set up search functionality if needed
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+
+        if (itemId == R.id.action_favorites) {
+            // Replace the current fragment with FavoritesFragment
+            requireActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.content, new FavoritesFragment())
+                    .addToBackStack(null)
+                    .commit();
+            return true;
+        } else if (itemId == R.id.action_help) {
+            // Handle the Help menu item click
+            showHelpDialog();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void showHelpDialog() {
+        // Implement the logic to show a dialog with instructions for using the interface
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Help")
+                .setMessage("This is where you put your help information.")
+                .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                .show();
     }
 }
 
