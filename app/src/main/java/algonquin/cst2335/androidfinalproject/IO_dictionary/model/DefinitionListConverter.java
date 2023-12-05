@@ -10,19 +10,15 @@ import java.util.List;
 
 public class DefinitionListConverter {
 
-
-
     @TypeConverter
-    public static List<String> fromString(String value) {
-        Type listType = new TypeToken<List<String>>() {}.getType();
+    public static List<Definition> fromString(String value) {
+        Type listType = new TypeToken<List<Definition>>() {}.getType();
         return new Gson().fromJson(value, listType);
     }
 
     @TypeConverter
-    public static String fromList(List<String> list) {
+    public static String fromList(List<Definition> list) {
         Gson gson = new Gson();
         return gson.toJson(list);
     }
-
-
 }

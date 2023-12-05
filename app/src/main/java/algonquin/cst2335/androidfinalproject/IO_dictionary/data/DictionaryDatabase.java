@@ -12,8 +12,8 @@ import androidx.room.TypeConverters;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.model.DefinitionListConverter;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.model.Word;
 
-@Database(entities = {Word.class}, version = 1)
-@TypeConverters(DefinitionListConverter.class)
+@Database(entities = {Word.class}, version = 1, exportSchema = false)
+@TypeConverters({DefinitionListConverter.class}) // Add this line
 public abstract class DictionaryDatabase extends RoomDatabase {
 
     private static DictionaryDatabase instance;

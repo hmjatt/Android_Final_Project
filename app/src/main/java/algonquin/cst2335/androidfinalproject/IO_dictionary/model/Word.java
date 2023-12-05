@@ -3,10 +3,10 @@ package algonquin.cst2335.androidfinalproject.IO_dictionary.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
-import com.google.gson.reflect.TypeToken;
+import androidx.room.TypeConverters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,29 +14,42 @@ import java.util.List;
 @Entity(tableName = "word_table")
 public class Word implements Parcelable {
 
-    @PrimaryKey(autoGenerate = true)
-    private int id;
-
+    @PrimaryKey
+    @NonNull
     private String word;
 
-    public void setDefinitions(List<String> definitions) {
+    @TypeConverters(DefinitionListConverter.class)
+    private List<Definition> definitions;
+
+    public Word(@NonNull String word) {
+        this.word = word;
+        this.definitions = new ArrayList<>();
+    }
+
+    @NonNull
+    public String getWord() {
+        return word;
+    }
+
+    public List<Definition> getDefinitions() {
+        return definitions;
+    }
+
+    public void setDefinitions(List<Definition> definitions) {
         this.definitions = definitions;
     }
 
-    private List<String> definitions;  // Assuming definitions is a list of strings
-
-
-    public Word(String word) {
-        this.word = word;
-        this.definitions = new ArrayList<>();  // Initialize the list here
+    public void addDefinition(Definition definition) {
+        definitions.add(definition);
     }
+
+    // Parcelable implementation here...
 
     protected Word(Parcel in) {
         word = in.readString();
-        definitions = in.createStringArrayList();
+        // Use createTypedArrayList() with the Definition.CREATOR
+        definitions = in.createTypedArrayList(Definition.CREATOR);
     }
-
-
 
     public static final Creator<Word> CREATOR = new Creator<Word>() {
         @Override
@@ -50,18 +63,6 @@ public class Word implements Parcelable {
         }
     };
 
-    public String getWord() {
-        return word;
-    }
-
-    public List<String> getDefinitions() {
-        return definitions;
-    }
-
-    public void addDefinition(String definition) {
-        definitions.add(definition);
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -70,14 +71,7 @@ public class Word implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(word);
-        dest.writeStringList(definitions);
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+        // Use writeTypedList() with the definitions list
+        dest.writeTypedList(definitions);
     }
 }

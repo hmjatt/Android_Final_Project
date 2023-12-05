@@ -156,25 +156,30 @@ public class DictionaryActivity extends AppCompatActivity implements WordsAdapte
                 // Extract the word
                 String wordText = definitionObject.getString("word");
 
-                Log.d("word", "API response received: " + wordText);
+//                Log.d("word", "API response received: " + wordText);
 
                 // Check if the response has an array of meanings
                 if (definitionObject.has("meanings")) {
                     JSONArray meaningsArray = definitionObject.getJSONArray("meanings");
 
-                    Log.d("meanings", "API response received: " + meaningsArray);
+//                    Log.d("meanings", "API response received: " + meaningsArray);
 
                     // Iterate through meanings
                     for (int j = 0; j < meaningsArray.length(); j++) {
                         JSONObject meaningObject = meaningsArray.getJSONObject(j);
 
-                        Log.d("meaning", "API response received: " + meaningObject);
+//                        Log.d("meaning", "API response received: " + meaningObject);
 
                         // Check if the meaningObject has an array of definitions
                         if (meaningObject.has("definitions")) {
                             JSONArray definitionsArray = meaningObject.getJSONArray("definitions");
 
-                            Log.d("defs", "API response received: " + definitionsArray);
+                            String partOfSpeech = meaningObject.getString("partOfSpeech");
+
+                            wordText = wordText + " - " + partOfSpeech;
+
+
+                            Log.d("partOfSpeech", "API partOfSpeech response: - " + partOfSpeech);
 
                             // Create a Word object
                             Word word = new Word(wordText);
@@ -186,7 +191,7 @@ public class DictionaryActivity extends AppCompatActivity implements WordsAdapte
                                 // Extract definition text
                                 String definitionText = definition.getString("definition");
 
-                                Log.d("defT", "API response received: " + definitionText);
+//                                Log.d("defT", "API response received: " + definitionText);
 
 
                                 // Extract definition text
@@ -197,7 +202,8 @@ public class DictionaryActivity extends AppCompatActivity implements WordsAdapte
 
 
                                 // Add the definition to the Word object
-                                word.addDefinition(definitionText);
+                                word.addDefinition(new Definition(definitionText));
+
                             }
 
                             // Add the Word object to the list
@@ -234,5 +240,7 @@ public class DictionaryActivity extends AppCompatActivity implements WordsAdapte
                 .replace(R.id.flContent, wordDetailFragment)
                 .addToBackStack(null)
                 .commit();
+
+        // Update the RecyclerView with definitions
     }
 }
