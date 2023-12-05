@@ -29,7 +29,7 @@ public class SavedWordsFragment extends Fragment {
         View view = inflater.inflate(R.layout.io_activity_dictionay, container, false);
 
         // Initialize RecyclerView
-        recyclerView = view.findViewById(R.id.dictionaryRecyclerView);
+        recyclerView = view.findViewById(R.id.dictionaryRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Initialize and set up the SavedWordsAdapter

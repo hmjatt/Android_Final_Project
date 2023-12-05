@@ -3,6 +3,8 @@ package algonquin.cst2335.androidfinalproject.IO_dictionary.model;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.util.List;
+
 @Entity(tableName = "saved_word_table")
 public class SavedWord {
 
