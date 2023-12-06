@@ -27,7 +27,7 @@ public class IO_DefinitionsAdapter extends RecyclerView.Adapter<IO_DefinitionsAd
     @NonNull
     @Override
     public DefinitionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.io_io_fragment_word_definition, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.io_io_fragment_word, parent, false);
         return new DefinitionViewHolder(view);
     }
 

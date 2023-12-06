@@ -66,11 +66,13 @@ public class IO_SavedWordsAdapter extends RecyclerView.Adapter<IO_SavedWordsAdap
         void bind(IO_Word savedWord) {
             tvSavedWord.setText(savedWord.getWord());
             itemView.setOnClickListener(v -> {
-                // ...
+                Log.d("SavedWordsFragment", "Saved Word clicked: " + savedWord.getWord());
 
                 // Notify the listener about the click event
                 listener.onSavedWordClick(savedWord);
             });
         }
+
+
     }
 }

@@ -40,9 +40,7 @@ public class IO_SavedWordsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.savedWordRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // Initialize and set up the SavedWordsAdapter
         savedWordsAdapter = new IO_SavedWordsAdapter(new ArrayList<>(), savedWord -> {
-
             Log.d("SavedWordsFragment", "Saved Word clicked: " + savedWord.getWord());
 
             IO_SavedWordDefinitionFragment savedWordDetailFragment = new IO_SavedWordDefinitionFragment();
@@ -55,6 +53,7 @@ public class IO_SavedWordsFragment extends Fragment {
                     .addToBackStack(null)
                     .commit();
         });
+
 
         recyclerView.setAdapter(savedWordsAdapter);
 
@@ -73,4 +72,6 @@ public class IO_SavedWordsFragment extends Fragment {
     private void updateRecyclerView(List<IO_Word> savedWords) {
         savedWordsAdapter.setSavedWords(savedWords);
     }
+
+
 }

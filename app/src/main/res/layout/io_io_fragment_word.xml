@@ -20,7 +20,7 @@
         android:text="Word"
         android:textSize="24dp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/textViewWords"
+        app:layout_constraintBottom_toTopOf="@+id/definitionPlaceholder"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,12 +32,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:text="PartOfSpeechTextView"
         android:textAlignment="center"
         android:textColor="#EAE7FA"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/btnSaveWord"
+        app:layout_constraintBottom_toTopOf="@+id/tvWordDetail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,6 +51,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:text="WordTextView"
         android:textAlignment="center"
         android:textColor="#EAE7FA"
@@ -58,8 +62,53 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/definitionPlaceholder"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <!-- Header TextView for Word def -->
+    <TextView
+        android:id="@+id/tvWordDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:padding="8dp"
+        android:text="Word Detail Placeholder"
+        android:textAlignment="center"
+        android:textColor="#EAE7FA"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/btnSaveWord"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewPartOfSpeech"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <TextView
+        android:id="@+id/definitionPlaceholder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/hm_image_border"
+        android:padding="8dp"
+        android:text="Definition"
+        android:textSize="24dp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/textViewWords"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/wordPlaceholder"
         app:layout_constraintVertical_bias="0.5" />
+
+
+    <!--   def end -->
 
     <Button
         android:id="@+id/btnSaveWord"
@@ -68,11 +117,11 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
         android:text="Save"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/wordRecyclerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewPartOfSpeech"
+        app:layout_constraintTop_toBottomOf="@+id/tvWordDetail"
         app:layout_constraintVertical_bias="0.5" />
 
     <!-- RecyclerView for Definitions -->
