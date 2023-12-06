@@ -37,14 +37,17 @@ dependencies {
 
     implementation("androidx.room:room-common:2.6.1")
     val room_version = "2.6.0"
-    implementation( "androidx.room:room-runtime:$room_version")
-    annotationProcessor( "androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+
+    implementation("com.google.code.gson:gson:2.8.8")
+
 
     implementation("androidx.recyclerview:recyclerview:1.3.2")
 
     implementation("com.android.volley:volley:1.2.1")
 
-    implementation ("com.squareup.picasso:picasso:2.71828")
+    implementation("com.squareup.picasso:picasso:2.71828")
 
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.10.0")

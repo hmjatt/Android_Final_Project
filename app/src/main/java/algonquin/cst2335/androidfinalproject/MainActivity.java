@@ -16,8 +16,8 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.navigation.NavigationView;
 
-import algonquin.cst2335.androidfinalproject.IO_dictionary.DictionaryFragment;
 import algonquin.cst2335.androidfinalproject.CF_recipe.RecipeSearchFragment;
+import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.activities.IO_DictionaryActivity;
 import algonquin.cst2335.androidfinalproject.SK_sunrise.ui.SunriseSunsetFragment;
 import algonquin.cst2335.androidfinalproject.hmsong.ui.activities.SongSearchActivity;
 
@@ -39,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private NavigationView nvDrawer;
     private boolean isSongSearchActivityLaunched = false;
+
+    private boolean isDictionaryActivityLaunched = false;
+
 
     /**
      * Called when the activity is first created.
@@ -120,7 +123,18 @@ public class MainActivity extends AppCompatActivity {
         } else if (menuItem.getItemId() == R.id.recipe_search) {
             fragmentClass = RecipeSearchFragment.class;
         } else if (menuItem.getItemId() == R.id.dictionary) {
-            fragmentClass = DictionaryFragment.class;
+            if (!isDictionaryActivityLaunched) {
+                fragmentClass = IO_DictionaryActivity.class;
+                Intent intent = new Intent(this, fragmentClass);
+                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(intent);
+                isDictionaryActivityLaunched = true;
+            } else {
+                // If already launched, bring it to the front
+                Intent intent = new Intent(this, IO_DictionaryActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent);
+            }
         } else if (menuItem.getItemId() == R.id.song_search) {
             // Launch SongSearchActivity only if not already launched
             if (!isSongSearchActivityLaunched) {
