@@ -33,10 +33,11 @@ public class IO_SavedWordsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.io_io_activity_dictionary, container, false);
+        View view = inflater.inflate(R.layout.io_io_fragment_saved_words, container, false);
+
 
         // Initialize RecyclerView
-        recyclerView = view.findViewById(R.id.dictionaryRecycler);
+        recyclerView = view.findViewById(R.id.savedWordRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Initialize and set up the SavedWordsAdapter
