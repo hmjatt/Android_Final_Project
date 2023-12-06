@@ -19,18 +19,28 @@ import algonquin.cst2335.androidfinalproject.R;
 public class IO_WordsAdapter extends RecyclerView.Adapter<IO_WordsAdapter.WordViewHolder> {
 
     private List<IO_Word> words;
+
+    private List<IO_Word> partOfSpeeches;
     private OnWordClickListener listener;
 
-    public IO_WordsAdapter(List<IO_Word> words, OnWordClickListener listener) {
+    public IO_WordsAdapter(List<IO_Word> words, List<IO_Word> partOfSpeeches, OnWordClickListener listener) {
         this.words = words;
+        this.partOfSpeeches = partOfSpeeches;
         this.listener = listener;
+
     }
 
 
-    public void setWords(List<IO_Word> words) {
+    public void setWords(List<IO_Word> words, List<IO_Word> partOfSpeeches) {
         this.words = words;
+        this.partOfSpeeches = partOfSpeeches;
         notifyDataSetChanged();
     }
+
+//    public void setPartOfSpeeches(List<IO_Word> partOfSpeeches) {
+//        this.partOfSpeeches = partOfSpeeches;
+//        notifyDataSetChanged();
+//    }
 
     @NonNull
     @Override
@@ -43,7 +53,8 @@ public class IO_WordsAdapter extends RecyclerView.Adapter<IO_WordsAdapter.WordVi
     @Override
     public void onBindViewHolder(@NonNull WordViewHolder holder, int position) {
         IO_Word word = words.get(position);
-        holder.bind(word);
+        IO_Word partOfSpeech = partOfSpeeches.get(position);
+        holder.bind(word, partOfSpeech);
     }
 
     @Override
@@ -60,14 +71,19 @@ public class IO_WordsAdapter extends RecyclerView.Adapter<IO_WordsAdapter.WordVi
     class WordViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView tvWord;
+        private final TextView tvPartOfSpeech;
+
 
         WordViewHolder(@NonNull View itemView) {
             super(itemView);
             tvWord = itemView.findViewById(R.id.textViewWords);
+            tvPartOfSpeech = itemView.findViewById(R.id.textViewPartOfSpeech);
         }
 
-        void bind(IO_Word word) {
+        void bind(IO_Word word, IO_Word partOfSpeech) {
             tvWord.setText(word.getWord());
+            tvPartOfSpeech.setText(partOfSpeech.getPartOfSpeech());
+
             // Add code to bind data to additional views if needed
             // For example, ImageView, additional TextViews, etc.
 

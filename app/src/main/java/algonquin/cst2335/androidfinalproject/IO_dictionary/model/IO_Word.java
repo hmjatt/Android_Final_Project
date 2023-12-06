@@ -25,21 +25,43 @@ public class IO_Word implements Parcelable {
             return new IO_Word[size];
         }
     };
+
     @PrimaryKey
     @NonNull
     private String word;
+
+    private String partOfSpeech;
+    // Modify to store both the definition and part of speech
     @TypeConverters(IO_DefinitionListConverter.class)
-    private List<IO_Definition> definitions;
+    private List<IO_Definition> wordDetailsList;
 
     public IO_Word(@NonNull String word) {
         this.word = word;
-        this.definitions = new ArrayList<>();
+        this.wordDetailsList = new ArrayList<>();
+        this.partOfSpeech = getPartOfSpeech();
     }
 
     protected IO_Word(Parcel in) {
         word = in.readString();
-        // Use createTypedArrayList() with the Definition.CREATOR
-        definitions = in.createTypedArrayList(IO_Definition.CREATOR);
+        // Use createTypedArrayList() with the IO_Definition.CREATOR
+        wordDetailsList = in.createTypedArrayList(IO_Definition.CREATOR);
+        partOfSpeech = in.readString();
+    }
+
+    public String getPartOfSpeech() {
+        return partOfSpeech;
+    }
+
+    public void setPartOfSpeech(String partOfSpeech) {
+        this.partOfSpeech = partOfSpeech;
+    }
+
+    public List<IO_Definition> getWordDetailsList() {
+        return wordDetailsList;
+    }
+
+    public void setWordDetailsList(List<IO_Definition> wordDetailsList) {
+        this.wordDetailsList = wordDetailsList;
     }
 
     @NonNull
@@ -48,17 +70,15 @@ public class IO_Word implements Parcelable {
     }
 
     public List<IO_Definition> getDefinitions() {
-        return definitions;
+        return wordDetailsList;
     }
 
-    // Parcelable implementation here...
-
-    public void setDefinitions(List<IO_Definition> definitions) {
-        this.definitions = definitions;
+    public void setDefinitions(List<IO_Definition> wordDetailsList) {
+        this.wordDetailsList = wordDetailsList;
     }
 
-    public void addDefinition(IO_Definition definition) {
-        definitions.add(definition);
+    public void addDefinition(IO_Definition wordDetails) {
+        wordDetailsList.add(wordDetails);
     }
 
     @Override
@@ -69,7 +89,8 @@ public class IO_Word implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(word);
-        // Use writeTypedList() with the definitions list
-        dest.writeTypedList(definitions);
+        // Use writeTypedList() with the wordDetailsList
+        dest.writeTypedList(wordDetailsList);
+        dest.writeString(partOfSpeech);
     }
 }

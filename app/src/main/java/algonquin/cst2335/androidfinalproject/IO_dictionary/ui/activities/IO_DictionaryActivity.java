@@ -40,6 +40,8 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
     private IO_WordsAdapter wordsAdapter;
     private List<IO_Word> dictionaryWords;
 
+    private List<IO_Word> dictionaryPartOfSpeeches;
+
     private IO_DictionaryDatabase dictionaryDatabase; // Add this line
 
     @Override
@@ -53,8 +55,10 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
         // Create an empty list of words or fetch it from somewhere
         dictionaryWords = new ArrayList<>();
 
+        dictionaryPartOfSpeeches = new ArrayList<>();
+
         // Initialize the adapter and set it to the RecyclerView
-        wordsAdapter = new IO_WordsAdapter(dictionaryWords, this);
+        wordsAdapter = new IO_WordsAdapter(dictionaryWords, dictionaryPartOfSpeeches, this);
         recyclerView.setAdapter(wordsAdapter);
 
         // Set a LinearLayoutManager to your RecyclerView
@@ -104,16 +108,20 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
                 null,
                 response -> {
                     // Log the API response
-                    Log.d("DictionaryActivity", "API response received: " + response.toString());
+//                    Log.d("DictionaryActivity", "API response received: " + response.toString());
 
                     // Parse the JSON response and update the RecyclerView
                     List<IO_Word> words = parseJsonResponse(response);
+                    List<IO_Word> partOfSpeeches = parseJsonResponse(response);
+
+//                    Log.d("partOfSpeeches", "API response received: " + partOfSpeeches);
+
 
                     // Insert words into your dictionary
                     insertWordsIntoDictionary(words);
 
                     // Update the RecyclerView with definitions
-                    updateRecyclerView(words);
+                    updateRecyclerView(words, partOfSpeeches);
                 },
                 error -> {
                     // Log the API error
@@ -161,6 +169,7 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
     private List<IO_Word> parseJsonResponse(JSONArray jsonResponse) {
         // Parse the JSON response and create a list of Word objects
         List<IO_Word> words = new ArrayList<>();
+        List<IO_Word> partOfSpeeches = new ArrayList<>();
 
         try {
             for (int i = 0; i < jsonResponse.length(); i++) {
@@ -181,12 +190,15 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
                         if (meaningObject.has("definitions")) {
                             JSONArray definitionsArray = meaningObject.getJSONArray("definitions");
 
-                            String partOfSpeech = meaningObject.getString("partOfSpeech");
+                            String partOfSpeechText = meaningObject.getString("partOfSpeech");
 
-                            wordText = wordText + " - " + partOfSpeech;
+
+//                            wordText = wordText + " - " + partOfSpeech;
 
                             // Create a Word object
                             IO_Word word = new IO_Word(wordText);
+                            IO_Word partOfSpeech = new IO_Word(partOfSpeechText);
+
 
                             // Iterate through definitions
                             for (int k = 0; k < definitionsArray.length(); k++) {
@@ -201,6 +213,10 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
 
                             // Add the Word object to the list
                             words.add(word);
+                            partOfSpeeches.add(partOfSpeech);
+
+//                            Log.d("partOfSpeeches", "API response received: " + partOfspeechs);
+
                         }
                     }
                 }
@@ -212,8 +228,11 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
         return words;
     }
 
-    public void updateRecyclerView(List<IO_Word> words) {
-        wordsAdapter.setWords(words);
+    public void updateRecyclerView(List<IO_Word> words, List<IO_Word> partOfSpeeches) {
+        wordsAdapter.setWords(words, partOfSpeeches);
+//        wordsAdapter.setPartOfSpeeches(parOfSpeeches);
+        Log.d("partOfSpeeches", "API response received: " + partOfSpeeches);
+
     }
 
     @Override
