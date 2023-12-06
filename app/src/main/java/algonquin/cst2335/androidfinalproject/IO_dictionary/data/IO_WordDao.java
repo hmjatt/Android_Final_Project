@@ -2,6 +2,7 @@
 
 package algonquin.cst2335.androidfinalproject.IO_dictionary.data;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -17,7 +18,8 @@ public interface IO_WordDao {
     void insertWord(IO_Word word);
 
     @Query("SELECT * FROM word_table")
-    List<IO_Word> getAllWords();
+    LiveData<List<IO_Word>> getAllWords(); // Change the return type to LiveData
+
 
     // Add other queries as needed
 }

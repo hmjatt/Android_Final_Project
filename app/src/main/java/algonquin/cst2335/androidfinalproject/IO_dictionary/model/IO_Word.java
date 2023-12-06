@@ -26,7 +26,9 @@ public class IO_Word implements Parcelable {
         }
     };
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    private long id; // New field for ID
+
     @NonNull
     private String word;
 
@@ -41,11 +43,23 @@ public class IO_Word implements Parcelable {
         this.partOfSpeech = getPartOfSpeech();
     }
 
+
     protected IO_Word(Parcel in) {
         word = in.readString();
         // Use createTypedArrayList() with the IO_Definition.CREATOR
         wordDetailsList = in.createTypedArrayList(IO_Definition.CREATOR);
         partOfSpeech = in.readString();
+        id = in.readLong(); // Read the new ID field from Parcel
+
+    }
+
+    // Getter and setter for the new ID field
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getPartOfSpeech() {
@@ -92,5 +106,7 @@ public class IO_Word implements Parcelable {
         // Use writeTypedList() with the wordDetailsList
         dest.writeTypedList(wordDetailsList);
         dest.writeString(partOfSpeech);
+        dest.writeLong(id); // Write the new ID field to Parcel
+
     }
 }

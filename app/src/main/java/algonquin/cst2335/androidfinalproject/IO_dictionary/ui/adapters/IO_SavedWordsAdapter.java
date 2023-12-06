@@ -13,22 +13,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_SavedWord;
+import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Word;
 import algonquin.cst2335.androidfinalproject.R;
 
 public class IO_SavedWordsAdapter extends RecyclerView.Adapter<IO_SavedWordsAdapter.SavedWordViewHolder> {
 
-    private List<IO_SavedWord> savedWords;
+    private List<IO_Word> savedWords;
     private OnSavedWordClickListener listener;
 
-    public IO_SavedWordsAdapter(List<IO_SavedWord> savedWords, OnSavedWordClickListener listener) {
+    public IO_SavedWordsAdapter(List<IO_Word> savedWords, OnSavedWordClickListener listener) {
         this.savedWords = savedWords;
         this.listener = listener;
     }
 
-    public void setSavedWords(List<IO_SavedWord> savedWords) {
+    public void setSavedWords(List<IO_Word> savedWords) {
         this.savedWords = savedWords;
         notifyDataSetChanged();
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull SavedWordViewHolder holder, int position) {
+        IO_Word savedWord = savedWords.get(position);
+        holder.bind(savedWord);
     }
 
     @NonNull
@@ -39,19 +45,13 @@ public class IO_SavedWordsAdapter extends RecyclerView.Adapter<IO_SavedWordsAdap
         return new SavedWordViewHolder(itemView);
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull SavedWordViewHolder holder, int position) {
-        IO_SavedWord savedWord = savedWords.get(position);
-        holder.bind(savedWord);
+    public interface OnSavedWordClickListener {
+        void onSavedWordClick(IO_Word savedWord);
     }
 
     @Override
     public int getItemCount() {
         return savedWords.size();
-    }
-
-    public interface OnSavedWordClickListener {
-        void onSavedWordClick(IO_SavedWord savedWord);
     }
 
     class SavedWordViewHolder extends RecyclerView.ViewHolder {
@@ -63,11 +63,10 @@ public class IO_SavedWordsAdapter extends RecyclerView.Adapter<IO_SavedWordsAdap
             tvSavedWord = itemView.findViewById(R.id.textViewSavedWords);
         }
 
-        void bind(IO_SavedWord savedWord) {
-            tvSavedWord.setText(savedWord.getSavedWord());
+        void bind(IO_Word savedWord) {
+            tvSavedWord.setText(savedWord.getWord());
             itemView.setOnClickListener(v -> {
-                // Log a message when a saved word is clicked
-                Log.d("SavedWordsAdapter", "Saved Word clicked: " + savedWord.getSavedWord());
+                // ...
 
                 // Notify the listener about the click event
                 listener.onSavedWordClick(savedWord);

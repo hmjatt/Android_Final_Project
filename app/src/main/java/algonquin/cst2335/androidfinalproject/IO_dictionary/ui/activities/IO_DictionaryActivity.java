@@ -24,7 +24,6 @@ import java.util.List;
 
 import algonquin.cst2335.androidfinalproject.IO_dictionary.data.IO_DictionaryDatabase;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Definition;
-import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_SavedWord;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Word;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.adapters.IO_DefinitionsAdapter;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.adapters.IO_WordsAdapter;
@@ -117,10 +116,6 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
 
 //                    Log.d("partOfSpeeches", "API response received: " + partOfSpeeches);
 
-
-                    // Insert words into your dictionary
-                    insertWordsIntoDictionary(words);
-
                     // Update the RecyclerView with definitions
                     updateRecyclerView(words, partOfSpeeches);
                 },
@@ -134,29 +129,6 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
 
         // Update the RecyclerView with definitions
         IO_DictionaryVolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(request);
-    }
-
-    private void insertWordsIntoDictionary(List<IO_Word> words) {
-        // Add logic to insert words into your dictionary
-        // For example, assuming you have a DictionaryDatabaseHelper class
-        // Assuming dbHelper is an instance of DatabaseHelper
-        // DictionaryDatabase dbHelper = DictionaryDatabase.getInstance(getApplicationContext()); // Remove this line
-
-        // Retrieve the Word object from the intent or wherever it's coming from
-        Intent intent = getIntent();
-        IO_Word word = intent.getParcelableExtra("word"); // Replace "word" with the actual key
-
-        // Check if word is not null before proceeding
-        if (word != null) {
-            // Convert List<Definition> to String (you might need to adjust this based on your needs)
-            String definitionsAsString = convertDefinitionsToString(word.getDefinitions());
-
-            // Create a SavedWord object using the Word object
-            IO_SavedWord savedWord = new IO_SavedWord(word.getWord(), definitionsAsString);
-
-            // Insert the SavedWord into the database
-            dictionaryDatabase.savedWordDao().insert(savedWord);
-        }
     }
 
     // Add this method to your DictionaryActivity.java to convert List<Definition> to String

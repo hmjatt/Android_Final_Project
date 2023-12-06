@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,7 +19,9 @@ import org.json.JSONArray;
 import java.util.ArrayList;
 import java.util.List;
 
-import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_SavedWord;
+import algonquin.cst2335.androidfinalproject.IO_dictionary.data.IO_DictionaryDatabase;
+
+import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Word;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.adapters.IO_SavedWordsAdapter;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.utils.IO_DictionaryVolleySingleton;
 import algonquin.cst2335.androidfinalproject.R;
@@ -39,11 +42,11 @@ public class IO_SavedWordsFragment extends Fragment {
         // Initialize and set up the SavedWordsAdapter
         savedWordsAdapter = new IO_SavedWordsAdapter(new ArrayList<>(), savedWord -> {
 
-            Log.d("SavedWordsFragment", "Saved Word clicked: " + savedWord.getSavedWord());
+            Log.d("SavedWordsFragment", "Saved Word clicked: " + savedWord.getWord());
 
             IO_SavedWordDefinitionFragment savedWordDetailFragment = new IO_SavedWordDefinitionFragment();
             Bundle bundle = new Bundle();
-            bundle.putInt(IO_SavedWordDefinitionFragment.ARG_SAVED_WORD_ID, savedWord.getId());
+            bundle.putInt(IO_SavedWordDefinitionFragment.ARG_SAVED_WORD_ID, (int) savedWord.getId());
             savedWordDetailFragment.setArguments(bundle);
 
             getParentFragmentManager().beginTransaction()
@@ -61,37 +64,12 @@ public class IO_SavedWordsFragment extends Fragment {
     }
 
     private void makeApiRequest() {
-        // Make an API request to get the list of saved words
-        String apiUrl = "https://api.example.com/saved-words";
-
-        JsonArrayRequest request = new JsonArrayRequest(
-                Request.Method.GET,
-                apiUrl,
-                null,
-                response -> {
-                    // Parse the JSON response and update the RecyclerView
-                    List<IO_SavedWord> savedWords = parseJsonResponse(response);
-                    updateRecyclerView(savedWords);
-                },
-                error -> {
-                    // Handle error if needed
-                    Log.e("SavedWordsFragment", "Error making API request: " + error.getMessage());
-                }
-        );
-
-        // Add the request to the Volley queue
-        IO_DictionaryVolleySingleton.getInstance(requireContext()).addToRequestQueue(request);
+        // Observe changes in the database using LiveData
+        IO_DictionaryDatabase.getInstance(requireContext()).wordDao().getAllWords().observe(getViewLifecycleOwner(), savedWords -> updateRecyclerView(savedWords));
     }
 
-    private List<IO_SavedWord> parseJsonResponse(JSONArray jsonResponse) {
-        // Parse the JSON response and create a list of SavedWord objects
-        // Implement your parsing logic based on the actual JSON structure
-        List<IO_SavedWord> savedWords = new ArrayList<>();
-        // Parse the JSON response and add saved words to the list
-        return savedWords;
-    }
 
-    private void updateRecyclerView(List<IO_SavedWord> savedWords) {
+    private void updateRecyclerView(List<IO_Word> savedWords) {
         savedWordsAdapter.setSavedWords(savedWords);
     }
 }

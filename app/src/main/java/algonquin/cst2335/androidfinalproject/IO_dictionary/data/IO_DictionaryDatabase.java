@@ -8,11 +8,10 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
 import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_DefinitionListConverter;
-import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_SavedWord;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Word;
 
 
-@Database(entities = {IO_Word.class, IO_SavedWord.class}, version = 1, exportSchema = false)
+@Database(entities = {IO_Word.class}, version = 1, exportSchema = false)
 @TypeConverters({IO_DefinitionListConverter.class})
 public abstract class IO_DictionaryDatabase extends RoomDatabase {
 
@@ -32,5 +31,4 @@ public abstract class IO_DictionaryDatabase extends RoomDatabase {
 
     public abstract IO_WordDao wordDao();
 
-    public abstract IO_SavedWordDao savedWordDao(); // Add this line
 }
