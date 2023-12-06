@@ -12,16 +12,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity(tableName = "word_table")
-public class Word implements Parcelable {
+public class IO_Word implements Parcelable {
 
     @PrimaryKey
     @NonNull
     private String word;
 
-    @TypeConverters(DefinitionListConverter.class)
-    private List<Definition> definitions;
+    @TypeConverters(IO_DefinitionListConverter.class)
+    private List<IO_Definition> definitions;
 
-    public Word(@NonNull String word) {
+    public IO_Word(@NonNull String word) {
         this.word = word;
         this.definitions = new ArrayList<>();
     }
@@ -31,35 +31,35 @@ public class Word implements Parcelable {
         return word;
     }
 
-    public List<Definition> getDefinitions() {
+    public List<IO_Definition> getDefinitions() {
         return definitions;
     }
 
-    public void setDefinitions(List<Definition> definitions) {
+    public void setDefinitions(List<IO_Definition> definitions) {
         this.definitions = definitions;
     }
 
-    public void addDefinition(Definition definition) {
+    public void addDefinition(IO_Definition definition) {
         definitions.add(definition);
     }
 
     // Parcelable implementation here...
 
-    protected Word(Parcel in) {
+    protected IO_Word(Parcel in) {
         word = in.readString();
         // Use createTypedArrayList() with the Definition.CREATOR
-        definitions = in.createTypedArrayList(Definition.CREATOR);
+        definitions = in.createTypedArrayList(IO_Definition.CREATOR);
     }
 
-    public static final Creator<Word> CREATOR = new Creator<Word>() {
+    public static final Creator<IO_Word> CREATOR = new Creator<IO_Word>() {
         @Override
-        public Word createFromParcel(Parcel in) {
-            return new Word(in);
+        public IO_Word createFromParcel(Parcel in) {
+            return new IO_Word(in);
         }
 
         @Override
-        public Word[] newArray(int size) {
-            return new Word[size];
+        public IO_Word[] newArray(int size) {
+            return new IO_Word[size];
         }
     };
 

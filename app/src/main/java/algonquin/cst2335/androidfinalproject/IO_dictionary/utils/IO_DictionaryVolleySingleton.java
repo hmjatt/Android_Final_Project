@@ -7,20 +7,20 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
-public class DictionaryVolleySingleton {
+public class IO_DictionaryVolleySingleton {
 
-    private static DictionaryVolleySingleton instance;
+    private static IO_DictionaryVolleySingleton instance;
     private RequestQueue requestQueue;
     private static Context applicationContext; // Change to applicationContext
 
-    private DictionaryVolleySingleton(Context context) {
+    private IO_DictionaryVolleySingleton(Context context) {
         this.applicationContext = context.getApplicationContext(); // Use applicationContext
         requestQueue = getRequestQueue();
     }
 
-    public static synchronized DictionaryVolleySingleton getInstance(Context context) {
+    public static synchronized IO_DictionaryVolleySingleton getInstance(Context context) {
         if (instance == null) {
-            instance = new DictionaryVolleySingleton(context);
+            instance = new IO_DictionaryVolleySingleton(context);
         }
         return instance;
     }

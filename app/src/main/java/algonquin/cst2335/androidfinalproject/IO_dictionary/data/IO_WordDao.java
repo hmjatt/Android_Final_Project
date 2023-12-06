@@ -8,16 +8,16 @@ import androidx.room.Query;
 
 import java.util.List;
 
-import algonquin.cst2335.androidfinalproject.IO_dictionary.model.Word;
+import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Word;
 
 @Dao
-public interface WordDao {
+public interface IO_WordDao {
 
     @Insert
-    void insertWord(Word word);
+    void insertWord(IO_Word word);
 
     @Query("SELECT * FROM word_table")
-    List<Word> getAllWords();
+    List<IO_Word> getAllWords();
 
     // Add other queries as needed
 }

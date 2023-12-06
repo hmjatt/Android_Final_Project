@@ -11,14 +11,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-import algonquin.cst2335.androidfinalproject.IO_dictionary.model.Definition;
+import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Definition;
 import algonquin.cst2335.androidfinalproject.R;
 
-public class SavedWordDefinitionAdapter extends RecyclerView.Adapter<SavedWordDefinitionAdapter.DefinitionViewHolder> {
+public class IO_SavedWordDefinitionAdapter extends RecyclerView.Adapter<IO_SavedWordDefinitionAdapter.DefinitionViewHolder> {
 
-    private List<Definition> definitions = new ArrayList<>();
+    private List<IO_Definition> definitions = new ArrayList<>();
 
-    public void setDefinitions(List<Definition> definitions) {
+    public void setDefinitions(List<IO_Definition> definitions) {
         this.definitions = definitions;
         notifyDataSetChanged();
     }
@@ -27,13 +27,13 @@ public class SavedWordDefinitionAdapter extends RecyclerView.Adapter<SavedWordDe
     @Override
     public DefinitionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.io_fragment_saved_word_definition, parent, false);
+                .inflate(R.layout.io_io_fragment_saved_word_definition, parent, false);
         return new DefinitionViewHolder(itemView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull DefinitionViewHolder holder, int position) {
-        Definition definition = definitions.get(position);
+        IO_Definition definition = definitions.get(position);
         holder.bind(definition);
     }
 
@@ -51,7 +51,7 @@ public class SavedWordDefinitionAdapter extends RecyclerView.Adapter<SavedWordDe
             tvDefinition = itemView.findViewById(R.id.tvSavedWordDetail);
         }
 
-        void bind(Definition definition) {
+        void bind(IO_Definition definition) {
             tvDefinition.setText(definition.getDefinition());
             // TODO: Customize the binding as needed
         }

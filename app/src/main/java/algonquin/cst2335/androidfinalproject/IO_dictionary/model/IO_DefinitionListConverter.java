@@ -8,16 +8,16 @@ import com.google.gson.reflect.TypeToken;
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class DefinitionListConverter {
+public class IO_DefinitionListConverter {
 
     @TypeConverter
-    public static List<Definition> fromString(String value) {
-        Type listType = new TypeToken<List<Definition>>() {}.getType();
+    public static List<IO_Definition> fromString(String value) {
+        Type listType = new TypeToken<List<IO_Definition>>() {}.getType();
         return new Gson().fromJson(value, listType);
     }
 
     @TypeConverter
-    public static String fromList(List<Definition> list) {
+    public static String fromList(List<IO_Definition> list) {
         Gson gson = new Gson();
         return gson.toJson(list);
     }

@@ -7,24 +7,24 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import algonquin.cst2335.androidfinalproject.IO_dictionary.model.SavedWord;
-
 import java.util.List;
 
+import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_SavedWord;
+
 @Dao
-public interface SavedWordDao {
+public interface IO_SavedWordDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insert(SavedWord savedWord);
+    void insert(IO_SavedWord savedWord);
 
     @Delete
-    void delete(SavedWord savedWord);
+    void delete(IO_SavedWord savedWord);
 
     @Query("SELECT * FROM saved_word_table")
-    List<SavedWord> getAllSavedWords();
+    List<IO_SavedWord> getAllSavedWords();
 
     @Query("SELECT * FROM saved_word_table WHERE id = :savedWordId")
-    SavedWord getSavedWordById(int savedWordId);
+    IO_SavedWord getSavedWordById(int savedWordId);
 
 
 }

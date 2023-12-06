@@ -11,21 +11,20 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import algonquin.cst2335.androidfinalproject.IO_dictionary.model.Definition;
-import algonquin.cst2335.androidfinalproject.IO_dictionary.model.SavedWord;
-import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.adapters.SavedWordDefinitionAdapter;
-import algonquin.cst2335.androidfinalproject.IO_dictionary.utils.DictionaryVolleySingleton;
-import algonquin.cst2335.androidfinalproject.R;
-
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonArrayRequest;
 
 import org.json.JSONArray;
 
-public class SavedWordDefinitionFragment extends Fragment {
+import java.util.ArrayList;
+import java.util.List;
+
+import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Definition;
+import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.adapters.IO_SavedWordDefinitionAdapter;
+import algonquin.cst2335.androidfinalproject.IO_dictionary.utils.IO_DictionaryVolleySingleton;
+import algonquin.cst2335.androidfinalproject.R;
+
+public class IO_SavedWordDefinitionFragment extends Fragment {
 
     public static final String ARG_SAVED_WORD_ID = "saved_word_id";
 
@@ -33,13 +32,13 @@ public class SavedWordDefinitionFragment extends Fragment {
 
     private TextView tvSavedWordDetail;
     private RecyclerView recyclerView;
-    private SavedWordDefinitionAdapter definitionsAdapter;
+    private IO_SavedWordDefinitionAdapter definitionsAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.io_activity_dictionay, container, false);
+        View view = inflater.inflate(R.layout.io_io_activity_dictionary, container, false);
 
-        View fragmentDefinition = inflater.inflate(R.layout.io_fragment_saved_word_definition, container, false);
+        View fragmentDefinition = inflater.inflate(R.layout.io_io_fragment_saved_word_definition, container, false);
 
         // Initialize views
         recyclerView = view.findViewById(R.id.dictionaryRecycler);
@@ -49,7 +48,7 @@ public class SavedWordDefinitionFragment extends Fragment {
         savedWordId = getArguments().getInt(ARG_SAVED_WORD_ID);
 
         // Initialize and set up the DefinitionsAdapter
-        definitionsAdapter = new SavedWordDefinitionAdapter();
+        definitionsAdapter = new IO_SavedWordDefinitionAdapter();
         recyclerView.setAdapter(definitionsAdapter);
 
         // Make API request to get saved word definitions
@@ -70,7 +69,7 @@ public class SavedWordDefinitionFragment extends Fragment {
                 null,
                 response -> {
                     // Parse the JSON response and update the RecyclerView
-                    List<Definition> definitions = parseJsonResponse(response);
+                    List<IO_Definition> definitions = parseJsonResponse(response);
                     updateRecyclerView(definitions);
                 },
                 error -> {
@@ -80,18 +79,18 @@ public class SavedWordDefinitionFragment extends Fragment {
         );
 
         // Add the request to the Volley queue
-        DictionaryVolleySingleton.getInstance(requireContext()).addToRequestQueue(request);
+        IO_DictionaryVolleySingleton.getInstance(requireContext()).addToRequestQueue(request);
     }
 
-    private List<Definition> parseJsonResponse(JSONArray jsonResponse) {
+    private List<IO_Definition> parseJsonResponse(JSONArray jsonResponse) {
         // Parse the JSON response and create a list of Definition objects
         // Implement your parsing logic based on the actual JSON structure
-        List<Definition> definitions = new ArrayList<>();
+        List<IO_Definition> definitions = new ArrayList<>();
         // Parse the JSON response and add definitions to the list
         return definitions;
     }
 
-    private void updateRecyclerView(List<Definition> definitions) {
+    private void updateRecyclerView(List<IO_Definition> definitions) {
         definitionsAdapter.setDefinitions(definitions);
     }
 

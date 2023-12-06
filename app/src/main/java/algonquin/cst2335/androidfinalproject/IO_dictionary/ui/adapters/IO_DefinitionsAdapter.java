@@ -12,16 +12,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-import algonquin.cst2335.androidfinalproject.IO_dictionary.model.Definition;
+import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Definition;
 import algonquin.cst2335.androidfinalproject.R;
 
 
-public class DefinitionsAdapter extends RecyclerView.Adapter<DefinitionsAdapter.DefinitionViewHolder> {
+public class IO_DefinitionsAdapter extends RecyclerView.Adapter<IO_DefinitionsAdapter.DefinitionViewHolder> {
 
-    private List<Definition> definitions = new ArrayList<>();
+    private List<IO_Definition> definitions = new ArrayList<>();
 
     // Constructor to accept initial data
-    public DefinitionsAdapter(List<Definition> definitions) {
+    public IO_DefinitionsAdapter(List<IO_Definition> definitions) {
         this.definitions = definitions;
     }
 
@@ -29,13 +29,13 @@ public class DefinitionsAdapter extends RecyclerView.Adapter<DefinitionsAdapter.
     @NonNull
     @Override
     public DefinitionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.io_fragment_word_definition, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.io_io_fragment_word_definition, parent, false);
         return new DefinitionViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull DefinitionViewHolder holder, int position) {
-        Definition definition = definitions.get(position);
+        IO_Definition definition = definitions.get(position);
         holder.tvDefinition.setText(definition.getDefinition());
     }
 
@@ -44,7 +44,7 @@ public class DefinitionsAdapter extends RecyclerView.Adapter<DefinitionsAdapter.
         return definitions.size();
     }
 
-    public void updateData(List<Definition> newDefinitions) {
+    public void updateData(List<IO_Definition> newDefinitions) {
         definitions.clear();
         definitions.addAll(newDefinitions);
         notifyDataSetChanged();

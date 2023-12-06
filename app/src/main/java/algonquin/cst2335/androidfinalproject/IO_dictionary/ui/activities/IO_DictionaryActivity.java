@@ -21,30 +21,30 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import algonquin.cst2335.androidfinalproject.IO_dictionary.data.DictionaryDatabase;
-import algonquin.cst2335.androidfinalproject.IO_dictionary.model.Definition;
-import algonquin.cst2335.androidfinalproject.IO_dictionary.model.SavedWord;
-import algonquin.cst2335.androidfinalproject.IO_dictionary.model.Word;
-import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.adapters.WordsAdapter;
-import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.fragments.SavedWordsFragment;
-import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.fragments.WordDetailFragment;
-import algonquin.cst2335.androidfinalproject.IO_dictionary.utils.DictionaryVolleySingleton;
+import algonquin.cst2335.androidfinalproject.IO_dictionary.data.IO_DictionaryDatabase;
+import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Definition;
+import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_SavedWord;
+import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Word;
+import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.adapters.IO_WordsAdapter;
+import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.fragments.IO_SavedWordsFragment;
+import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.fragments.IO_WordDefinitionFragment;
+import algonquin.cst2335.androidfinalproject.IO_dictionary.utils.IO_DictionaryVolleySingleton;
 import algonquin.cst2335.androidfinalproject.R;
 
-public class DictionaryActivity extends AppCompatActivity implements WordsAdapter.OnWordClickListener {
+public class IO_DictionaryActivity extends AppCompatActivity implements IO_WordsAdapter.OnWordClickListener {
 
     private EditText searchEditText;
     private Button searchButton;
 
-    private WordsAdapter wordsAdapter;
-    private List<Word> dictionaryWords;
+    private IO_WordsAdapter wordsAdapter;
+    private List<IO_Word> dictionaryWords;
 
-    private DictionaryDatabase dictionaryDatabase; // Add this line
+    private IO_DictionaryDatabase dictionaryDatabase; // Add this line
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.io_activity_dictionay);
+        setContentView(R.layout.io_io_activity_dictionary);
 
         // Assuming you have a RecyclerView with the ID "dictionaryRecycler" in your layout
         RecyclerView recyclerView = findViewById(R.id.dictionaryRecycler);
@@ -53,7 +53,7 @@ public class DictionaryActivity extends AppCompatActivity implements WordsAdapte
         dictionaryWords = new ArrayList<>();
 
         // Initialize the adapter and set it to the RecyclerView
-        wordsAdapter = new WordsAdapter(dictionaryWords, this);
+        wordsAdapter = new IO_WordsAdapter(dictionaryWords, this);
         recyclerView.setAdapter(wordsAdapter);
 
         // Set a LinearLayoutManager to your RecyclerView
@@ -61,7 +61,7 @@ public class DictionaryActivity extends AppCompatActivity implements WordsAdapte
         recyclerView.setLayoutManager(layoutManager);
 
         // Initialize the dictionaryDatabase
-        dictionaryDatabase = DictionaryDatabase.getInstance(this);
+        dictionaryDatabase = IO_DictionaryDatabase.getInstance(this);
 
         // Set up EditText and Button
         searchEditText = findViewById(R.id.searchWords);
@@ -82,7 +82,7 @@ public class DictionaryActivity extends AppCompatActivity implements WordsAdapte
         Button btnViewSavedWords = findViewById(R.id.btnViewSavedWords);
         btnViewSavedWords.setOnClickListener(view -> {
             // Handle the button click, for example, navigate to the SavedWordsFragment
-            SavedWordsFragment savedWordsFragment = new SavedWordsFragment();
+            IO_SavedWordsFragment savedWordsFragment = new IO_SavedWordsFragment();
             // Use FragmentManager to replace the current fragment with SavedWordsFragment
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.flContent, savedWordsFragment)
@@ -106,7 +106,7 @@ public class DictionaryActivity extends AppCompatActivity implements WordsAdapte
                     Log.d("DictionaryActivity", "API response received: " + response.toString());
 
                     // Parse the JSON response and update the RecyclerView
-                    List<Word> words = parseJsonResponse(response);
+                    List<IO_Word> words = parseJsonResponse(response);
 
                     // Insert words into your dictionary
                     insertWordsIntoDictionary(words);
@@ -123,10 +123,10 @@ public class DictionaryActivity extends AppCompatActivity implements WordsAdapte
         );
 
         // Update the RecyclerView with definitions
-        DictionaryVolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(request);
+        IO_DictionaryVolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(request);
     }
 
-    private void insertWordsIntoDictionary(List<Word> words) {
+    private void insertWordsIntoDictionary(List<IO_Word> words) {
         // Add logic to insert words into your dictionary
         // For example, assuming you have a DictionaryDatabaseHelper class
         // Assuming dbHelper is an instance of DatabaseHelper
@@ -134,7 +134,7 @@ public class DictionaryActivity extends AppCompatActivity implements WordsAdapte
 
         // Retrieve the Word object from the intent or wherever it's coming from
         Intent intent = getIntent();
-        Word word = intent.getParcelableExtra("word"); // Replace "word" with the actual key
+        IO_Word word = intent.getParcelableExtra("word"); // Replace "word" with the actual key
 
         // Check if word is not null before proceeding
         if (word != null) {
@@ -142,7 +142,7 @@ public class DictionaryActivity extends AppCompatActivity implements WordsAdapte
             String definitionsAsString = convertDefinitionsToString(word.getDefinitions());
 
             // Create a SavedWord object using the Word object
-            SavedWord savedWord = new SavedWord(word.getWord(), definitionsAsString);
+            IO_SavedWord savedWord = new IO_SavedWord(word.getWord(), definitionsAsString);
 
             // Insert the SavedWord into the database
             dictionaryDatabase.savedWordDao().insert(savedWord);
@@ -150,16 +150,16 @@ public class DictionaryActivity extends AppCompatActivity implements WordsAdapte
     }
 
     // Add this method to your DictionaryActivity.java to convert List<Definition> to String
-    private String convertDefinitionsToString(List<Definition> definitions) {
+    private String convertDefinitionsToString(List<IO_Definition> definitions) {
         // Implement the logic to convert the list to a string, e.g., concatenate definitions
         // Return the resulting string
         // You might need to adjust this based on how you want to store the definitions
         return definitions.toString();
     }
 
-    private List<Word> parseJsonResponse(JSONArray jsonResponse) {
+    private List<IO_Word> parseJsonResponse(JSONArray jsonResponse) {
         // Parse the JSON response and create a list of Word objects
-        List<Word> words = new ArrayList<>();
+        List<IO_Word> words = new ArrayList<>();
 
         try {
             for (int i = 0; i < jsonResponse.length(); i++) {
@@ -185,7 +185,7 @@ public class DictionaryActivity extends AppCompatActivity implements WordsAdapte
                             wordText = wordText + " - " + partOfSpeech;
 
                             // Create a Word object
-                            Word word = new Word(wordText);
+                            IO_Word word = new IO_Word(wordText);
 
                             // Iterate through definitions
                             for (int k = 0; k < definitionsArray.length(); k++) {
@@ -195,7 +195,7 @@ public class DictionaryActivity extends AppCompatActivity implements WordsAdapte
                                 String definitionText = definition.getString("definition");
 
                                 // Add the definition to the Word object
-                                word.addDefinition(new Definition(definitionText));
+                                word.addDefinition(new IO_Definition(definitionText));
                             }
 
                             // Add the Word object to the list
@@ -211,12 +211,12 @@ public class DictionaryActivity extends AppCompatActivity implements WordsAdapte
         return words;
     }
 
-    public void updateRecyclerView(List<Word> words) {
+    public void updateRecyclerView(List<IO_Word> words) {
         wordsAdapter.setWords(words);
     }
 
     @Override
-    public void onWordClick(Word word) {
+    public void onWordClick(IO_Word word) {
         // Handle item click, load WordDetailFragment with the selected word
         // Use a callback or communication method to communicate with the activity
         // and load the WordDetailFragment.
@@ -224,14 +224,14 @@ public class DictionaryActivity extends AppCompatActivity implements WordsAdapte
         Log.d("DictionaryActivity", "Word clicked: " + word.getWord());
 
         // Replace the current fragment with WordDetailFragment
-        WordDetailFragment wordDetailFragment = new WordDetailFragment();
+        IO_WordDefinitionFragment wordDetailFragment = new IO_WordDefinitionFragment();
 
         // Save the selected word to the database
         saveWordToDatabase(word);
 
         // Pass the selected word to WordDetailFragment using arguments
         Bundle bundle = new Bundle();
-        bundle.putParcelable(WordDetailFragment.ARG_SELECTED_WORD, word);
+        bundle.putParcelable(IO_WordDefinitionFragment.ARG_SELECTED_WORD, word);
         wordDetailFragment.setArguments(bundle);
 
         getSupportFragmentManager().beginTransaction()
@@ -240,11 +240,11 @@ public class DictionaryActivity extends AppCompatActivity implements WordsAdapte
                 .commit();
     }
 
-    private void saveWordToDatabase(Word word) {
+    private void saveWordToDatabase(IO_Word word) {
         // Save the word to the database asynchronously using Kotlin Coroutines
         new Thread(() -> {
             // For example, assuming you have a SavedWordDao in DictionaryDatabase
-            SavedWord savedWord = new SavedWord(word.getWord(), word.getDefinitions().toString());
+            IO_SavedWord savedWord = new IO_SavedWord(word.getWord(), word.getDefinitions().toString());
             dictionaryDatabase.savedWordDao().insert(savedWord);
 
             // You may also update the UI or provide a confirmation message

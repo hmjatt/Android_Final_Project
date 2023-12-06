@@ -3,27 +3,27 @@ package algonquin.cst2335.androidfinalproject.IO_dictionary.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Definition implements Parcelable {
+public class IO_Definition implements Parcelable {
 
     private String definition;
 
-    public Definition(String definition) {
+    public IO_Definition(String definition) {
         this.definition = definition;
     }
 
-    protected Definition(Parcel in) {
+    protected IO_Definition(Parcel in) {
         definition = in.readString();
     }
 
-    public static final Creator<Definition> CREATOR = new Creator<Definition>() {
+    public static final Creator<IO_Definition> CREATOR = new Creator<IO_Definition>() {
         @Override
-        public Definition createFromParcel(Parcel in) {
-            return new Definition(in);
+        public IO_Definition createFromParcel(Parcel in) {
+            return new IO_Definition(in);
         }
 
         @Override
-        public Definition[] newArray(int size) {
-            return new Definition[size];
+        public IO_Definition[] newArray(int size) {
+            return new IO_Definition[size];
         }
     };
 
