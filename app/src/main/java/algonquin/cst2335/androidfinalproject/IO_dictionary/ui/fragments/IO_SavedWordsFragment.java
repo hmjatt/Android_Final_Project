@@ -35,26 +35,25 @@ public class IO_SavedWordsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.io_io_fragment_saved_words, container, false);
 
-
         // Initialize RecyclerView
         recyclerView = view.findViewById(R.id.savedWordRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        // Initialize and set up the SavedWordsAdapter
         savedWordsAdapter = new IO_SavedWordsAdapter(new ArrayList<>(), savedWord -> {
             Log.d("SavedWordsFragment", "Saved Word clicked: " + savedWord.getWord());
-
             IO_SavedWordDefinitionFragment savedWordDetailFragment = new IO_SavedWordDefinitionFragment();
             Bundle bundle = new Bundle();
             bundle.putInt(IO_SavedWordDefinitionFragment.ARG_SAVED_WORD_ID, (int) savedWord.getId());
             savedWordDetailFragment.setArguments(bundle);
 
             getParentFragmentManager().beginTransaction()
-                    .replace(R.id.flContent, savedWordDetailFragment)
+                    .replace(R.id.wordRecyclerView, savedWordDetailFragment)
                     .addToBackStack(null)
                     .commit();
         });
 
-
+        // Set the adapter to the RecyclerView
         recyclerView.setAdapter(savedWordsAdapter);
 
         // Make API request to get saved words
@@ -65,13 +64,22 @@ public class IO_SavedWordsFragment extends Fragment {
 
     private void makeApiRequest() {
         // Observe changes in the database using LiveData
-        IO_DictionaryDatabase.getInstance(requireContext()).wordDao().getAllWords().observe(getViewLifecycleOwner(), savedWords -> updateRecyclerView(savedWords));
+        IO_DictionaryDatabase.getInstance(requireContext()).wordDao().getAllWords().observe(getViewLifecycleOwner(), savedWords -> {
+            try {
+                updateRecyclerView(savedWords);
+            } catch (Exception e) {
+                Log.e("SavedWordsFragment", "Error updating RecyclerView: " + e.getMessage());
+            }
+        });
     }
-
 
     private void updateRecyclerView(List<IO_Word> savedWords) {
         savedWordsAdapter.setSavedWords(savedWords);
+        Log.d("SavedWordsFragment", "RecyclerView Updated with " + savedWords.size() + " saved words");
+
+        // Additional logs for debugging
+        for (IO_Word word : savedWords) {
+            Log.d("SavedWordsFragment", "Word: " + word.getWord() + ", ID: " + word.getId());
+        }
     }
-
-
 }

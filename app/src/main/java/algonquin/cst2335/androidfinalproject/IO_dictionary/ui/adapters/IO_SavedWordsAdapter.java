@@ -1,6 +1,6 @@
-// SavedWordsAdapter.java
-
 package algonquin.cst2335.androidfinalproject.IO_dictionary.ui.adapters;
+
+import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,17 +24,20 @@ public class IO_SavedWordsAdapter extends RecyclerView.Adapter<IO_SavedWordsAdap
     public IO_SavedWordsAdapter(List<IO_Word> savedWords, OnSavedWordClickListener listener) {
         this.savedWords = savedWords;
         this.listener = listener;
+        Log.d("SavedWordsAdapter", "Adapter initialized");
     }
 
     public void setSavedWords(List<IO_Word> savedWords) {
         this.savedWords = savedWords;
         notifyDataSetChanged();
+        Log.d("SavedWordsAdapter", "Saved words updated. New count: " + savedWords.size());
     }
 
     @Override
     public void onBindViewHolder(@NonNull SavedWordViewHolder holder, int position) {
         IO_Word savedWord = savedWords.get(position);
         holder.bind(savedWord);
+        Log.d("SavedWordsAdapter", "onBindViewHolder called for position: " + position);
     }
 
     @NonNull
@@ -42,16 +45,20 @@ public class IO_SavedWordsAdapter extends RecyclerView.Adapter<IO_SavedWordsAdap
     public SavedWordViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.io_io_fragment_saved_words, parent, false);
-        return new SavedWordViewHolder(itemView);
-    }
-
-    public interface OnSavedWordClickListener {
-        void onSavedWordClick(IO_Word savedWord);
+        SavedWordViewHolder viewHolder = new SavedWordViewHolder(itemView);
+        Log.d("SavedWordsAdapter", "onCreateViewHolder called");
+        return viewHolder;
     }
 
     @Override
     public int getItemCount() {
-        return savedWords.size();
+        int itemCount = savedWords.size();
+        Log.d("SavedWordsAdapter", "getItemCount called. Count: " + itemCount);
+        return itemCount;
+    }
+
+    public interface OnSavedWordClickListener {
+        void onSavedWordClick(IO_Word savedWord);
     }
 
     class SavedWordViewHolder extends RecyclerView.ViewHolder {
@@ -61,18 +68,18 @@ public class IO_SavedWordsAdapter extends RecyclerView.Adapter<IO_SavedWordsAdap
         SavedWordViewHolder(@NonNull View itemView) {
             super(itemView);
             tvSavedWord = itemView.findViewById(R.id.textViewSavedWords);
+            Log.d("SavedWordsAdapter", "SavedWordViewHolder created");
         }
 
         void bind(IO_Word savedWord) {
             tvSavedWord.setText(savedWord.getWord());
             itemView.setOnClickListener(v -> {
-                Log.d("SavedWordsFragment", "Saved Word clicked: " + savedWord.getWord());
+                // ...
 
                 // Notify the listener about the click event
                 listener.onSavedWordClick(savedWord);
+                Log.d("SavedWordsAdapter", "Item clicked: " + savedWord.getWord());
             });
         }
-
-
     }
 }

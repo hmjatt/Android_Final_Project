@@ -1,18 +1,20 @@
-<!-- io_fragment_saved_word_definition.xml -->
+<!-- io_fragment_word_definition.xml -->
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="3dp"
+    android:layout_marginStart="3dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginEnd="3dp"
     android:background="@drawable/hm_rounded_corner"
     android:gravity="center"
     android:orientation="vertical">
 
-
+    <!-- Header TextView for Word -->
     <TextView
-        android:id="@+id/tvSavedWordDetail"
+        android:id="@+id/tvWordDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -20,50 +22,45 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
         android:padding="8dp"
-        android:text="Saved Word Detail Placeholder"
+        android:text="Word Detail Placeholder"
         android:textAlignment="center"
         android:textColor="#EAE7FA"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/btnDeleteSavedDefinition"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/savedDefinitionPlaceholder"
+        app:layout_constraintTop_toBottomOf="@+id/definitionPlaceholder"
         app:layout_constraintVertical_bias="0.5" />
 
-
     <TextView
-        android:id="@+id/savedDefinitionPlaceholder"
+        android:id="@+id/definitionPlaceholder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/hm_image_border"
         android:padding="8dp"
-        android:text="Saved Definition"
+        android:text="Definition"
         android:textSize="24dp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/tvSavedWordDetail"
+        app:layout_constraintBottom_toTopOf="@+id/tvWordDetail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.5" />
 
-    <Button
-        android:id="@+id/btnDeleteSavedDefinition"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <!-- RecyclerView for Definitions -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/definitionRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp"
-        android:text="Delete Definition"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvSavedWordDetail"
-        app:layout_constraintVertical_bias="0.5" />
-
+        app:layout_constraintTop_toBottomOf="@+id/tvWordDetail" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,32 @@
+<!-- res/values/styles.xml -->
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.AndroidFinalProject" parent="Theme.Material3.DayNight.NoActionBar">
+
+    </style>
+
+    <style name="Theme.AndroidFinalProject" parent="Base.Theme.AndroidFinalProject" />
+
+
+    <!-- Harmeet styles start -->
+    <style name="HelpDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/hm_dialog_background</item>
+        <item name="android:windowTitleStyle">@style/DialogTitleStyle</item>
+        <item name="android:buttonBarStyle">@style/ButtonBarStyle</item>
+        <item name="android:textColorPrimary">@color/dialogTextPrimaryColor</item>
+        <item name="android:textColorSecondary">@color/dialogTextSecondaryColor</item>
+    </style>
+
+    <style name="DialogTitleStyle" parent="TextAppearance.AppCompat.Title">
+        <item name="android:textColor">@color/dialogTextPrimaryColor</item>
+    </style>
+
+    <style name="ButtonBarStyle" parent="Widget.AppCompat.ButtonBar.AlertDialog">
+        <item name="android:background">@color/dialogButtonBarColor</item>
+    </style>
+    <!-- Harmeet styles end -->
+
+
+</resources>
+
+

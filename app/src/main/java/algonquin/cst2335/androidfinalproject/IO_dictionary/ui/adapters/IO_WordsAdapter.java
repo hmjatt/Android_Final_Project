@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Definition;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Word;
 import algonquin.cst2335.androidfinalproject.R;
 
@@ -24,7 +23,6 @@ public class IO_WordsAdapter extends RecyclerView.Adapter<IO_WordsAdapter.WordVi
 
     private List<IO_Word> partOfSpeeches;
     private OnWordClickListener listener;
-
 
     public IO_WordsAdapter(List<IO_Word> words, List<IO_Word> partOfSpeeches, OnWordClickListener listener) {
         this.words = words;
@@ -79,36 +77,17 @@ public class IO_WordsAdapter extends RecyclerView.Adapter<IO_WordsAdapter.WordVi
 
         private final Button btnSave;
 
-        private TextView tvWordTitle;
-
-        private TextView tvDefTitle;
-
-        private TextView tvDefinitions;
-
 
         WordViewHolder(@NonNull View itemView) {
             super(itemView);
             tvWord = itemView.findViewById(R.id.textViewWords);
             tvPartOfSpeech = itemView.findViewById(R.id.textViewPartOfSpeech);
             btnSave = itemView.findViewById(R.id.btnSaveWord);
-            tvDefTitle = itemView.findViewById(R.id.definitionPlaceholder);
-            tvDefinitions = itemView.findViewById(R.id.tvWordDetail);
         }
 
         void bind(IO_Word word) {
             tvWord.setText(word.getWord());
             tvPartOfSpeech.setText(word.getPartOfSpeech());
-
-            // Convert the list of definitions to a formatted string
-            StringBuilder definitionsStringBuilder = new StringBuilder();
-            List<IO_Definition> definitions = word.getDefinitions();
-            if (definitions != null) {
-                for (IO_Definition definition : definitions) {
-                    definitionsStringBuilder.append("• ").append(definition.getDefinition()).append("\n");
-                }
-            }
-
-            tvDefinitions.setText(definitionsStringBuilder.toString());
 
             // Additional logic to display multiple meanings if needed
 
@@ -128,8 +107,8 @@ public class IO_WordsAdapter extends RecyclerView.Adapter<IO_WordsAdapter.WordVi
                 // Call the method to save the word and its definitions to the database
                 saveWordToDatabase(word);
             });
-        }
 
+        }
 
         // New method to handle saving word and definitions
         private void saveWordToDatabase(IO_Word word) {

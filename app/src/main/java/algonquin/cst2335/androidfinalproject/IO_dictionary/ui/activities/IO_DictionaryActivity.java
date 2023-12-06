@@ -27,9 +27,7 @@ import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Definition;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Word;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.adapters.IO_DefinitionsAdapter;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.adapters.IO_WordsAdapter;
-import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.fragments.IO_DefinitionsFragment;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.fragments.IO_SavedWordsFragment;
-import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.fragments.IO_WordFragment;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.utils.IO_DictionaryVolleySingleton;
 import algonquin.cst2335.androidfinalproject.R;
 
@@ -206,27 +204,36 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
 
     @Override
     public void onWordClick(IO_Word word) {
-        // Create a new DefinitionsFragment instance
-        IO_DefinitionsFragment definitionsFragment = new IO_DefinitionsFragment();
+        // Handle item click, load WordDetail directly in the RecyclerView
 
-        // Pass data to the fragment
-        definitionsFragment.updateDefinitions(word.getDefinitions());
+        // Log for testing the click event
+        Log.d("DictionaryActivity", "Word clicked: " + word.getWord());
 
-        // Replace the current fragment with DefinitionsFragment
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.flContent, definitionsFragment)
-                .addToBackStack(null)
-                .commit();
-    }
+        // Display the selected word in a TextView
+        TextView tvWordDetail = findViewById(R.id.tvWordDetail);
 
-    // Helper method to convert List<IO_Definition> to List<String>
-    private List<String> getDefinitionsAsStringList(List<IO_Definition> definitions) {
-        List<String> definitionStrings = new ArrayList<>();
-        for (IO_Definition definition : definitions) {
-            definitionStrings.add(definition.getDefinition());
+        if (tvWordDetail != null) {
+            tvWordDetail.setText(word != null ? word.getWord() : "No word selected");
+        } else {
+            // Log a message or handle the case where tvWordDetail is not found
+            Log.e("DictionaryActivity", "TextView tvWordDetail not found in the layout");
         }
-        return definitionStrings;
+
+        // Initialize DefinitionsAdapter with the list of definitions from the selected word
+        List<IO_Definition> definitions = word != null ? word.getDefinitions() : null;
+        IO_DefinitionsAdapter definitionsAdapter = new IO_DefinitionsAdapter(definitions);
+
+        // Assuming you have a RecyclerView with the ID "definitionRecycler" in your layout
+        RecyclerView recyclerView = findViewById(R.id.dictionaryRecycler);
+
+        // Set a LinearLayoutManager to your RecyclerView
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+        // Set the adapter to the RecyclerView
+        recyclerView.setAdapter(definitionsAdapter);
     }
+
 
     @Override
     public void onSaveButtonClick(IO_Word word) {

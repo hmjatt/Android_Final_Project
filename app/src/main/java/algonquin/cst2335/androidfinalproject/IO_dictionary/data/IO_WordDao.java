@@ -17,13 +17,8 @@ public interface IO_WordDao {
     @Insert
     void insertWord(IO_Word word);
 
-
     @Query("SELECT * FROM word_table")
     LiveData<List<IO_Word>> getAllWords(); // Change the return type to LiveData
-
-
-    @Query("SELECT * FROM word_table WHERE id = :wordId")
-    IO_Word getWordById(int wordId);
 
 
     // Add other queries as needed
