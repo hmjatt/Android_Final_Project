@@ -1,9 +1,11 @@
 package algonquin.cst2335.androidfinalproject.IO_dictionary.ui.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -44,6 +46,13 @@ public class IO_SavedWordDefinitionFragment extends Fragment {
         // Load definitions from the local database
         loadDefinitionsFromDatabase(savedWordId);
 
+        // Implement delete button logic here (for example, in a button click listener)
+        Button deleteButton = view.findViewById(R.id.btnDeleteSavedDefinition);
+        deleteButton.setOnClickListener(view1 -> {
+            // Delete the word and its definitions from the database
+            deleteWordAndDefinitions(savedWordId);
+        });
+
         return view;
     }
 
@@ -59,7 +68,18 @@ public class IO_SavedWordDefinitionFragment extends Fragment {
         });
     }
 
+    private void deleteWordAndDefinitions(int savedWordId) {
+        // Delete the word and its definitions from the database
+        IO_DictionaryDatabase.getInstance(requireContext()).wordDao().deleteWordById(savedWordId);
+
+        // Log for testing the delete operation
+        Log.d("DictionaryActivity", "Word and definitions deleted with ID: " + savedWordId);
+
+        // You may also update the UI or provide a confirmation message
+    }
+
     private void updateRecyclerView(List<IO_Definition> definitions) {
         definitionsAdapter.setDefinitions(definitions);
     }
+
 }

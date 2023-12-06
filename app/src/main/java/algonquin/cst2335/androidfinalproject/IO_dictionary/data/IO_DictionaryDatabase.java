@@ -31,4 +31,12 @@ public abstract class IO_DictionaryDatabase extends RoomDatabase {
 
     public abstract IO_WordDao wordDao();
 
+    public int countWordsByPartOfSpeech(String word, String partOfSpeech) {
+        return wordDao().countWordsByPartOfSpeech(word, partOfSpeech);
+    }
+
+    public void deleteWordById(long wordId) {
+        new Thread(() -> wordDao().deleteWordById(wordId)).start();
+    }
+
 }

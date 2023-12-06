@@ -2,11 +2,14 @@ package algonquin.cst2335.androidfinalproject.IO_dictionary.ui.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,6 +25,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import algonquin.cst2335.androidfinalproject.IO_dictionary.data.IO_DictionaryDatabase;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Definition;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Word;
@@ -33,6 +37,9 @@ import algonquin.cst2335.androidfinalproject.R;
 
 public class IO_DictionaryActivity extends AppCompatActivity implements IO_WordsAdapter.OnWordClickListener,
         IO_WordsAdapter.OnSaveButtonClickListener {
+
+
+    private final Handler handler = new Handler(Looper.getMainLooper());
 
     private EditText searchEditText;
     private Button searchButton;
@@ -232,6 +239,8 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
 
         // Set the adapter to the RecyclerView
         recyclerView.setAdapter(definitionsAdapter);
+
+
     }
 
 
@@ -241,16 +250,30 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
         saveWordToDatabase(word);
     }
 
-    private void saveWordToDatabase(IO_Word word) {
-        // Save the word to the database asynchronously using Kotlin Coroutines
-        new Thread(() -> {
-            // For example, assuming you have a WordDao in DictionaryDatabase
-            dictionaryDatabase.wordDao().insertWord(word);
 
-            // You may also update the UI or provide a confirmation message
-            // For now, use logs to test the save operation
-            Log.d("DictionaryActivity", "Word saved to database: " + word.getWord());
+    private void saveWordToDatabase(IO_Word word) {
+        new Thread(() -> {
+            // Check if the word with its part of speech already exists in the database
+            int count = dictionaryDatabase.wordDao().countWordsByPartOfSpeech(word.getWord(), word.getPartOfSpeech());
+
+            if (count == 0) {
+                // Save the word to the database if it doesn't exist
+                dictionaryDatabase.wordDao().insertWord(word);
+
+                // You may also update the UI or provide a confirmation message
+                // For now, use logs to test the save operation
+                Log.d("DictionaryActivity", "Word saved to database: " + word.getWord());
+            } else {
+                // Show a Toast message indicating that the word already exists
+                runOnUiThread(() -> {
+                    Toast.makeText(getApplicationContext(), "Word already exists in database", Toast.LENGTH_SHORT).show();
+                });
+
+                // Log for testing the case where the word already exists
+                Log.d("DictionaryActivity", "Word already exists in the database: " + word.getWord());
+            }
         }).start();
     }
+
 
 }
