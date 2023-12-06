@@ -57,6 +57,7 @@ public class IO_WordsAdapter extends RecyclerView.Adapter<IO_WordsAdapter.WordVi
     }
 
 
+
     @Override
     public int getItemCount() {
         return words.size();
@@ -84,6 +85,8 @@ public class IO_WordsAdapter extends RecyclerView.Adapter<IO_WordsAdapter.WordVi
             tvWord.setText(word.getWord());
             tvPartOfSpeech.setText(word.getPartOfSpeech());
 
+            // Additional logic to display multiple meanings if needed
+
             itemView.setOnClickListener(v -> {
                 // Log a message when a word is clicked
                 Log.d("WordsAdapter", "Word clicked: " + word.getWord());
@@ -92,6 +95,7 @@ public class IO_WordsAdapter extends RecyclerView.Adapter<IO_WordsAdapter.WordVi
                 listener.onWordClick(word);
             });
         }
+
 
     }
 }

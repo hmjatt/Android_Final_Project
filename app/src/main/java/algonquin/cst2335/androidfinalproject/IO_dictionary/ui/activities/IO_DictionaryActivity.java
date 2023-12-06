@@ -167,36 +167,35 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
     }
 
     private List<IO_Word> parseJsonResponse(JSONArray jsonResponse) {
-        // Parse the JSON response and create a list of Word objects
         List<IO_Word> words = new ArrayList<>();
-        List<IO_Word> partOfSpeeches = new ArrayList<>();
 
         try {
             for (int i = 0; i < jsonResponse.length(); i++) {
-                JSONObject definitionObject = jsonResponse.getJSONObject(i);
+                JSONObject wordObject = jsonResponse.getJSONObject(i);
 
                 // Extract the word
-                String wordText = definitionObject.getString("word");
+                String wordText = wordObject.getString("word");
 
                 // Create a Word object
                 IO_Word word = new IO_Word(wordText);
 
                 // Check if the response has an array of meanings
-                if (definitionObject.has("meanings")) {
-                    JSONArray meaningsArray = definitionObject.getJSONArray("meanings");
+                if (wordObject.has("meanings")) {
+                    JSONArray meaningsArray = wordObject.getJSONArray("meanings");
 
                     // Iterate through meanings
                     for (int j = 0; j < meaningsArray.length(); j++) {
                         JSONObject meaningObject = meaningsArray.getJSONObject(j);
 
+                        // Extract part of speech
+                        String partOfSpeechText = meaningObject.getString("partOfSpeech");
+
+                        // Set the part of speech for the Word object
+                        word.setPartOfSpeech(partOfSpeechText);
+
                         // Check if the meaningObject has an array of definitions
                         if (meaningObject.has("definitions")) {
                             JSONArray definitionsArray = meaningObject.getJSONArray("definitions");
-
-                            String partOfSpeechText = meaningObject.getString("partOfSpeech");
-
-                            // Set the part of speech for the Word object
-                            word.setPartOfSpeech(partOfSpeechText);
 
                             // Iterate through definitions
                             for (int k = 0; k < definitionsArray.length(); k++) {
@@ -210,17 +209,18 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
                             }
                         }
                     }
-                    // Add the Word object to the list
+
+                    // Add the Word object to the list for each meaning
                     words.add(word);
                 }
             }
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         return words;
     }
+
 
     public void updateRecyclerView(List<IO_Word> words, List<IO_Word> partOfSpeeches) {
         wordsAdapter.setWords(words, partOfSpeeches);
