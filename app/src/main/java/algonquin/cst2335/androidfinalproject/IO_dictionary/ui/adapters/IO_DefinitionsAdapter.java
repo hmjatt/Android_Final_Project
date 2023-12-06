@@ -15,7 +15,6 @@ import java.util.List;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Definition;
 import algonquin.cst2335.androidfinalproject.R;
 
-
 public class IO_DefinitionsAdapter extends RecyclerView.Adapter<IO_DefinitionsAdapter.DefinitionViewHolder> {
 
     private List<IO_Definition> definitions = new ArrayList<>();
@@ -24,7 +23,6 @@ public class IO_DefinitionsAdapter extends RecyclerView.Adapter<IO_DefinitionsAd
     public IO_DefinitionsAdapter(List<IO_Definition> definitions) {
         this.definitions = definitions;
     }
-
 
     @NonNull
     @Override

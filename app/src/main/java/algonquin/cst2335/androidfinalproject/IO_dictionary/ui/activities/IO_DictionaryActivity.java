@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,9 +26,9 @@ import algonquin.cst2335.androidfinalproject.IO_dictionary.data.IO_DictionaryDat
 import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Definition;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_SavedWord;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Word;
+import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.adapters.IO_DefinitionsAdapter;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.adapters.IO_WordsAdapter;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.fragments.IO_SavedWordsFragment;
-import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.fragments.IO_WordDefinitionFragment;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.utils.IO_DictionaryVolleySingleton;
 import algonquin.cst2335.androidfinalproject.R;
 
@@ -217,27 +218,34 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
 
     @Override
     public void onWordClick(IO_Word word) {
-        // Handle item click, load WordDetailFragment with the selected word
-        // Use a callback or communication method to communicate with the activity
-        // and load the WordDetailFragment.
-        // For now, use logs to test the click event.
+        // Handle item click, load WordDetail directly in the RecyclerView
+
+        // Log for testing the click event
         Log.d("DictionaryActivity", "Word clicked: " + word.getWord());
 
-        // Replace the current fragment with WordDetailFragment
-        IO_WordDefinitionFragment wordDetailFragment = new IO_WordDefinitionFragment();
+        // Display the selected word in a TextView
+        TextView tvWordDetail = findViewById(R.id.tvWordDetail);
 
-        // Save the selected word to the database
-        saveWordToDatabase(word);
+        if (tvWordDetail != null) {
+            tvWordDetail.setText(word != null ? word.getWord() : "No word selected");
+        } else {
+            // Log a message or handle the case where tvWordDetail is not found
+            Log.e("DictionaryActivity", "TextView tvWordDetail not found in the layout");
+        }
 
-        // Pass the selected word to WordDetailFragment using arguments
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(IO_WordDefinitionFragment.ARG_SELECTED_WORD, word);
-        wordDetailFragment.setArguments(bundle);
+        // Initialize DefinitionsAdapter with the list of definitions from the selected word
+        List<IO_Definition> definitions = word != null ? word.getDefinitions() : null;
+        IO_DefinitionsAdapter definitionsAdapter = new IO_DefinitionsAdapter(definitions);
 
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.flContent, wordDetailFragment)
-                .addToBackStack(null)
-                .commit();
+        // Assuming you have a RecyclerView with the ID "definitionRecycler" in your layout
+        RecyclerView recyclerView = findViewById(R.id.dictionaryRecycler);
+
+        // Set a LinearLayoutManager to your RecyclerView
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+        // Set the adapter to the RecyclerView
+        recyclerView.setAdapter(definitionsAdapter);
     }
 
     private void saveWordToDatabase(IO_Word word) {
