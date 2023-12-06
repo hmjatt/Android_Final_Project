@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,6 +29,8 @@ public class IO_SavedWordDefinitionFragment extends Fragment {
     private RecyclerView recyclerView;
     private IO_SavedWordDefinitionAdapter definitionsAdapter;
 
+    private IO_DictionaryDatabase dictionaryDatabase; // Add this line
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.io_io_fragment_saved_word_definition, container, false);
@@ -43,18 +46,30 @@ public class IO_SavedWordDefinitionFragment extends Fragment {
         definitionsAdapter = new IO_SavedWordDefinitionAdapter();
         recyclerView.setAdapter(definitionsAdapter);
 
+        // Initialize the dictionaryDatabase
+        dictionaryDatabase = IO_DictionaryDatabase.getInstance(requireContext()); // Add this line
+
         // Load definitions from the local database
         loadDefinitionsFromDatabase(savedWordId);
 
+
         // Implement delete button logic here (for example, in a button click listener)
         Button deleteButton = view.findViewById(R.id.btnDeleteSavedDefinition);
-        deleteButton.setOnClickListener(view1 -> {
+        deleteButton.setOnClickListener(v -> {
+            // Log statement to check if the delete button click is registered
+            Log.d("DictionaryActivity", "Delete button clicked");
+
             // Delete the word and its definitions from the database
             deleteWordAndDefinitions(savedWordId);
         });
 
+
+        // Log statement to check if the delete button is registered
+        Log.d("DictionaryActivity", "Delete button is registered");
+
         return view;
     }
+
 
     private void loadDefinitionsFromDatabase(int savedWordId) {
         // Retrieve the IO_Word object from the database using the savedWordId
@@ -69,17 +84,24 @@ public class IO_SavedWordDefinitionFragment extends Fragment {
     }
 
     private void deleteWordAndDefinitions(int savedWordId) {
-        // Delete the word and its definitions from the database
-        IO_DictionaryDatabase.getInstance(requireContext()).wordDao().deleteWordById(savedWordId);
+        new Thread(() -> {
+            // Delete the definitions for the selected word
+            dictionaryDatabase.wordDao().deleteDefinitionsForWord(savedWordId);
 
-        // Log for testing the delete operation
-        Log.d("DictionaryActivity", "Word and definitions deleted with ID: " + savedWordId);
+            // Check if all definitions are deleted, and delete the word if true
+            dictionaryDatabase.wordDao().deleteWordIfNoDefinitions(savedWordId);
 
-        // You may also update the UI or provide a confirmation message
+            // Show a Toast indicating that the definitions have been deleted
+            requireActivity().runOnUiThread(() -> {
+                Toast.makeText(requireContext(), "Definitions deleted for word ID: " + savedWordId, Toast.LENGTH_SHORT).show();
+            });
+        }).start();
     }
+
 
     private void updateRecyclerView(List<IO_Definition> definitions) {
         definitionsAdapter.setDefinitions(definitions);
     }
+
 
 }
