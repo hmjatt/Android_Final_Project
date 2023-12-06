@@ -48,7 +48,7 @@ public class IO_SavedWordsFragment extends Fragment {
             savedWordDetailFragment.setArguments(bundle);
 
             getParentFragmentManager().beginTransaction()
-                    .replace(R.id.wordRecyclerView, savedWordDetailFragment)
+                    .replace(R.id.flContent, savedWordDetailFragment)
                     .addToBackStack(null)
                     .commit();
         });
