@@ -178,6 +178,9 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
                 // Extract the word
                 String wordText = definitionObject.getString("word");
 
+                // Create a Word object
+                IO_Word word = new IO_Word(wordText);
+
                 // Check if the response has an array of meanings
                 if (definitionObject.has("meanings")) {
                     JSONArray meaningsArray = definitionObject.getJSONArray("meanings");
@@ -192,13 +195,8 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
 
                             String partOfSpeechText = meaningObject.getString("partOfSpeech");
 
-
-//                            wordText = wordText + " - " + partOfSpeech;
-
-                            // Create a Word object
-                            IO_Word word = new IO_Word(wordText);
-                            IO_Word partOfSpeech = new IO_Word(partOfSpeechText);
-
+                            // Set the part of speech for the Word object
+                            word.setPartOfSpeech(partOfSpeechText);
 
                             // Iterate through definitions
                             for (int k = 0; k < definitionsArray.length(); k++) {
@@ -210,17 +208,13 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
                                 // Add the definition to the Word object
                                 word.addDefinition(new IO_Definition(definitionText));
                             }
-
-                            // Add the Word object to the list
-                            words.add(word);
-                            partOfSpeeches.add(partOfSpeech);
-
-//                            Log.d("partOfSpeeches", "API response received: " + partOfspeechs);
-
                         }
                     }
+                    // Add the Word object to the list
+                    words.add(word);
                 }
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

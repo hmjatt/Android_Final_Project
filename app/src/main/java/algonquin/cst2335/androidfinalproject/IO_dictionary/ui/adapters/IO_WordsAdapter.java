@@ -53,9 +53,9 @@ public class IO_WordsAdapter extends RecyclerView.Adapter<IO_WordsAdapter.WordVi
     @Override
     public void onBindViewHolder(@NonNull WordViewHolder holder, int position) {
         IO_Word word = words.get(position);
-        IO_Word partOfSpeech = partOfSpeeches.get(position);
-        holder.bind(word, partOfSpeech);
+        holder.bind(word);
     }
+
 
     @Override
     public int getItemCount() {
@@ -80,12 +80,9 @@ public class IO_WordsAdapter extends RecyclerView.Adapter<IO_WordsAdapter.WordVi
             tvPartOfSpeech = itemView.findViewById(R.id.textViewPartOfSpeech);
         }
 
-        void bind(IO_Word word, IO_Word partOfSpeech) {
+        void bind(IO_Word word) {
             tvWord.setText(word.getWord());
-            tvPartOfSpeech.setText(partOfSpeech.getPartOfSpeech());
-
-            // Add code to bind data to additional views if needed
-            // For example, ImageView, additional TextViews, etc.
+            tvPartOfSpeech.setText(word.getPartOfSpeech());
 
             itemView.setOnClickListener(v -> {
                 // Log a message when a word is clicked
@@ -93,9 +90,8 @@ public class IO_WordsAdapter extends RecyclerView.Adapter<IO_WordsAdapter.WordVi
 
                 // Notify the listener about the click event
                 listener.onWordClick(word);
-
-
             });
         }
+
     }
 }
