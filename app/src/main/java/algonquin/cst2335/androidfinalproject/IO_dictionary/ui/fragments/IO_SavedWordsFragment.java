@@ -31,6 +31,9 @@ public class IO_SavedWordsFragment extends Fragment {
     private RecyclerView recyclerView;
     private IO_SavedWordsAdapter savedWordsAdapter;
 
+    private List<IO_Word> dictionaryPartOfSpeeches;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.io_io_fragment_saved_words, container, false);
@@ -39,8 +42,11 @@ public class IO_SavedWordsFragment extends Fragment {
         recyclerView = view.findViewById(R.id.savedWordRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        dictionaryPartOfSpeeches = new ArrayList<>();
+
+
         // Initialize and set up the SavedWordsAdapter
-        savedWordsAdapter = new IO_SavedWordsAdapter(new ArrayList<>(), savedWord -> {
+        savedWordsAdapter = new IO_SavedWordsAdapter(new ArrayList<>(), dictionaryPartOfSpeeches, savedWord -> {
             Log.d("SavedWordsFragment", "Saved Word clicked: " + savedWord.getWord());
             IO_SavedWordDefinitionFragment savedWordDetailFragment = new IO_SavedWordDefinitionFragment();
             Bundle bundle = new Bundle();
@@ -66,15 +72,15 @@ public class IO_SavedWordsFragment extends Fragment {
         // Observe changes in the database using LiveData
         IO_DictionaryDatabase.getInstance(requireContext()).wordDao().getAllWords().observe(getViewLifecycleOwner(), savedWords -> {
             try {
-                updateRecyclerView(savedWords);
+                updateRecyclerView(savedWords, dictionaryPartOfSpeeches);
             } catch (Exception e) {
                 Log.e("SavedWordsFragment", "Error updating RecyclerView: " + e.getMessage());
             }
         });
     }
 
-    private void updateRecyclerView(List<IO_Word> savedWords) {
-        savedWordsAdapter.setSavedWords(savedWords);
+    private void updateRecyclerView(List<IO_Word> savedWords, List<IO_Word> partOfSpeeches) {
+        savedWordsAdapter.setSavedWords(savedWords, partOfSpeeches);
         Log.d("SavedWordsFragment", "RecyclerView Updated with " + savedWords.size() + " saved words");
 
         // Additional logs for debugging

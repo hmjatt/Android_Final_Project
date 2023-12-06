@@ -21,14 +21,19 @@ public class IO_SavedWordsAdapter extends RecyclerView.Adapter<IO_SavedWordsAdap
     private List<IO_Word> savedWords;
     private OnSavedWordClickListener listener;
 
-    public IO_SavedWordsAdapter(List<IO_Word> savedWords, OnSavedWordClickListener listener) {
+    private List<IO_Word> partOfSpeeches;
+
+
+    public IO_SavedWordsAdapter(List<IO_Word> savedWords, List<IO_Word> partOfSpeeches, OnSavedWordClickListener listener) {
         this.savedWords = savedWords;
         this.listener = listener;
+        this.partOfSpeeches = partOfSpeeches;
         Log.d("SavedWordsAdapter", "Adapter initialized");
     }
 
-    public void setSavedWords(List<IO_Word> savedWords) {
+    public void setSavedWords(List<IO_Word> savedWords, List<IO_Word> partOfSpeeches) {
         this.savedWords = savedWords;
+        this.partOfSpeeches = partOfSpeeches;
         notifyDataSetChanged();
         Log.d("SavedWordsAdapter", "Saved words updated. New count: " + savedWords.size());
     }
@@ -65,14 +70,19 @@ public class IO_SavedWordsAdapter extends RecyclerView.Adapter<IO_SavedWordsAdap
 
         private final TextView tvSavedWord;
 
+        private final TextView tvPartOfSpeech;
+
+
         SavedWordViewHolder(@NonNull View itemView) {
             super(itemView);
             tvSavedWord = itemView.findViewById(R.id.textViewSavedWords);
+            tvPartOfSpeech = itemView.findViewById(R.id.textViewPartOfSpeech);
             Log.d("SavedWordsAdapter", "SavedWordViewHolder created");
         }
 
         void bind(IO_Word savedWord) {
             tvSavedWord.setText(savedWord.getWord());
+            tvPartOfSpeech.setText(savedWord.getPartOfSpeech());
             itemView.setOnClickListener(v -> {
                 // ...
 
