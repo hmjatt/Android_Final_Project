@@ -32,7 +32,8 @@ import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.fragments.IO_Saved
 import algonquin.cst2335.androidfinalproject.IO_dictionary.utils.IO_DictionaryVolleySingleton;
 import algonquin.cst2335.androidfinalproject.R;
 
-public class IO_DictionaryActivity extends AppCompatActivity implements IO_WordsAdapter.OnWordClickListener {
+public class IO_DictionaryActivity extends AppCompatActivity implements IO_WordsAdapter.OnWordClickListener,
+        IO_WordsAdapter.OnSaveButtonClickListener {
 
     private EditText searchEditText;
     private Button searchButton;
@@ -261,12 +262,18 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
         recyclerView.setAdapter(definitionsAdapter);
     }
 
+
+    @Override
+    public void onSaveButtonClick(IO_Word word) {
+        // Handle saving logic here
+        saveWordToDatabase(word);
+    }
+
     private void saveWordToDatabase(IO_Word word) {
         // Save the word to the database asynchronously using Kotlin Coroutines
         new Thread(() -> {
-            // For example, assuming you have a SavedWordDao in DictionaryDatabase
-            IO_SavedWord savedWord = new IO_SavedWord(word.getWord(), word.getDefinitions().toString());
-            dictionaryDatabase.savedWordDao().insert(savedWord);
+            // For example, assuming you have a WordDao in DictionaryDatabase
+            dictionaryDatabase.wordDao().insertWord(word);
 
             // You may also update the UI or provide a confirmation message
             // For now, use logs to test the save operation
