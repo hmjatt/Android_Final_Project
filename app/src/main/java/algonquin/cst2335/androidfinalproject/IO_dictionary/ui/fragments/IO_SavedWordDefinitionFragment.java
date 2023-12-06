@@ -53,14 +53,16 @@ public class IO_SavedWordDefinitionFragment extends Fragment {
         loadDefinitionsFromDatabase(savedWordId);
 
 
-        // Implement delete button logic here (for example, in a button click listener)
         Button deleteButton = view.findViewById(R.id.btnDeleteSavedDefinition);
-        deleteButton.setOnClickListener(v -> {
-            // Log statement to check if the delete button click is registered
-            Log.d("DictionaryActivity", "Delete button clicked");
+        Log.d("DictionaryActivity", "Delete button instance: " + deleteButton);
 
-            // Delete the word and its definitions from the database
-            deleteWordAndDefinitions(savedWordId);
+//        Button deleteButton = view.findViewById(R.id.btnDeleteSavedDefinition);
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("DictionaryActivity", "Delete button clicked");
+                deleteWordAndDefinitions(savedWordId);
+            }
         });
 
 
@@ -84,6 +86,8 @@ public class IO_SavedWordDefinitionFragment extends Fragment {
     }
 
     private void deleteWordAndDefinitions(int savedWordId) {
+        Log.d("DictionaryActivity", "Deleting word and definitions for ID: " + savedWordId);
+
         new Thread(() -> {
             // Delete the definitions for the selected word
             dictionaryDatabase.wordDao().deleteDefinitionsForWord(savedWordId);
