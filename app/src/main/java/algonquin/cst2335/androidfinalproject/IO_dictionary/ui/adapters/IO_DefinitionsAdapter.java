@@ -56,4 +56,6 @@ public class IO_DefinitionsAdapter extends RecyclerView.Adapter<IO_DefinitionsAd
             tvDefinition = itemView.findViewById(R.id.tvWordDetail);
         }
     }
+
+
 }

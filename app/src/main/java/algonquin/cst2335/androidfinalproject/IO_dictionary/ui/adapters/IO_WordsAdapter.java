@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Definition;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Word;
 import algonquin.cst2335.androidfinalproject.R;
 
@@ -21,20 +22,16 @@ public class IO_WordsAdapter extends RecyclerView.Adapter<IO_WordsAdapter.WordVi
 
     private List<IO_Word> words;
 
-    private List<IO_Word> partOfSpeeches;
+    private List<IO_Definition> definitions;
     private OnWordClickListener listener;
 
-    public IO_WordsAdapter(List<IO_Word> words, List<IO_Word> partOfSpeeches, OnWordClickListener listener) {
+    public IO_WordsAdapter(List<IO_Word> words, OnWordClickListener listener) {
         this.words = words;
-        this.partOfSpeeches = partOfSpeeches;
         this.listener = listener;
-
     }
 
-
-    public void setWords(List<IO_Word> words, List<IO_Word> partOfSpeeches) {
+    public void setWords(List<IO_Word> words) {
         this.words = words;
-        this.partOfSpeeches = partOfSpeeches;
         notifyDataSetChanged();
     }
 
@@ -49,10 +46,9 @@ public class IO_WordsAdapter extends RecyclerView.Adapter<IO_WordsAdapter.WordVi
     @Override
     public void onBindViewHolder(@NonNull WordViewHolder holder, int position) {
         IO_Word word = words.get(position);
-        holder.bind(word);
+        IO_Definition definition = definitions.get(position);
+        holder.bind(word, definition);
     }
-
-
 
     @Override
     public int getItemCount() {
@@ -62,21 +58,15 @@ public class IO_WordsAdapter extends RecyclerView.Adapter<IO_WordsAdapter.WordVi
     public interface OnWordClickListener {
         void onWordClick(IO_Word word);
 
-
+        void onSaveButtonClick(IO_Word word, IO_Definition definition);  // Corrected method name
     }
 
-    // Interface for handling the "Save" button click
-    public interface OnSaveButtonClickListener {
-        void onSaveButtonClick(IO_Word word);
-    }
 
     class WordViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView tvWord;
         private final TextView tvPartOfSpeech;
-
         private final Button btnSave;
-
 
         WordViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -85,43 +75,19 @@ public class IO_WordsAdapter extends RecyclerView.Adapter<IO_WordsAdapter.WordVi
             btnSave = itemView.findViewById(R.id.btnSaveWord);
         }
 
-        void bind(IO_Word word) {
+        void bind(IO_Word word, IO_Definition definition) {
             tvWord.setText(word.getWord());
             tvPartOfSpeech.setText(word.getPartOfSpeech());
 
-            // Additional logic to display multiple meanings if needed
-
             itemView.setOnClickListener(v -> {
-                // Log a message when a word is clicked
                 Log.d("WordsAdapter", "Word clicked: " + word.getWord());
-
-                // Notify the listener about the click event
                 listener.onWordClick(word);
             });
 
-            // Add a click listener for the "Save" button
             btnSave.setOnClickListener(v -> {
-                // Log a message when the "Save" button is clicked
                 Log.d("WordsAdapter", "Save button clicked for word: " + word.getWord());
-
-                // Call the method to save the word and its definitions to the database
-                saveWordToDatabase(word);
+                listener.onSaveButtonClick(word, definition);
             });
-
         }
-
-        // New method to handle saving word and definitions
-        private void saveWordToDatabase(IO_Word word) {
-            // Check if the listener is not null and if the listener implements the saving interface
-            if (listener != null && listener instanceof OnSaveButtonClickListener) {
-                // Cast the listener to the saving interface
-                OnSaveButtonClickListener saveButtonClickListener = (OnSaveButtonClickListener) listener;
-
-                // Call the interface method to save the word and its definitions
-                saveButtonClickListener.onSaveButtonClick(word);
-            }
-        }
-
-
     }
 }
