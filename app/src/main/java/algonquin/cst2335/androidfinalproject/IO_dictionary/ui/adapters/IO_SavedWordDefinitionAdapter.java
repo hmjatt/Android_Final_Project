@@ -28,7 +28,8 @@ public class IO_SavedWordDefinitionAdapter extends RecyclerView.Adapter<IO_Saved
     public DefinitionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.io_io_fragment_saved_word_definition, parent, false);
-        return new DefinitionViewHolder(itemView);
+        IO_SavedWordDefinitionAdapter.DefinitionViewHolder viewHolder = new IO_SavedWordDefinitionAdapter.DefinitionViewHolder(itemView);
+        return viewHolder;
     }
 
     @Override
@@ -53,6 +54,7 @@ public class IO_SavedWordDefinitionAdapter extends RecyclerView.Adapter<IO_Saved
 
         void bind(IO_Definition definition) {
             tvDefinition.setText(definition.getDefinition());
+
             // TODO: Customize the binding as needed
         }
     }

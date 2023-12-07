@@ -50,6 +50,7 @@ public class IO_SavedWordsAdapter extends RecyclerView.Adapter<IO_SavedWordsAdap
     public SavedWordViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.io_io_fragment_saved_words, parent, false);
+
         SavedWordViewHolder viewHolder = new SavedWordViewHolder(itemView);
         Log.d("SavedWordsAdapter", "onCreateViewHolder called");
         return viewHolder;
