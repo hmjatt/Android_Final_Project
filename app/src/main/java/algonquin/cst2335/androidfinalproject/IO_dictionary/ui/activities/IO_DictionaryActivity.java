@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,13 +29,18 @@ import algonquin.cst2335.androidfinalproject.IO_dictionary.data.IO_DictionaryDat
 import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Definition;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Word;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.adapters.IO_DefinitionsAdapter;
+import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.adapters.IO_SavedWordsAdapter;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.adapters.IO_WordsAdapter;
+import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.fragments.IO_SavedWordDefinitionFragment;
+import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.fragments.IO_SavedWordsFragment;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.fragments.IO_WordDetailFragment;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.utils.IO_DictionaryVolleySingleton;
 import algonquin.cst2335.androidfinalproject.R;
 
-public class IO_DictionaryActivity extends AppCompatActivity implements IO_WordsAdapter.OnWordClickListener, IO_WordsAdapter.OnSaveButtonClickListener {
 
+public class IO_DictionaryActivity extends AppCompatActivity
+        implements IO_WordsAdapter.OnWordClickListener, IO_WordsAdapter.OnSaveButtonClickListener,
+        IO_SavedWordsAdapter.OnSavedWordClickListener {
     private final Handler handler = new Handler(Looper.getMainLooper());
 
     private EditText searchEditText;
@@ -44,6 +50,10 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
     private List<IO_Word> dictionaryWords;
 
     private IO_DictionaryDatabase dictionaryDatabase;
+
+    private IO_SavedWordsFragment savedWordsFragment;
+    private IO_SavedWordDefinitionFragment savedWordDefinitionFragment;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +83,31 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
             }
         });
 
+        savedWordsFragment = new IO_SavedWordsFragment();
+        savedWordDefinitionFragment = new IO_SavedWordDefinitionFragment();
+
         Button btnViewSavedDefinitions = findViewById(R.id.btnViewSavedWords);
-        btnViewSavedDefinitions.setOnClickListener(view -> btnViewSavedDefinitionsClick());
+        btnViewSavedDefinitions.setOnClickListener(view -> switchToSavedWordsFragment());
+
+    }
+
+    private void switchToSavedWordsFragment() {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.flContentDic, savedWordsFragment);
+        fragmentTransaction.addToBackStack(null); // Add to back stack to allow back navigation
+        fragmentTransaction.commit();
+    }
+
+
+    private void switchToSavedWordDefinitionFragment(IO_Word savedWord) {
+        Bundle args = new Bundle();
+        args.putLong(IO_SavedWordDefinitionFragment.ARG_SAVED_WORD_ID, savedWord.getId());
+        savedWordDefinitionFragment.setArguments(args);
+
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.flContentDic, savedWordDefinitionFragment);
+        fragmentTransaction.addToBackStack(null); // Add to back stack to allow back navigation
+        fragmentTransaction.commit();
     }
 
     private void makeApiRequest(String searchTerm) {
@@ -183,6 +216,26 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
         showToast("Word and definitions saved");
     }
 
+
+    @Override
+    public void onSavedWordClick(IO_Word savedWord) {
+        switchToSavedWordDefinitionFragment(savedWord);
+    }
+
+    private void navigateToDefinitionsFragment(IO_Word savedWord) {
+        IO_SavedWordDefinitionFragment definitionFragment = new IO_SavedWordDefinitionFragment();
+
+        Bundle args = new Bundle();
+        args.putLong(IO_SavedWordDefinitionFragment.ARG_SAVED_WORD_ID, savedWord.getId());
+        definitionFragment.setArguments(args);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.flContentDic, definitionFragment)
+                .addToBackStack(null)
+                .commit();
+    }
+
+
     private List<IO_Definition> getDefinitionsFromDatabase(IO_Word word) {
         long wordId = word.getId();
         List<IO_Definition> definitions = new ArrayList<>();
@@ -192,7 +245,6 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
 
         return definitions;
     }
-
 
 
     private void saveDefinitionToDatabase(IO_Word word, IO_Definition definition) {

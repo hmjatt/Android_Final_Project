@@ -23,18 +23,14 @@ public class IO_SavedWordsFragment extends Fragment implements IO_SavedWordsAdap
 
     private IoIoFragmentSavedWordsBinding binding;
     private IO_SavedWordsAdapter savedWordsAdapter;
-    private List<IO_Word> dictionaryPartOfSpeeches;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = IoIoFragmentSavedWordsBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-
         // Initialize RecyclerView
         binding.savedWordRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
-        dictionaryPartOfSpeeches = new ArrayList<>();
 
         savedWordsAdapter = new IO_SavedWordsAdapter(new ArrayList<>(), this);
 
@@ -83,7 +79,7 @@ public class IO_SavedWordsFragment extends Fragment implements IO_SavedWordsAdap
         // Use FragmentManager to replace the current fragment with the new one
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.flContent, definitionFragment)
+                .replace(R.id.flContentDic, definitionFragment)
                 .addToBackStack(null)
                 .commit();
     }
