@@ -53,7 +53,7 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
         RecyclerView recyclerView = findViewById(R.id.dictionaryRecycler);
         dictionaryWords = new ArrayList<>();
 
-        wordsAdapter = new IO_WordsAdapter(dictionaryWords, this); // Pass the activity as OnSaveButtonClickListener
+        wordsAdapter = new IO_WordsAdapter(dictionaryWords, this, this); // Pass the activity as both OnWordClickListener and OnSaveButtonClickListener
         recyclerView.setAdapter(wordsAdapter);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);

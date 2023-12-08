@@ -23,12 +23,13 @@ public class IO_WordsAdapter extends RecyclerView.Adapter<IO_WordsAdapter.WordVi
     private List<IO_Word> words;
 
     private OnWordClickListener listener;
-    private OnWordClickListener onWordClickListener;
+    private OnSaveButtonClickListener onSaveButtonClickListener;
 
 
-    public IO_WordsAdapter(List<IO_Word> words, OnWordClickListener listener) {
+    public IO_WordsAdapter(List<IO_Word> words, OnWordClickListener listener, OnSaveButtonClickListener saveButtonClickListener) {
         this.words = words;
         this.listener = listener;
+        this.onSaveButtonClickListener = saveButtonClickListener;
     }
 
     public void setWords(List<IO_Word> words) {
@@ -60,7 +61,11 @@ public class IO_WordsAdapter extends RecyclerView.Adapter<IO_WordsAdapter.WordVi
     }
 
     public void setOnWordClickListener(OnWordClickListener listener) {
-        this.onWordClickListener = listener;
+        this.listener = listener;
+    }
+
+    public void setOnSaveButtonClickListener(OnSaveButtonClickListener saveButtonClickListener) {
+        this.onSaveButtonClickListener = saveButtonClickListener;
     }
 
     public void setSavedWords(List<IO_Word> savedWords) {
