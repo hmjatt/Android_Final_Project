@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -87,6 +88,9 @@ public class IO_DictionaryActivity extends AppCompatActivity
         savedWordsFragment = new IO_SavedWordsFragment();
         savedWordDefinitionFragment = new IO_SavedWordDefinitionFragment();
 
+        // Call the method to display previously searched words
+        displayPreviouslySearchedWords();
+
         Button btnViewSavedDefinitions = findViewById(R.id.btnViewSavedWords);
         btnViewSavedDefinitions.setOnClickListener(view -> switchToSavedWordsFragment());
 
@@ -115,10 +119,7 @@ public class IO_DictionaryActivity extends AppCompatActivity
         String apiUrl = "https://api.dictionaryapi.dev/api/v2/entries/en/" + searchTerm;
 
 
-        SharedPreferences preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("lastSearchTerm", searchTerm);
-        editor.apply();
+        saveSearchTermToSharedPreferences(searchTerm);
 
 
         JsonArrayRequest request = new JsonArrayRequest(
@@ -320,6 +321,28 @@ public class IO_DictionaryActivity extends AppCompatActivity
         // TODO: Implement your logic to fetch definitions from an API using the word parameter
 
         return definitions;
+    }
+
+    // Method to store the search term in SharedPreferences
+    private void saveSearchTermToSharedPreferences(String searchTerm) {
+        SharedPreferences preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("lastSearchTerm", searchTerm);
+        editor.apply();
+    }
+
+
+    // Method to retrieve and display previously searched words
+// Method to retrieve and display previously searched words
+    private void displayPreviouslySearchedWords() {
+        SharedPreferences preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String lastSearchTerm = preferences.getString("lastSearchTerm", "");
+
+        if (!TextUtils.isEmpty(lastSearchTerm)) {
+            // Assume you have a TextView with id 'textViewLastSearchTerm' in your layout
+            TextView textView = findViewById(R.id.searchWords);
+            textView.setText(lastSearchTerm);
+        }
     }
 
 }
