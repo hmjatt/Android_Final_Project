@@ -5,9 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +29,9 @@ public class IO_SingleDefinitionFragment extends Fragment {
     private RecyclerView recyclerView;
     private IO_SingleDefinitionAdapter definitionAdapter;
     private List<String> definitions = new ArrayList<>();
+
+    // Variable to store the last deleted definition
+    private String lastDeletedDefinition;
 
     public IO_SingleDefinitionFragment() {
         // Required empty public constructor
@@ -88,7 +94,7 @@ public class IO_SingleDefinitionFragment extends Fragment {
     private void onDeleteDefinitionClick(int position) {
         if (position >= 0 && position < definitions.size()) {
             String definitionToDelete = definitions.get(position);
-            deleteWordAndDefinition(definitionToDelete);
+            showDeleteDefinitionDialog(definitionToDelete);
         }
     }
 
@@ -96,6 +102,9 @@ public class IO_SingleDefinitionFragment extends Fragment {
         new Thread(() -> {
             if (getArguments() != null) {
                 long savedWordId = getArguments().getLong(ARG_SAVED_WORD_ID);
+
+                // Store the last deleted definition
+                lastDeletedDefinition = definitionToDelete;
 
                 // Change to int return type
                 int deletedRows = dictionaryDatabase.wordDao().deleteDefinitionForWord(savedWordId, definitionToDelete);
@@ -105,13 +114,53 @@ public class IO_SingleDefinitionFragment extends Fragment {
                     // For example, you can show a message based on the result
                     if (deletedRows > 0) {
                         loadDefinitionsFromDatabase(savedWordId);
-                        // Show success message
+                        showUndoSnackbar();
                     } else {
                         // Show failure message
                     }
                 });
             }
         }).start();
+    }
+
+    private void showUndoSnackbar() {
+        Snackbar snackbar = Snackbar.make(requireView(), "Definition DELETED", Snackbar.LENGTH_LONG);
+        snackbar.setAction("UNDO", v -> undoDefinitionDeletion());
+        snackbar.show();
+    }
+
+    private void undoDefinitionDeletion() {
+        if (getArguments() != null) {
+            long savedWordId = getArguments().getLong(ARG_SAVED_WORD_ID);
+
+            // Check if there is a last deleted definition to undo
+            if (lastDeletedDefinition != null) {
+                // Insert the last deleted definition back to the database
+                new Thread(() -> {
+                    IO_Definition definitionToInsert = new IO_Definition(lastDeletedDefinition);
+                    definitionToInsert.setWordId(savedWordId);
+                    dictionaryDatabase.definitionDao().insertDefinition(definitionToInsert);
+
+                    // Load definitions again to update the UI
+                    requireActivity().runOnUiThread(() -> loadDefinitionsFromDatabase(savedWordId));
+                }).start();
+            }
+        }
+    }
+
+
+    private void showDeleteDefinitionDialog(String definitionToDelete) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Confirm Deletion");
+        builder.setMessage("Are you sure you want to delete this definition?");
+        builder.setPositiveButton("YES", (dialog, which) -> {
+            // Proceed with the deletion
+            deleteWordAndDefinition(definitionToDelete);
+        });
+        builder.setNegativeButton("NO", (dialog, which) -> {
+            // Do nothing, as the user chose not to delete
+        });
+        builder.show();
     }
 
 

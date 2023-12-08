@@ -1,5 +1,6 @@
 package algonquin.cst2335.androidfinalproject.IO_dictionary.ui.activities;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -112,6 +113,13 @@ public class IO_DictionaryActivity extends AppCompatActivity
 
     private void makeApiRequest(String searchTerm) {
         String apiUrl = "https://api.dictionaryapi.dev/api/v2/entries/en/" + searchTerm;
+
+
+        SharedPreferences preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("lastSearchTerm", searchTerm);
+        editor.apply();
+
 
         JsonArrayRequest request = new JsonArrayRequest(
                 Request.Method.GET,
