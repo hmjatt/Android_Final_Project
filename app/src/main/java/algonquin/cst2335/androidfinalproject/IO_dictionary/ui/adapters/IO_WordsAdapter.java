@@ -62,13 +62,11 @@ public class IO_WordsAdapter extends RecyclerView.Adapter<IO_WordsAdapter.WordVi
 
         private final TextView tvWord;
         private final TextView tvPartOfSpeech;
-//        private final Button btnSave;
 
         WordViewHolder(@NonNull View itemView) {
             super(itemView);
             tvWord = itemView.findViewById(R.id.textViewWords);
             tvPartOfSpeech = itemView.findViewById(R.id.textViewPartOfSpeech);
-//            btnSave = itemView.findViewById(R.id.btnSaveWord);
         }
 
         void bind(IO_Word word) {
@@ -80,10 +78,13 @@ public class IO_WordsAdapter extends RecyclerView.Adapter<IO_WordsAdapter.WordVi
                 listener.onWordClick(word);
             });
 
-//            btnSave.setOnClickListener(v -> {
-//                Log.d("WordsAdapter", "Save button clicked for word: " + word.getWord());
-//                listener.onSaveButtonClick(word);
-//            });
         }
     }
+
+    public void setSavedWords(List<IO_Word> savedWords) {
+        this.words = savedWords;
+        notifyDataSetChanged();
+    }
+
+
 }

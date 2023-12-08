@@ -80,16 +80,12 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
             }
         });
 
-        Button btnViewSavedWords = findViewById(R.id.btnViewSavedWords);
-        btnViewSavedWords.setOnClickListener(view -> {
-            IO_SavedWordsFragment savedWordsFragment = new IO_SavedWordsFragment();
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.flContent, savedWordsFragment)
-                    .addToBackStack(null)
-                    .commit();
+        Button btnViewSavedDefinitions = findViewById(R.id.btnViewSavedWords);
+        btnViewSavedDefinitions.setOnClickListener(view -> {
+            btnViewSavedDefinitionsClick();
         });
 
-        updateSavedWordsRecyclerView();
+//        updateSavedWordsRecyclerView();
     }
 
     private void makeApiRequest(String searchTerm) {
@@ -165,30 +161,22 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
         return words;
     }
 
-    private void btnViewSavedWordsClick() {
+    private void btnViewSavedDefinitionsClick() {
         LiveData<List<IO_Word>> savedWordsLiveData = dictionaryDatabase.wordDao().getAllWords();
         savedWordsLiveData.observe(this, savedWords -> {
-            handler.post(() -> wordsAdapter.setWords(savedWords));
+            handler.post(() -> wordsAdapter.setSavedWords(savedWords));
         });
     }
 
-    private void updateSavedWordsRecyclerView() {
-        btnViewSavedWordsClick();
-    }
+
+//    private void updateSavedWordsRecyclerView() {
+//        btnViewSavedDefinitionsClick();
+//    }
 
 
     private void updateRecyclerView(List<IO_Word> words) {
         wordsAdapter.setWords(words);
     }
-
-//    private void updateSavedWordsRecyclerView() {
-//        runOnUiThread(() -> {
-//            LiveData<List<IO_Word>> savedWordsLiveData = dictionaryDatabase.wordDao().getAllWords();
-//            savedWordsLiveData.observe(this, savedWords -> {
-//                handler.post(() -> wordsAdapter.setWords(savedWords));
-//            });
-//        });
-//    }
 
     @Override
     public void onWordClick(IO_Word word) {
@@ -242,10 +230,6 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
             // If the word does not exist, insert it
             long wordId = dictionaryDatabase.wordDao().insertWord(word);
             word.setId(wordId);
-
-            // Insert the provided definition into the database
-            // Commented out for now, as definitions should be inserted separately
-            // dictionaryDatabase.definitionDao().insertDefinition(definition);
 
             Log.d("DictionaryActivity", "Word saved to database: " + word.getWord());
         } else {
