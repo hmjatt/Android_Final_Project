@@ -1,3 +1,4 @@
+// IO_WordDao.java
 package algonquin.cst2335.androidfinalproject.IO_dictionary.data;
 
 import androidx.lifecycle.LiveData;
@@ -16,12 +17,8 @@ public interface IO_WordDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     long insertWord(IO_Word word);
 
-
     @Query("DELETE FROM word_table WHERE id = :wordId AND (SELECT COUNT(*) FROM word_table WHERE id = :wordId) = 0")
     void deleteWordIfNoDefinitions(long wordId);
-
-    @Query("SELECT COUNT(*) FROM word_table WHERE word = :word AND partOfSpeech = :partOfSpeech")
-    int countWordsByPartOfSpeech(String word, String partOfSpeech);
 
     @Query("SELECT * FROM word_table")
     LiveData<List<IO_Word>> getAllWords();
@@ -38,13 +35,11 @@ public interface IO_WordDao {
     @Query("DELETE FROM definition_table WHERE wordId = :wordId AND definition = :definitionText")
     void deleteDefinitionForWord(long wordId, String definitionText);
 
-
     @Query("DELETE FROM word_table WHERE id = :wordId")
     void deleteDefinitionsForWord(long wordId);
 
-    @Query("SELECT * FROM word_table WHERE word = :word AND partOfSpeech = :partOfSpeech")
-    IO_Word getWordByWordSync(String word, String partOfSpeech);
-
+    @Query("SELECT * FROM word_table WHERE word = :word")
+    IO_Word getWordByWordSync(String word);
 
     // Add other queries as needed
 }

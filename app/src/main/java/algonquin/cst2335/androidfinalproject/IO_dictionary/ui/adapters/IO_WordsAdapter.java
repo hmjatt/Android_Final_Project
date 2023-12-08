@@ -81,21 +81,16 @@ public class IO_WordsAdapter extends RecyclerView.Adapter<IO_WordsAdapter.WordVi
     class WordViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView tvWord;
-        private final TextView tvPartOfSpeech;
-
-        private final Button btnSaveTheWord;
 
 
         WordViewHolder(@NonNull View itemView) {
             super(itemView);
             tvWord = itemView.findViewById(R.id.textViewWords);
-            tvPartOfSpeech = itemView.findViewById(R.id.textViewPartOfSpeech);
-            btnSaveTheWord = itemView.findViewById(R.id.btnSaveWord);
         }
 
         void bind(IO_Word word) {
             tvWord.setText(word.getWord());
-            tvPartOfSpeech.setText(word.getPartOfSpeech());
+
 
             itemView.setOnClickListener(v -> {
                 Log.d("WordsAdapter", "Word clicked: " + word.getWord());

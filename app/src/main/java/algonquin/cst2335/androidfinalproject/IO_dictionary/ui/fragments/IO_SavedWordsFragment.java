@@ -36,7 +36,7 @@ public class IO_SavedWordsFragment extends Fragment implements IO_SavedWordsAdap
 
         dictionaryPartOfSpeeches = new ArrayList<>();
 
-        savedWordsAdapter = new IO_SavedWordsAdapter(new ArrayList<>(), dictionaryPartOfSpeeches, this);
+        savedWordsAdapter = new IO_SavedWordsAdapter(new ArrayList<>(), this);
 
         // Set the adapter to the RecyclerView
         binding.savedWordRecyclerView.setAdapter(savedWordsAdapter);
@@ -50,15 +50,15 @@ public class IO_SavedWordsFragment extends Fragment implements IO_SavedWordsAdap
     private void makeApiRequest() {
         IO_DictionaryDatabase.getInstance(requireContext()).wordDao().getAllWords().observe(getViewLifecycleOwner(), savedWords -> {
             try {
-                updateRecyclerView(savedWords, dictionaryPartOfSpeeches);
+                updateRecyclerView(savedWords);
             } catch (Exception e) {
                 // Handle error
             }
         });
     }
 
-    private void updateRecyclerView(List<IO_Word> savedWords, List<IO_Word> partOfSpeeches) {
-        savedWordsAdapter.setSavedWords(savedWords, partOfSpeeches);
+    private void updateRecyclerView(List<IO_Word> savedWords) {
+        savedWordsAdapter.setSavedWords(savedWords);
     }
 
     // Implement the OnSavedWordClickListener interface method

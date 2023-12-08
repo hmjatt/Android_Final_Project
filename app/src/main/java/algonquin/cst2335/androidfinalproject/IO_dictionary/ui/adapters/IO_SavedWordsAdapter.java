@@ -16,17 +16,14 @@ public class IO_SavedWordsAdapter extends RecyclerView.Adapter<IO_SavedWordsAdap
     private List<IO_Word> savedWords;
     private OnSavedWordClickListener listener;
 
-    private List<IO_Word> partOfSpeeches;
 
-    public IO_SavedWordsAdapter(List<IO_Word> savedWords, List<IO_Word> partOfSpeeches, OnSavedWordClickListener listener) {
+    public IO_SavedWordsAdapter(List<IO_Word> savedWords, OnSavedWordClickListener listener) {
         this.savedWords = savedWords;
         this.listener = listener;
-        this.partOfSpeeches = partOfSpeeches;
     }
 
-    public void setSavedWords(List<IO_Word> savedWords, List<IO_Word> partOfSpeeches) {
+    public void setSavedWords(List<IO_Word> savedWords) {
         this.savedWords = savedWords;
-        this.partOfSpeeches = partOfSpeeches;
         notifyDataSetChanged();
     }
 
@@ -63,7 +60,6 @@ public class IO_SavedWordsAdapter extends RecyclerView.Adapter<IO_SavedWordsAdap
 
         void bind(IO_Word savedWord) {
             binding.textViewSavedWords.setText(savedWord.getWord());
-            binding.textViewPartOfSpeech.setText(savedWord.getPartOfSpeech());
             itemView.setOnClickListener(v -> listener.onSavedWordClick(savedWord));
         }
     }

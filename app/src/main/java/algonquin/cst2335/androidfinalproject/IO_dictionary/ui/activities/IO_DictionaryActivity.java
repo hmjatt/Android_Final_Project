@@ -119,10 +119,8 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
                 for (int j = 0; j < meaningsArray.length(); j++) {
                     JSONObject meaningObject = meaningsArray.getJSONObject(j);
 
-                    String partOfSpeechText = meaningObject.getString("partOfSpeech");
-                    word.setPartOfSpeech(partOfSpeechText);
 
-                    IO_Word existingWord = dictionaryDatabase.wordDao().getWordByWordSync(wordText, partOfSpeechText);
+                    IO_Word existingWord = dictionaryDatabase.wordDao().getWordByWordSync(wordText);
 
                     if (existingWord == null) {
                         if (meaningObject.has("definitions")) {

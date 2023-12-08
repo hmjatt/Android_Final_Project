@@ -7,7 +7,6 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-import androidx.room.TypeConverters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +20,8 @@ public class IO_Word implements Parcelable {
     @NonNull
     private String word;
 
-    private String partOfSpeech;
-
     public IO_Word(@NonNull String word) {
         this.word = word;
-        this.partOfSpeech = getPartOfSpeech();
     }
 
     public static final Creator<IO_Word> CREATOR = new Creator<IO_Word>() {
@@ -42,7 +38,6 @@ public class IO_Word implements Parcelable {
 
     protected IO_Word(Parcel in) {
         word = in.readString();
-        partOfSpeech = in.readString();
         id = in.readLong(); // Read the new ID field from Parcel
     }
 
@@ -53,14 +48,6 @@ public class IO_Word implements Parcelable {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public String getPartOfSpeech() {
-        return partOfSpeech;
-    }
-
-    public void setPartOfSpeech(String partOfSpeech) {
-        this.partOfSpeech = partOfSpeech;
     }
 
     @NonNull
@@ -76,7 +63,6 @@ public class IO_Word implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(word);
-        dest.writeString(partOfSpeech);
         dest.writeLong(id); // Write the new ID field to Parcel
     }
 }
