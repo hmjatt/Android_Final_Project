@@ -37,7 +37,7 @@
         android:textColor="#EAE7FA"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/btnSaveWord"
+        app:layout_constraintBottom_toTopOf="@+id/wordRecyclerView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -61,19 +61,19 @@
         app:layout_constraintTop_toBottomOf="@+id/wordPlaceholder"
         app:layout_constraintVertical_bias="0.5" />
 
-    <Button
-        android:id="@+id/btnSaveWord"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="16dp"
-        android:text="Save"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewPartOfSpeech"
-        app:layout_constraintVertical_bias="0.5" />
+    <!--    <Button-->
+    <!--        android:id="@+id/btnSaveWord"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="8dp"-->
+    <!--        android:layout_marginBottom="16dp"-->
+    <!--        android:text="Save"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintHorizontal_bias="0.5"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/textViewPartOfSpeech"-->
+    <!--        app:layout_constraintVertical_bias="0.5" />-->
 
     <!-- RecyclerView for Definitions -->
     <androidx.recyclerview.widget.RecyclerView
@@ -84,5 +84,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnSaveWord" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewPartOfSpeech" />
 </androidx.constraintlayout.widget.ConstraintLayout>

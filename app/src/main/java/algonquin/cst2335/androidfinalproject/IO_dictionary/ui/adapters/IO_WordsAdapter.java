@@ -22,7 +22,6 @@ public class IO_WordsAdapter extends RecyclerView.Adapter<IO_WordsAdapter.WordVi
 
     private List<IO_Word> words;
 
-    private List<IO_Definition> definitions;
     private OnWordClickListener listener;
 
     public IO_WordsAdapter(List<IO_Word> words, OnWordClickListener listener) {
@@ -46,8 +45,7 @@ public class IO_WordsAdapter extends RecyclerView.Adapter<IO_WordsAdapter.WordVi
     @Override
     public void onBindViewHolder(@NonNull WordViewHolder holder, int position) {
         IO_Word word = words.get(position);
-        IO_Definition definition = definitions.get(position);
-        holder.bind(word, definition);
+        holder.bind(word);
     }
 
     @Override
@@ -57,8 +55,6 @@ public class IO_WordsAdapter extends RecyclerView.Adapter<IO_WordsAdapter.WordVi
 
     public interface OnWordClickListener {
         void onWordClick(IO_Word word);
-
-        void onSaveButtonClick(IO_Word word, IO_Definition definition);  // Corrected method name
     }
 
 
@@ -66,16 +62,16 @@ public class IO_WordsAdapter extends RecyclerView.Adapter<IO_WordsAdapter.WordVi
 
         private final TextView tvWord;
         private final TextView tvPartOfSpeech;
-        private final Button btnSave;
+//        private final Button btnSave;
 
         WordViewHolder(@NonNull View itemView) {
             super(itemView);
             tvWord = itemView.findViewById(R.id.textViewWords);
             tvPartOfSpeech = itemView.findViewById(R.id.textViewPartOfSpeech);
-            btnSave = itemView.findViewById(R.id.btnSaveWord);
+//            btnSave = itemView.findViewById(R.id.btnSaveWord);
         }
 
-        void bind(IO_Word word, IO_Definition definition) {
+        void bind(IO_Word word) {
             tvWord.setText(word.getWord());
             tvPartOfSpeech.setText(word.getPartOfSpeech());
 
@@ -84,10 +80,10 @@ public class IO_WordsAdapter extends RecyclerView.Adapter<IO_WordsAdapter.WordVi
                 listener.onWordClick(word);
             });
 
-            btnSave.setOnClickListener(v -> {
-                Log.d("WordsAdapter", "Save button clicked for word: " + word.getWord());
-                listener.onSaveButtonClick(word, definition);
-            });
+//            btnSave.setOnClickListener(v -> {
+//                Log.d("WordsAdapter", "Save button clicked for word: " + word.getWord());
+//                listener.onSaveButtonClick(word);
+//            });
         }
     }
 }

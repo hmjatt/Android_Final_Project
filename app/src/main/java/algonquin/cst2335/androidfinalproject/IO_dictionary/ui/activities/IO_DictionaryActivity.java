@@ -127,6 +127,13 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
                 String wordText = wordObject.getString("word");
                 word = new IO_Word(wordText);
 
+
+                // Insert the definitions into the database
+                words.add(word);
+
+                saveWordToDatabase(word);
+
+
                 if (wordObject.has("meanings")) {
                     JSONArray meaningsArray = wordObject.getJSONArray("meanings");
 
@@ -147,12 +154,13 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
                                 def = new IO_Definition(definitionText);
                                 definitions.add(def);
 
-                                saveWordToDatabase(word, def);
+                                saveDefinitionToDatabase(word, def);
+
+
                             }
                         }
                     }
-                    // Insert the definitions into the database
-                    words.add(word);
+
 
                 }
             }
@@ -209,29 +217,38 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
     }
 
 
-    @Override
-    public void onSaveButtonClick(IO_Word word, IO_Definition definition) {
-        saveWordToDatabase(word, definition);
-    }
+    private void saveDefinitionToDatabase(IO_Word word, IO_Definition definition) {
+        // Check if the word already exists in the database
+        long wordId = word.getId();
 
+        // Insert the provided definition into the database
+        definition.setWordId(wordId);
 
-    private void saveWordToDatabase(IO_Word word, IO_Definition definition) {
-        new Thread(() -> {
-            // Check if the word already exists in the database
-            IO_Word existingWord = dictionaryDatabase.wordDao().getWordByIdSync((int) word.getId());
-            if (existingWord == null) {
-                // If the word does not exist, insert it
-                long wordId = dictionaryDatabase.wordDao().insertWord(word);
-                definition.setWordId(wordId);
-
-                // Insert the provided definition into the database
+        runOnUiThread(() -> {
+            new Thread(() -> {
                 dictionaryDatabase.definitionDao().insertDefinition(definition);
                 Log.d("DictionaryActivity", "Definition saved to database: " + definition.getDefinition());
-            } else {
-                // Log a message or handle the case where the word already exists
-                Log.d("DictionaryActivity", "Word already exists in the database: " + word.getWord());
-            }
-        }).start();
+            }).start();
+        });
+    }
+
+    private void saveWordToDatabase(IO_Word word) {
+        // Check if the word already exists in the database
+        IO_Word existingWord = dictionaryDatabase.wordDao().getWordByIdSync((int) word.getId());
+        if (existingWord == null) {
+            // If the word does not exist, insert it
+            long wordId = dictionaryDatabase.wordDao().insertWord(word);
+            word.setId(wordId);
+
+            // Insert the provided definition into the database
+            // Commented out for now, as definitions should be inserted separately
+            // dictionaryDatabase.definitionDao().insertDefinition(definition);
+
+            Log.d("DictionaryActivity", "Word saved to database: " + word.getWord());
+        } else {
+            // Log a message or handle the case where the word already exists
+            Log.d("DictionaryActivity", "Word already exists in the database: " + word.getWord());
+        }
     }
 
 
