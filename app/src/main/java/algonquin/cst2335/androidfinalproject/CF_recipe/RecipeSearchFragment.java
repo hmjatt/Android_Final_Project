@@ -1,66 +1,96 @@
 package algonquin.cst2335.androidfinalproject.CF_recipe;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import algonquin.cst2335.androidfinalproject.R;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link RecipeSearchFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class RecipeSearchFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public RecipeSearchFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment RecipeSearchFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static RecipeSearchFragment newInstance(String param1, String param2) {
-        RecipeSearchFragment fragment = new RecipeSearchFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    private EditText editTextRecipeName;
+    private Button buttonSearch;
+    private RecyclerView recyclerView;
+    private List<Recipe> recipes;
+    private RecipeApiService apiService;
+    private RecyclerViewAdapter adapter;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.cf_fragment_recipe_search, container, false);
+
+        // Initialize UI elements and set listeners
+        editTextRecipeName = view.findViewById(R.id.editTextRecipeName);
+        buttonSearch = view.findViewById(R.id.buttonSearch);
+        recyclerView = view.findViewById(R.id.recyclerView);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://api.spoonacular.com")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        apiService = retrofit.create(RecipeApiService.class);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recipes = new ArrayList<>();
+        adapter = new RecyclerViewAdapter(recipes);
+        recyclerView.setAdapter(adapter);
+
+        buttonSearch.setOnClickListener(v -> searchRecipes());
+
+        return view;
+    }
+
+    private void searchRecipes() {
+        String recipeName = editTextRecipeName.getText().toString().trim();
+        if (!recipeName.isEmpty()) {
+            Call<RecipeSearchResponse> call = apiService.searchRecipes(recipeName, "6094350a0074428eaa8e5b351dec96b1");
+            call.enqueue(new Callback<RecipeSearchResponse>() {
+                @Override
+                public void onResponse(Call<RecipeSearchResponse> call, Response<RecipeSearchResponse> response) {
+                    if (response.isSuccessful()) {
+                        updateRecipeList(response.body().getResults());
+                    } else {
+                        handleApiError();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<RecipeSearchResponse> call, Throwable t) {
+                    handleApiFailure(t);
+                }
+            });
+        } else {
+            Toast.makeText(getContext(), "Please enter a recipe name", Toast.LENGTH_SHORT).show();
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.cf_fragment_recipe_search, container, false);
+    private void updateRecipeList(List<Recipe> newRecipes) {
+        recipes.clear();
+        recipes.addAll(newRecipes);
+        adapter.notifyDataSetChanged();
+    }
+
+    private void handleApiError() {
+        Toast.makeText(getContext(), "Failed to get recipe data", Toast.LENGTH_SHORT).show();
+    }
+
+    private void handleApiFailure(Throwable t) {
+        Toast.makeText(getContext(), "Error: " + t.getMessage(), Toast.LENGTH_SHORT).show();
     }
 }
