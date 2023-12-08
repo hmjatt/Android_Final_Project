@@ -116,33 +116,24 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
 
     private List<IO_Word> parseJsonResponse(JSONArray jsonResponse) {
         List<IO_Word> words = new ArrayList<>();
-        List<IO_Definition> definitions = new ArrayList<>();
 
         try {
-            IO_Word word = null;
-            IO_Definition def = null;
             for (int i = 0; i < jsonResponse.length(); i++) {
                 JSONObject wordObject = jsonResponse.getJSONObject(i);
 
                 String wordText = wordObject.getString("word");
-                word = new IO_Word(wordText);
-
-
-                // Insert the definitions into the database
-                words.add(word);
-
-                saveWordToDatabase(word);
-
+                IO_Word word = new IO_Word(wordText);
 
                 if (wordObject.has("meanings")) {
                     JSONArray meaningsArray = wordObject.getJSONArray("meanings");
 
-                    def = null;
                     for (int j = 0; j < meaningsArray.length(); j++) {
                         JSONObject meaningObject = meaningsArray.getJSONObject(j);
 
-                        String partOfSpeechText = meaningObject.getString("partOfSpeech");
-                        word.setPartOfSpeech(partOfSpeechText);
+                        if (meaningObject.has("partOfSpeech")) {
+                            String partOfSpeechText = meaningObject.getString("partOfSpeech");
+                            word.setPartOfSpeech(partOfSpeechText);
+                        }
 
                         if (meaningObject.has("definitions")) {
                             JSONArray definitionsArray = meaningObject.getJSONArray("definitions");
@@ -151,21 +142,18 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
                                 JSONObject definitionObject = definitionsArray.getJSONObject(k);
                                 String definitionText = definitionObject.getString("definition");
 
-                                def = new IO_Definition(definitionText);
-                                definitions.add(def);
-
+                                IO_Definition def = new IO_Definition(definitionText);
+                                // Save word before saving definition
+                                saveWordToDatabase(word);
                                 saveDefinitionToDatabase(word, def);
-
-
                             }
                         }
                     }
-
-
                 }
+
+                // Insert the word into the database after retrieving part of speech
+                words.add(word);
             }
-
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
