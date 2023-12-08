@@ -1,4 +1,4 @@
-<!-- This DrawerLayout has two children at the root  -->
+<!-- activity_main.xml  -->
 <androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -18,12 +18,31 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <!-- The text to show when no app is selected -->
+
         <!-- The main content view where fragments are loaded -->
         <FrameLayout
             android:id="@+id/flContent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent" >
+
+            <TextView
+                android:id="@+id/tvNoAppSelected"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/please_select_an_app_from_the_toolbar"
+                android:textAlignment="center"
+                android:textSize="40dp"
+                android:textStyle="bold"
+                android:background="@drawable/hm_image_border"
+                android:layout_margin="5dp"
+                android:padding="5dp"
+                android:visibility="gone"/>
+        </FrameLayout>
+
+
     </LinearLayout>
 
     <!-- The navigation drawer that comes from the left -->

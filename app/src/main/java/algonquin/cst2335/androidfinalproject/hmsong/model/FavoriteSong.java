@@ -1,34 +1,79 @@
+// FavoriteSong.java
 package algonquin.cst2335.androidfinalproject.hmsong.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = "favorite_songs")
-public class FavoriteSong {
+/**
+ * Represents a favorite song with details such as title, duration, album name, and album cover URL.
+ *
+ * @version 1.0
+ * @author Harmeet Matharoo
+ */
+@Entity
+public class FavoriteSong implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    @ColumnInfo(name = "id")
+    private long id;
 
-    @ColumnInfo(name = "title")
+    @ColumnInfo(name = "TitleColumn")
     private String title;
 
-    @ColumnInfo(name = "duration")
+    @ColumnInfo(name = "DurationColumn")
     private String duration;
 
-    @ColumnInfo(name = "album_name")
+    @ColumnInfo(name = "AlbumNameColumn")
     private String albumName;
 
-    @ColumnInfo(name = "album_cover_url")
+    @ColumnInfo(name = "AlbumCoverUrlColumn")
     private String albumCoverUrl;
 
-    // Constructors, getters, and setters
+    /**
+     * Constructs a FavoriteSong with the specified details.
+     *
+     * @param title          The title of the favorite song.
+     * @param duration       The duration of the favorite song.
+     * @param albumName      The album name of the favorite song.
+     * @param albumCoverUrl  The URL of the album cover for the favorite song.
+     */
+    public FavoriteSong(String title, String duration, String albumName, String albumCoverUrl) {
+        this.title = title;
+        this.duration = duration;
+        this.albumName = albumName;
+        this.albumCoverUrl = albumCoverUrl;
+    }
 
-    public int getId() {
+    protected FavoriteSong(Parcel in) {
+        id = in.readLong();
+        title = in.readString();
+        duration = in.readString();
+        albumName = in.readString();
+        albumCoverUrl = in.readString();
+    }
+
+    public static final Creator<FavoriteSong> CREATOR = new Creator<FavoriteSong>() {
+        @Override
+        public FavoriteSong createFromParcel(Parcel in) {
+            return new FavoriteSong(in);
+        }
+
+        @Override
+        public FavoriteSong[] newArray(int size) {
+            return new FavoriteSong[size];
+        }
+    };
+
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -62,5 +107,19 @@ public class FavoriteSong {
 
     public void setAlbumCoverUrl(String albumCoverUrl) {
         this.albumCoverUrl = albumCoverUrl;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(title);
+        dest.writeString(duration);
+        dest.writeString(albumName);
+        dest.writeString(albumCoverUrl);
     }
 }

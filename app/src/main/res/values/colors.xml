@@ -1,12 +1,30 @@
+<!-- res/values/colors.xml -->
 <resources>
+
+
+    <!--  Harmeet styles start  -->
+    <color name="colorPrimary">#2196F3</color> <!-- Material Blue -->
+    <color name="colorPrimaryDark">#1565C0</color> <!-- Darker Blue -->
+    <color name="colorAccent">#4CAF50</color> <!-- Green Accent -->
+
+    <!-- Dialog Colors -->
+    <color name="dialogButtonBarColor">#FF4081</color> <!-- Pink -->
+    <color name="dialogTitleColor">#FF4081</color> <!-- Pink -->
+    <color name="dialogTextPrimaryColor">#382658</color> <!-- Dark Gray -->
+    <color name="dialogTextSecondaryColor">#666666</color> <!-- Medium Gray -->
+
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="colorPrimary">#1976D2</item> <!-- Deep Blue -->
-        <item name="colorPrimaryDark">#0D47A1</item> <!-- Dark Blue -->
-        <item name="colorAccent">#4CAF50</item> <!-- Green -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
     </style>
 
     <style name="AlbumTitleText">
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">#333333</item>
     </style>
+
+    <!-- Harmeet styles end -->
+
 </resources>
+

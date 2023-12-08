@@ -1,31 +1,31 @@
+// Artist.java
 package algonquin.cst2335.androidfinalproject.hmsong.model;
 
-import java.util.List;
-
+/**
+ * Represents an Artist with an ID.
+ *
+ * @version 1.0
+ * @author Harmeet Matharoo
+ */
 public class Artist {
 
     private String id;
-    private List<Album> albums;
 
-    // Constructors, getters, and setters
-
+    /**
+     * Constructs an Artist with the specified ID.
+     *
+     * @param id The ID of the artist.
+     */
     public Artist(String id) {
         this.id = id;
     }
 
+    /**
+     * Gets the ID of the artist.
+     *
+     * @return The ID of the artist.
+     */
     public String getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public List<Album> getAlbums() {
-        return albums;
-    }
-
-    public void setAlbums(List<Album> albums) {
-        this.albums = albums;
     }
 }

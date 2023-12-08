@@ -1,11 +1,10 @@
-<!-- res/menu/menu_artist_search.xml -->
-
+<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <!-- Search menu item -->
     <item
-        android:id="@+id/action_search"
+        android:id="@+id/location_action_search"
         android:icon="@android:drawable/ic_menu_search"
         android:title="Search"
         app:showAsAction="ifRoom|collapseActionView"
@@ -13,16 +12,15 @@
 
     <!-- Favorites menu item -->
     <item
-        android:id="@+id/action_favorites"
+        android:id="@+id/location_action_favorites"
         android:icon="@android:drawable/btn_star"
         android:title="Favorites"
         app:showAsAction="ifRoom" />
 
     <!-- Help menu item -->
     <item
-        android:id="@+id/action_help"
+        android:id="@+id/location_action_help"
         android:icon="@android:drawable/ic_menu_help"
         android:title="Help"
         app:showAsAction="ifRoom" />
-
 </menu>
