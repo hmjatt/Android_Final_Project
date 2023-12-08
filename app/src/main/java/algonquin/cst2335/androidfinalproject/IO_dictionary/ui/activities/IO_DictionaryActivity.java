@@ -1,6 +1,5 @@
 package algonquin.cst2335.androidfinalproject.IO_dictionary.ui.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -8,7 +7,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,21 +24,16 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import algonquin.cst2335.androidfinalproject.IO_dictionary.data.IO_DictionaryDatabase;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Definition;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Word;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.adapters.IO_DefinitionsAdapter;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.adapters.IO_WordsAdapter;
-import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.fragments.IO_SavedWordsFragment;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.fragments.IO_WordDetailFragment;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.utils.IO_DictionaryVolleySingleton;
 import algonquin.cst2335.androidfinalproject.R;
 
-
-// ... (import statements remain unchanged)
-
-public class IO_DictionaryActivity extends AppCompatActivity implements IO_WordsAdapter.OnWordClickListener {
+public class IO_DictionaryActivity extends AppCompatActivity implements IO_WordsAdapter.OnWordClickListener, IO_WordsAdapter.OnSaveButtonClickListener {
 
     private final Handler handler = new Handler(Looper.getMainLooper());
 
@@ -49,7 +42,6 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
 
     private IO_WordsAdapter wordsAdapter;
     private List<IO_Word> dictionaryWords;
-
 
     private IO_DictionaryDatabase dictionaryDatabase;
 
@@ -61,7 +53,7 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
         RecyclerView recyclerView = findViewById(R.id.dictionaryRecycler);
         dictionaryWords = new ArrayList<>();
 
-        wordsAdapter = new IO_WordsAdapter(dictionaryWords, this);
+        wordsAdapter = new IO_WordsAdapter(dictionaryWords, this); // Pass the activity as OnSaveButtonClickListener
         recyclerView.setAdapter(wordsAdapter);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -82,10 +74,7 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
         });
 
         Button btnViewSavedDefinitions = findViewById(R.id.btnViewSavedWords);
-        btnViewSavedDefinitions.setOnClickListener(view -> {
-            btnViewSavedDefinitionsClick();
-        });
-
+        btnViewSavedDefinitions.setOnClickListener(view -> btnViewSavedDefinitionsClick());
     }
 
     private void makeApiRequest(String searchTerm) {
@@ -97,69 +86,85 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
                 null,
                 response -> {
                     new Thread(() -> {
-                        List<IO_Word> words = parseJsonResponse(response);
-                        handler.post(() -> updateRecyclerView(words));
+                        try {
+                            List<IO_Word> words = parseJsonResponse(response);
+                            handler.post(() -> updateRecyclerView(words));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            showToast("Error parsing JSON response");
+                        }
                     }).start();
                 },
                 error -> {
                     Log.e("DictionaryActivity", "Error making API request: " + error.getMessage());
+                    showToast("Error making API request");
                 }
         );
 
         IO_DictionaryVolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(request);
     }
 
-
-    private List<IO_Word> parseJsonResponse(JSONArray jsonResponse) {
+    private List<IO_Word> parseJsonResponse(JSONArray jsonResponse) throws JSONException {
         List<IO_Word> words = new ArrayList<>();
 
-        try {
-            for (int i = 0; i < jsonResponse.length(); i++) {
-                JSONObject wordObject = jsonResponse.getJSONObject(i);
+        for (int i = 0; i < jsonResponse.length(); i++) {
+            JSONObject wordObject = jsonResponse.getJSONObject(i);
 
-                String wordText = wordObject.getString("word");
-                IO_Word word = new IO_Word(wordText);
+            String wordText = wordObject.getString("word");
+            IO_Word word = new IO_Word(wordText);
 
-                if (wordObject.has("meanings")) {
-                    JSONArray meaningsArray = wordObject.getJSONArray("meanings");
+            if (wordObject.has("meanings")) {
+                JSONArray meaningsArray = wordObject.getJSONArray("meanings");
 
-                    for (int j = 0; j < meaningsArray.length(); j++) {
-                        JSONObject meaningObject = meaningsArray.getJSONObject(j);
+                for (int j = 0; j < meaningsArray.length(); j++) {
+                    JSONObject meaningObject = meaningsArray.getJSONObject(j);
 
+                    String partOfSpeechText = meaningObject.getString("partOfSpeech");
+                    word.setPartOfSpeech(partOfSpeechText);
 
-                        String partOfSpeechText = meaningObject.getString("partOfSpeech");
-                        word.setPartOfSpeech(partOfSpeechText);
+                    IO_Word existingWord = dictionaryDatabase.wordDao().getWordByWordSync(wordText, partOfSpeechText);
 
-                        // Check if the word already exists in the database
-                        IO_Word existingWord = dictionaryDatabase.wordDao().getWordByWordSync(wordText, partOfSpeechText);
+                    if (existingWord == null) {
+                        if (meaningObject.has("definitions")) {
+                            JSONArray definitionsArray = meaningObject.getJSONArray("definitions");
 
-                        if (existingWord == null) {
-
-                            if (meaningObject.has("definitions")) {
-                                JSONArray definitionsArray = meaningObject.getJSONArray("definitions");
-
-                                for (int k = 0; k < definitionsArray.length(); k++) {
-                                    JSONObject definitionObject = definitionsArray.getJSONObject(k);
-                                    String definitionText = definitionObject.getString("definition");
-
-                                    IO_Definition def = new IO_Definition(definitionText);
-                                    // Save word before saving definition
-                                    saveWordToDatabase(word);
-                                    saveDefinitionToDatabase(word, def);
-                                }
-                            }
+                            // Separate method for fetching and saving definitions
+                            List<IO_Definition> definitions = fetchAndSaveDefinitions(word, definitionsArray);
+                            words.add(word);
                         }
                     }
                 }
-                // Insert the word into the database after retrieving part of speech
-                words.add(word);
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
+
+            // Set up the save button click listener
+            wordsAdapter.setOnWordClickListener(this);
         }
 
         return words;
     }
+
+
+    private List<IO_Definition> fetchAndSaveDefinitions(IO_Word word, JSONArray definitionsArray) throws JSONException {
+        List<IO_Definition> definitions = new ArrayList<>();
+
+        for (int k = 0; k < definitionsArray.length(); k++) {
+            JSONObject definitionObject = definitionsArray.getJSONObject(k);
+            String definitionText = definitionObject.getString("definition");
+
+            IO_Definition def = new IO_Definition(definitionText);
+
+            // Save word before saving definition
+            saveWordToDatabase(word);
+
+            // Save definition to the database with the word's foreign key
+            saveDefinitionToDatabase(word, def);
+
+            definitions.add(def);
+        }
+
+        return definitions;
+    }
+
 
     private void btnViewSavedDefinitionsClick() {
         LiveData<List<IO_Word>> savedWordsLiveData = dictionaryDatabase.wordDao().getAllWords();
@@ -168,44 +173,22 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
         });
     }
 
-
     private void updateRecyclerView(List<IO_Word> words) {
         wordsAdapter.setWords(words);
     }
 
+
     @Override
-    public void onWordClick(IO_Word word) {
-        // Get the instance of the WordDetailFragment
-        IO_WordDetailFragment wordDetailFragment = (IO_WordDetailFragment) getSupportFragmentManager().findFragmentById(R.id.tvWordDetail);
-
-        if (wordDetailFragment != null) {
-            // Update the word detail in the fragment
-            wordDetailFragment.updateWordDetail(word);
-        } else {
-            Log.e("DictionaryActivity", "WordDetailFragment not found in the layout");
-        }
-
-        // Log the clicked word
-        Log.d("DictionaryActivity", "Clicked on word: " + (word != null ? word.getWord() : "null"));
-
-        // Retrieve definitions from the database
-        List<IO_Definition> definitions = getDefinitionsFromDatabase(word);
-        Log.d("DictionaryActivity", "Number of definitions for the word: " + definitions.size());
-
-        // Create and set up the DefinitionsAdapter
-        IO_DefinitionsAdapter definitionsAdapter = new IO_DefinitionsAdapter(definitions);
-
-        // Set up the RecyclerView with the DefinitionsAdapter
-        RecyclerView recyclerView = findViewById(R.id.dictionaryRecycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(definitionsAdapter);
+    public void onSaveButtonClick(IO_Word word) {
+        // Handle the save button click for the selected word
+        saveWordAndDefinitions(word);
+        showToast("Word and definitions saved");
     }
 
     private List<IO_Definition> getDefinitionsFromDatabase(IO_Word word) {
         long wordId = word.getId();
         List<IO_Definition> definitions = new ArrayList<>();
 
-        // Observe the LiveData to get the list of definitions
         LiveData<List<IO_Definition>> definitionsLiveData = dictionaryDatabase.definitionDao().getDefinitionsByWordId(wordId);
         definitionsLiveData.observe(this, definitions::addAll);
 
@@ -213,11 +196,9 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
     }
 
 
-    private void saveDefinitionToDatabase(IO_Word word, IO_Definition definition) {
-        // Check if the word already exists in the database
-        long wordId = word.getId();
 
-        // Insert the provided definition into the database
+    private void saveDefinitionToDatabase(IO_Word word, IO_Definition definition) {
+        long wordId = word.getId();
         definition.setWordId(wordId);
 
         runOnUiThread(() -> {
@@ -229,19 +210,58 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
     }
 
     private void saveWordToDatabase(IO_Word word) {
-        // Check if the word already exists in the database
         IO_Word existingWord = dictionaryDatabase.wordDao().getWordByIdSync((int) word.getId());
         if (existingWord == null) {
-            // If the word does not exist, insert it
             long wordId = dictionaryDatabase.wordDao().insertWord(word);
             word.setId(wordId);
-
             Log.d("DictionaryActivity", "Word saved to database: " + word.getWord());
         } else {
-            // Log a message or handle the case where the word already exists
             Log.d("DictionaryActivity", "Word already exists in the database: " + word.getWord());
         }
     }
 
+
+    private void showToast(String message) {
+        runOnUiThread(() -> Toast.makeText(IO_DictionaryActivity.this, message, Toast.LENGTH_SHORT).show());
+    }
+
+    @Override
+    public void onWordClick(IO_Word word) {
+        IO_WordDetailFragment wordDetailFragment = (IO_WordDetailFragment) getSupportFragmentManager().findFragmentById(R.id.flContentDic);
+        if (wordDetailFragment != null) {
+            wordDetailFragment.updateWordDetail(word);
+        } else {
+            Log.e("DictionaryActivity", "WordDetailFragment not found in the layout");
+        }
+
+        Log.d("DictionaryActivity", "Clicked on word: " + (word != null ? word.getWord() : "null"));
+
+        List<IO_Definition> definitions = getDefinitionsFromDatabase(word);
+        Log.d("DictionaryActivity", "Number of definitions for the word: " + definitions.size());
+
+        IO_DefinitionsAdapter definitionsAdapter = new IO_DefinitionsAdapter(definitions);
+
+        RecyclerView recyclerView = findViewById(R.id.dictionaryRecycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(definitionsAdapter);
+    }
+
+    private void saveWordAndDefinitions(IO_Word word) {
+        saveWordToDatabase(word);
+        List<IO_Definition> definitions = getDefinitionsFromApi(word);
+
+        for (IO_Definition definition : definitions) {
+            saveDefinitionToDatabase(word, definition);
+        }
+        showToast("Word and definitions saved");
+    }
+
+    private List<IO_Definition> getDefinitionsFromApi(IO_Word word) {
+        List<IO_Definition> definitions = new ArrayList<>();
+
+        // TODO: Implement your logic to fetch definitions from an API using the word parameter
+
+        return definitions;
+    }
 
 }

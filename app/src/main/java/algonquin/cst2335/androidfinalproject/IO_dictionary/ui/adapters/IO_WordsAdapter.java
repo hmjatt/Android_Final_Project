@@ -23,6 +23,8 @@ public class IO_WordsAdapter extends RecyclerView.Adapter<IO_WordsAdapter.WordVi
     private List<IO_Word> words;
 
     private OnWordClickListener listener;
+    private OnWordClickListener onWordClickListener;
+
 
     public IO_WordsAdapter(List<IO_Word> words, OnWordClickListener listener) {
         this.words = words;
@@ -57,16 +59,33 @@ public class IO_WordsAdapter extends RecyclerView.Adapter<IO_WordsAdapter.WordVi
         void onWordClick(IO_Word word);
     }
 
+    public void setOnWordClickListener(OnWordClickListener listener) {
+        this.onWordClickListener = listener;
+    }
+
+    public void setSavedWords(List<IO_Word> savedWords) {
+        this.words = savedWords;
+        notifyDataSetChanged();
+    }
+
+    // Define an interface for handling save button clicks
+    public interface OnSaveButtonClickListener {
+        void onSaveButtonClick(IO_Word word);
+    }
 
     class WordViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView tvWord;
         private final TextView tvPartOfSpeech;
 
+        private final Button btnSaveTheWord;
+
+
         WordViewHolder(@NonNull View itemView) {
             super(itemView);
             tvWord = itemView.findViewById(R.id.textViewWords);
             tvPartOfSpeech = itemView.findViewById(R.id.textViewPartOfSpeech);
+            btnSaveTheWord = itemView.findViewById(R.id.btnSaveWord);
         }
 
         void bind(IO_Word word) {
@@ -79,11 +98,6 @@ public class IO_WordsAdapter extends RecyclerView.Adapter<IO_WordsAdapter.WordVi
             });
 
         }
-    }
-
-    public void setSavedWords(List<IO_Word> savedWords) {
-        this.words = savedWords;
-        notifyDataSetChanged();
     }
 
 
