@@ -130,27 +130,31 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
                     for (int j = 0; j < meaningsArray.length(); j++) {
                         JSONObject meaningObject = meaningsArray.getJSONObject(j);
 
-                        if (meaningObject.has("partOfSpeech")) {
-                            String partOfSpeechText = meaningObject.getString("partOfSpeech");
-                            word.setPartOfSpeech(partOfSpeechText);
-                        }
 
-                        if (meaningObject.has("definitions")) {
-                            JSONArray definitionsArray = meaningObject.getJSONArray("definitions");
+                        String partOfSpeechText = meaningObject.getString("partOfSpeech");
+                        word.setPartOfSpeech(partOfSpeechText);
 
-                            for (int k = 0; k < definitionsArray.length(); k++) {
-                                JSONObject definitionObject = definitionsArray.getJSONObject(k);
-                                String definitionText = definitionObject.getString("definition");
+                        // Check if the word already exists in the database
+                        IO_Word existingWord = dictionaryDatabase.wordDao().getWordByWordSync(wordText, partOfSpeechText);
 
-                                IO_Definition def = new IO_Definition(definitionText);
-                                // Save word before saving definition
-                                saveWordToDatabase(word);
-                                saveDefinitionToDatabase(word, def);
+                        if (existingWord == null) {
+
+                            if (meaningObject.has("definitions")) {
+                                JSONArray definitionsArray = meaningObject.getJSONArray("definitions");
+
+                                for (int k = 0; k < definitionsArray.length(); k++) {
+                                    JSONObject definitionObject = definitionsArray.getJSONObject(k);
+                                    String definitionText = definitionObject.getString("definition");
+
+                                    IO_Definition def = new IO_Definition(definitionText);
+                                    // Save word before saving definition
+                                    saveWordToDatabase(word);
+                                    saveDefinitionToDatabase(word, def);
+                                }
                             }
                         }
                     }
                 }
-
                 // Insert the word into the database after retrieving part of speech
                 words.add(word);
             }
@@ -161,19 +165,30 @@ public class IO_DictionaryActivity extends AppCompatActivity implements IO_Words
         return words;
     }
 
+    private void btnViewSavedWordsClick() {
+        LiveData<List<IO_Word>> savedWordsLiveData = dictionaryDatabase.wordDao().getAllWords();
+        savedWordsLiveData.observe(this, savedWords -> {
+            handler.post(() -> wordsAdapter.setWords(savedWords));
+        });
+    }
+
+    private void updateSavedWordsRecyclerView() {
+        btnViewSavedWordsClick();
+    }
+
 
     private void updateRecyclerView(List<IO_Word> words) {
         wordsAdapter.setWords(words);
     }
 
-    private void updateSavedWordsRecyclerView() {
-        runOnUiThread(() -> {
-            LiveData<List<IO_Word>> savedWordsLiveData = dictionaryDatabase.wordDao().getAllWords();
-            savedWordsLiveData.observe(this, savedWords -> {
-                handler.post(() -> wordsAdapter.setWords(savedWords));
-            });
-        });
-    }
+//    private void updateSavedWordsRecyclerView() {
+//        runOnUiThread(() -> {
+//            LiveData<List<IO_Word>> savedWordsLiveData = dictionaryDatabase.wordDao().getAllWords();
+//            savedWordsLiveData.observe(this, savedWords -> {
+//                handler.post(() -> wordsAdapter.setWords(savedWords));
+//            });
+//        });
+//    }
 
     @Override
     public void onWordClick(IO_Word word) {

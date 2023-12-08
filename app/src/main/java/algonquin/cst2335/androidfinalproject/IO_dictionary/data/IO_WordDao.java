@@ -42,6 +42,9 @@ public interface IO_WordDao {
     @Query("DELETE FROM word_table WHERE id = :wordId")
     void deleteDefinitionsForWord(long wordId);
 
+    @Query("SELECT * FROM word_table WHERE word = :word AND partOfSpeech = :partOfSpeech")
+    IO_Word getWordByWordSync(String word, String partOfSpeech);
+
 
     // Add other queries as needed
 }
