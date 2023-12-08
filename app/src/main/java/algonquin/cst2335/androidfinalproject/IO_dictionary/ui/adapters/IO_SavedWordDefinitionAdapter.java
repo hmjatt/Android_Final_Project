@@ -64,7 +64,6 @@ public class IO_SavedWordDefinitionAdapter
             this.binding = binding;
 
             binding.getRoot().setOnClickListener(v -> {
-
                 int position = getBindingAdapterPosition();
                 if (position != RecyclerView.NO_POSITION && listener != null) {
                     listener.onItemClick(definitions.get(position));
@@ -76,4 +75,6 @@ public class IO_SavedWordDefinitionAdapter
             binding.tvSavedWordDetail.setText(definition.getDefinition());
         }
     }
+
+
 }

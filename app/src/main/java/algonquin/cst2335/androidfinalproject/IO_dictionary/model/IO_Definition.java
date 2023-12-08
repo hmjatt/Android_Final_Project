@@ -26,6 +26,7 @@ public class IO_Definition implements Parcelable {
     private long wordId; // Reference to the parent IO_Word
     private String definition;
 
+
     public IO_Definition(String definition) {
         this.definition = definition;
     }

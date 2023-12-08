@@ -4,29 +4,37 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import algonquin.cst2335.androidfinalproject.IO_dictionary.data.IO_DictionaryDatabase;
+import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Definition;
+import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.adapters.IO_SingleDefinitionAdapter;
+import algonquin.cst2335.androidfinalproject.R;
 import algonquin.cst2335.androidfinalproject.databinding.IoIoFragmentSingleDefinitionBinding;
 
 public class IO_SingleDefinitionFragment extends Fragment {
 
-    private static final String ARG_DEFINITION_TEXT = "definition_text";
     private static final String ARG_SAVED_WORD_ID = "saved_word_id";
 
     private IO_DictionaryDatabase dictionaryDatabase;
+    private RecyclerView recyclerView;
+    private IO_SingleDefinitionAdapter definitionAdapter;
+    private List<String> definitions = new ArrayList<>();
 
     public IO_SingleDefinitionFragment() {
         // Required empty public constructor
     }
 
-    public static IO_SingleDefinitionFragment newInstance(String definitionText) {
+    public static IO_SingleDefinitionFragment newInstance(long savedWordId) {
         IO_SingleDefinitionFragment fragment = new IO_SingleDefinitionFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_DEFINITION_TEXT, definitionText);
+        args.putLong(ARG_SAVED_WORD_ID, savedWordId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -36,30 +44,75 @@ public class IO_SingleDefinitionFragment extends Fragment {
         IoIoFragmentSingleDefinitionBinding binding =
                 IoIoFragmentSingleDefinitionBinding.inflate(inflater, container, false);
 
-        TextView tvDefinition = binding.tvSavedWordDetail;
+        recyclerView = binding.savedDefinitionRecyclerView;
+        dictionaryDatabase = IO_DictionaryDatabase.getInstance(requireContext());
+
+        // Set up the adapter for definitions
+        definitionAdapter = new IO_SingleDefinitionAdapter(definitions, position -> {
+            // Handle delete button click here
+            onDeleteDefinitionClick(position);
+        });
+
+        // Set up RecyclerView
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(definitionAdapter);
+
         if (getArguments() != null) {
-            String definitionText = getArguments().getString(ARG_DEFINITION_TEXT);
             long savedWordId = getArguments().getLong(ARG_SAVED_WORD_ID);
-
-            tvDefinition.setText(definitionText);
-
-            // Initialize the dictionaryDatabase
-            dictionaryDatabase = IO_DictionaryDatabase.getInstance(requireContext());
-
-            // Set up the delete button click listener
-            binding.btnDeleteSavedDefinition.setOnClickListener(v -> deleteWordAndDefinition(savedWordId));
+            loadDefinitionsFromDatabase(savedWordId);
         }
 
         return binding.getRoot();
     }
 
-    private void deleteWordAndDefinition(long savedWordId) {
-        new Thread(() -> {
-            dictionaryDatabase.wordDao().deleteDefinitionForWord(savedWordId, getArguments().getString(ARG_DEFINITION_TEXT));
+    private void loadDefinitionsFromDatabase(long savedWordId) {
+        dictionaryDatabase.wordDao().getDefinitionsByWordId(savedWordId).observe(getViewLifecycleOwner(), ioDefinitions -> {
+            // Extract the definition texts from the list of IO_Definition objects
+            List<String> definitionTexts = new ArrayList<>();
+            for (IO_Definition ioDefinition : ioDefinitions) {
+                definitionTexts.add(ioDefinition.getDefinition());
+            }
 
-            requireActivity().runOnUiThread(() -> {
-                Toast.makeText(requireContext(), "Definition deleted for word ID: " + savedWordId, Toast.LENGTH_SHORT).show();
-            });
+            // Update the RecyclerView with the extracted definition texts
+            updateRecyclerView(definitionTexts);
+        });
+    }
+
+
+    private void updateRecyclerView(List<String> definitions) {
+        this.definitions.clear();
+        this.definitions.addAll(definitions);
+        definitionAdapter.notifyDataSetChanged();
+    }
+
+    private void onDeleteDefinitionClick(int position) {
+        if (position >= 0 && position < definitions.size()) {
+            String definitionToDelete = definitions.get(position);
+            deleteWordAndDefinition(definitionToDelete);
+        }
+    }
+
+    private void deleteWordAndDefinition(String definitionToDelete) {
+        new Thread(() -> {
+            if (getArguments() != null) {
+                long savedWordId = getArguments().getLong(ARG_SAVED_WORD_ID);
+
+                // Change to int return type
+                int deletedRows = dictionaryDatabase.wordDao().deleteDefinitionForWord(savedWordId, definitionToDelete);
+
+                requireActivity().runOnUiThread(() -> {
+                    // Check the number of deleted rows if needed
+                    // For example, you can show a message based on the result
+                    if (deletedRows > 0) {
+                        loadDefinitionsFromDatabase(savedWordId);
+                        // Show success message
+                    } else {
+                        // Show failure message
+                    }
+                });
+            }
         }).start();
     }
+
+
 }

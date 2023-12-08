@@ -14,6 +14,11 @@ import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Definition;
 @Dao
 public interface IO_DefinitionDao {
 
+
+    @Query("DELETE FROM definition_table WHERE wordId = :wordId AND definition = :definitionText")
+    int deleteDefinitionForWord(long wordId, String definitionText);
+
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertDefinition(IO_Definition definition);
 
