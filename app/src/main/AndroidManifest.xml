@@ -34,5 +34,6 @@
             android:exported="true"
             android:launchMode="singleTop"
             android:theme="@style/Base.Theme.AndroidFinalProject" />
+
     </application>
 </manifest>

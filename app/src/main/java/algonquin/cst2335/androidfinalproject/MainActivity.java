@@ -124,14 +124,18 @@ public class MainActivity extends AppCompatActivity {
             fragmentClass = RecipeSearchFragment.class;
         } else if (menuItem.getItemId() == R.id.dictionary) {
             if (!isDictionaryActivityLaunched) {
+
                 fragmentClass = IO_DictionaryActivity.class;
+
                 Intent intent = new Intent(this, fragmentClass);
                 intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intent);
                 isDictionaryActivityLaunched = true;
             } else {
                 // If already launched, bring it to the front
+
                 Intent intent = new Intent(this, IO_DictionaryActivity.class);
+
                 intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
             }

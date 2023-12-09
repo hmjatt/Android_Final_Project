@@ -1,0 +1,55 @@
+<!-- cf_fragment_recipe_details.xml -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <ImageView
+        android:id="@+id/imageViewRecipe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+/>
+   />
+
+    <TextView
+        android:id="@+id/textViewRecipeTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/imageViewRecipe"
+        android:layout_marginTop="16dp"
+        android:textSize="18sp"
+        android:textStyle="bold"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/textViewRecipeTitle"
+        android:layout_marginTop="8dp">
+
+        <TextView
+            android:id="@+id/textViewRecipeSummary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:padding="8dp"/>
+
+
+
+    </ScrollView>
+
+    <Button
+        android:id="@+id/buttonSaveRecipe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewRecipeSummary"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:text="Save Recipe"
+        android:background="?android:attr/selectableItemBackground"
+        tools:ignore="NotSibling" />
+
+</RelativeLayout>
