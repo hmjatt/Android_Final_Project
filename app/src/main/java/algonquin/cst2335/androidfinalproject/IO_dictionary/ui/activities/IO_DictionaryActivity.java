@@ -6,11 +6,14 @@ import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.LiveData;
@@ -61,6 +64,8 @@ public class IO_DictionaryActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.io_io_activity_dictionary);
+        setSupportActionBar(findViewById(R.id.toolbar));
+
 
         RecyclerView recyclerView = findViewById(R.id.dictionaryRecycler);
         dictionaryWords = new ArrayList<>();
@@ -181,6 +186,33 @@ public class IO_DictionaryActivity extends AppCompatActivity
         }
 
         return words;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.io_dictionary_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.io_menu_help) {
+            showInstructionsDialog();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void showInstructionsDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Instructions");
+        builder.setMessage("Instructions:\n" +
+                "1. Search for Definitions:\n   - Enter a word in the provided EditText.\n   - Click the \"Search\" button to look up its definition.\n\n" +
+                "2. View and Save Definitions:\n   - Definitions are fetched from https://api.dictionaryapi.dev/api/v2/entries/en/XXXX.\n   - Save search terms and definitions by clicking the \"Save\" button.\n\n" +
+                "3. Navigate and Manage Saved Words:\n   - Tap \"View Saved Words\" to see a list of saved words with their definitions.\n   - Click on a saved word to view its definitions.\n   - While viewing saved words, there's an option to delete specific definitions.\n\n" +
+                "4. Persistent Search Term:\n   - The last search term is saved using SharedPreferences.\n   - On app restart, the previous search term is auto-populated in the search field.\n");
+        builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+        builder.show();
     }
 
 
