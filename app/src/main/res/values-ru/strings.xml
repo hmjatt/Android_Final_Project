@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="saved_word_text">ТекстСохраненногоСлова</string>
+    <string name="saved_word_placeholder">СохраненноеСлово</string>
+    <string name="io_search">Поиск</string>
+    <string name="enter_word_hint">Введите слово</string>
+    <string name="view_saved_words">Просмотр Сохраненных Слов</string>
+    <string name="flContent">flContent</string>
+    <string name="saved_word_detail_placeholder">ЗаглушкаДеталейСохраненногоСлова</string>
+    <string name="saved_definition">СохраненноеОпределение</string>
+    <string name="delete_definition">Удалить Определение</string>
+    <string name="word">Слово</string>
+    <string name="word_text_view">ТекстСлова</string>
+    <string name="word_detail_placeholder">ЗаглушкаДеталейСлова</string>
+    <string name="definition">Определение</string>
+</resources>

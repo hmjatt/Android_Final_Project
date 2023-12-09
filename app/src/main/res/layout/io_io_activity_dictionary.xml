@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="@string/search"
+            android:text="@string/io_search"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
-            android:hint="@string/enter_artist_name"
+            android:hint="@string/enter_word_hint"
             android:inputType="text"
             app:layout_constraintBottom_toTopOf="@+id/btnViewSavedWords"
             app:layout_constraintEnd_toStartOf="@+id/btnSearchWords"
@@ -62,7 +62,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="13dp"
             android:layout_marginBottom="8dp"
-            android:text="View Saved Words"
+            android:text="@string/view_saved_words"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnSearchWords"
             app:layout_constraintStart_toStartOf="parent"
@@ -88,7 +88,7 @@
             android:id="@+id/flContentDic"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:text="flContent"
+            android:text="@string/flContent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -113,6 +113,3 @@
     <!-- Main Content FrameLayout -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-
