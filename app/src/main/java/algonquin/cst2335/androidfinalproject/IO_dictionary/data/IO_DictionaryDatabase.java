@@ -1,4 +1,3 @@
-// IO_DictionaryDatabase.java
 package algonquin.cst2335.androidfinalproject.IO_dictionary.data;
 
 import android.content.Context;
@@ -9,15 +8,24 @@ import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
 import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Definition;
-import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_DefinitionListConverter;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Word;
 
+/**
+ * Room database class for the IO Dictionary application.
+ * Author: Iuliia Obukhova
+ * Version: 1.0
+ */
 @Database(entities = {IO_Word.class, IO_Definition.class}, version = 3, exportSchema = false)
-@TypeConverters({IO_DefinitionListConverter.class})
 public abstract class IO_DictionaryDatabase extends RoomDatabase {
 
     private static IO_DictionaryDatabase instance;
 
+    /**
+     * Gets an instance of the database using the Singleton pattern.
+     *
+     * @param context The application context.
+     * @return The database instance.
+     */
     public static synchronized IO_DictionaryDatabase getInstance(Context context) {
         if (instance == null) {
             instance = Room.databaseBuilder(
@@ -30,8 +38,18 @@ public abstract class IO_DictionaryDatabase extends RoomDatabase {
         return instance;
     }
 
+    /**
+     * Gets the DAO for accessing IO_Word entities.
+     *
+     * @return The IO_WordDao instance.
+     */
     public abstract IO_WordDao wordDao();
 
+    /**
+     * Gets the DAO for accessing IO_Definition entities.
+     *
+     * @return The IO_DefinitionDao instance.
+     */
     public abstract IO_DefinitionDao definitionDao();
 
     // Add any additional DAOs as needed

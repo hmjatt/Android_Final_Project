@@ -18,8 +18,15 @@ import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.adapters.IO_SavedW
 import algonquin.cst2335.androidfinalproject.R;
 import algonquin.cst2335.androidfinalproject.databinding.IoIoFragmentSavedWordDefinitionBinding;
 
+/**
+ * Fragment to display the definitions of a saved word.
+ *
+ * @Author Iuliia Obukhova
+ * @Version 1.0
+ */
 public class IO_SavedWordDefinitionFragment extends Fragment implements IO_SavedWordDefinitionAdapter.OnItemClickListener {
 
+    // Key for the saved word ID argument
     public static final String ARG_SAVED_WORD_ID = "saved_word_id";
 
     private long savedWordId;
@@ -52,22 +59,45 @@ public class IO_SavedWordDefinitionFragment extends Fragment implements IO_Saved
         return view;
     }
 
+    /**
+     * Load definitions from the local database and observe changes.
+     *
+     * @param savedWordId The ID of the saved word.
+     */
     private void loadDefinitionsFromDatabase(long savedWordId) {
-        dictionaryDatabase.definitionDao().getDefinitionsByWordId(savedWordId).observe(getViewLifecycleOwner(), ioDefinitions -> {
-            updateRecyclerView(ioDefinitions);
+        dictionaryDatabase.definitionDao().getDefinitionsByWordId(savedWordId).observe(getViewLifecycleOwner(), new Observer<List<IO_Definition>>() {
+            @Override
+            public void onChanged(List<IO_Definition> ioDefinitions) {
+                updateRecyclerView(ioDefinitions);
+            }
         });
     }
 
+    /**
+     * Update the RecyclerView with the provided list of definitions.
+     *
+     * @param definitions The list of definitions to display.
+     */
     private void updateRecyclerView(List<IO_Definition> definitions) {
         definitionsAdapter.setDefinitions(definitions);
     }
 
+    /**
+     * Handle the item click event when a definition is clicked.
+     *
+     * @param definition The clicked definition.
+     */
     @Override
     public void onItemClick(IO_Definition definition) {
-        // Handle item click here, for example, navigate to IO_SingleDefinitionFragment
+        // Handle item click, for example, navigate to IO_SingleDefinitionFragment
         navigateToSingleDefinitionFragment(definition);
     }
 
+    /**
+     * Navigate to the fragment that displays a single definition.
+     *
+     * @param definition The definition to display.
+     */
     private void navigateToSingleDefinitionFragment(IO_Definition definition) {
         IO_SingleDefinitionFragment singleDefinitionFragment = IO_SingleDefinitionFragment.newInstance(definition.getWordId());
 

@@ -10,11 +10,11 @@ import com.android.volley.toolbox.Volley;
 public class IO_DictionaryVolleySingleton {
 
     private static IO_DictionaryVolleySingleton instance;
-    private static Context applicationContext; // Change to applicationContext
+    private final Context applicationContext;
     private RequestQueue requestQueue;
 
     private IO_DictionaryVolleySingleton(Context context) {
-        this.applicationContext = context.getApplicationContext(); // Use applicationContext
+        this.applicationContext = context.getApplicationContext();
         requestQueue = getRequestQueue();
     }
 

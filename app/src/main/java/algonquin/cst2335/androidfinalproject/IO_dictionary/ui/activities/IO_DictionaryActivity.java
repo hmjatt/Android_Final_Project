@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
@@ -46,9 +45,16 @@ import algonquin.cst2335.androidfinalproject.IO_dictionary.utils.IO_DictionaryVo
 import algonquin.cst2335.androidfinalproject.R;
 
 
+/**
+ * The main activity for the IO Dictionary application.
+ *
+ * @Author Iuliia Obukhova
+ * @Version 1.0
+ */
 public class IO_DictionaryActivity extends AppCompatActivity
         implements IO_WordsAdapter.OnWordClickListener,
         IO_SavedWordsAdapter.OnSavedWordClickListener {
+
     private final Handler handler = new Handler(Looper.getMainLooper());
 
     private EditText searchEditText;
@@ -62,20 +68,22 @@ public class IO_DictionaryActivity extends AppCompatActivity
     private IO_SavedWordsFragment savedWordsFragment;
     private IO_SavedWordDefinitionFragment savedWordDefinitionFragment;
 
-
+    /**
+     * Initializes the activity and sets up the UI components.
+     *
+     * @param savedInstanceState The saved instance state.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.io_io_activity_dictionary);
         setSupportActionBar(findViewById(R.id.toolbar));
 
-
         RecyclerView recyclerView = findViewById(R.id.dictionaryRecycler);
         dictionaryWords = new ArrayList<>();
 
-        wordsAdapter = new IO_WordsAdapter(dictionaryWords, this); // Pass the activity as both OnWordClickListener and OnSaveButtonClickListener
+        wordsAdapter = new IO_WordsAdapter(dictionaryWords, this);
         recyclerView.setAdapter(wordsAdapter);
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
@@ -85,8 +93,6 @@ public class IO_DictionaryActivity extends AppCompatActivity
         searchButton = findViewById(R.id.btnSearchWords);
 
         searchButton.setOnClickListener(view -> {
-            Log.d("DictionaryActivity", "Search button clicked");
-
             String searchTerm = searchEditText.getText().toString();
             if (!TextUtils.isEmpty(searchTerm)) {
                 makeApiRequest(searchTerm);
@@ -96,22 +102,27 @@ public class IO_DictionaryActivity extends AppCompatActivity
         savedWordsFragment = new IO_SavedWordsFragment();
         savedWordDefinitionFragment = new IO_SavedWordDefinitionFragment();
 
-        // Call the method to display previously searched words
         displayPreviouslySearchedWords();
 
         Button btnViewSavedDefinitions = findViewById(R.id.btnViewSavedWords);
         btnViewSavedDefinitions.setOnClickListener(view -> switchToSavedWordsFragment());
-
     }
 
+    /**
+     * Switches to the fragment displaying saved words.
+     */
     private void switchToSavedWordsFragment() {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.flContentDic, savedWordsFragment);
-        fragmentTransaction.addToBackStack(null); // Add to back stack to allow back navigation
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 
-
+    /**
+     * Switches to the fragment displaying the definitions of a saved word.
+     *
+     * @param savedWord The saved word for which to display definitions.
+     */
     private void switchToSavedWordDefinitionFragment(IO_Word savedWord) {
         Bundle args = new Bundle();
         args.putLong(IO_SavedWordDefinitionFragment.ARG_SAVED_WORD_ID, savedWord.getId());
@@ -119,10 +130,15 @@ public class IO_DictionaryActivity extends AppCompatActivity
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.flContentDic, savedWordDefinitionFragment);
-        fragmentTransaction.addToBackStack(null); // Add to back stack to allow back navigation
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 
+    /**
+     * Makes an API request to fetch word definitions.
+     *
+     * @param searchTerm The term to search for.
+     */
     private void makeApiRequest(String searchTerm) {
         String apiUrl = "https://api.dictionaryapi.dev/api/v2/entries/en/" + searchTerm;
 
@@ -151,7 +167,6 @@ public class IO_DictionaryActivity extends AppCompatActivity
                     }).start();
                 },
                 error -> {
-                    Log.e("DictionaryActivity", "Error making API request: " + error.getMessage());
                     showToast("Error making API request");
                 }
         );
@@ -160,8 +175,12 @@ public class IO_DictionaryActivity extends AppCompatActivity
     }
 
 
-    // Check if the word already exists in the list
-// Check if the word already exists in the list
+    /**
+     * Checks if a word already exists in the list.
+     *
+     * @param words The list of words to check.
+     * @return True if the word already exists; false otherwise.
+     */
     private boolean wordAlreadyExists(List<IO_Word> words) {
         if (words.isEmpty()) {
             return false;
@@ -186,7 +205,13 @@ public class IO_DictionaryActivity extends AppCompatActivity
         }
     }
 
-
+    /**
+     * Parses the JSON response from the API.
+     *
+     * @param jsonResponse The JSON response to parse.
+     * @return The list of parsed words.
+     * @throws JSONException If there is an error parsing the JSON response.
+     */
     private List<IO_Word> parseJsonResponse(JSONArray jsonResponse) throws JSONException {
         List<IO_Word> words = new ArrayList<>();
 
@@ -224,12 +249,24 @@ public class IO_DictionaryActivity extends AppCompatActivity
         return words;
     }
 
+    /**
+     * Displays the options menu.
+     *
+     * @param menu The menu to inflate.
+     * @return True to display the menu.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.io_dictionary_menu, menu);
         return true;
     }
 
+    /**
+     * Handles menu item selection.
+     *
+     * @param item The selected menu item.
+     * @return True if the item is handled; false otherwise.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.io_menu_help) {
@@ -239,6 +276,9 @@ public class IO_DictionaryActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Shows an instructions dialog.
+     */
     private void showInstructionsDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Instructions");
@@ -251,7 +291,14 @@ public class IO_DictionaryActivity extends AppCompatActivity
         builder.show();
     }
 
-
+    /**
+     * Fetches and saves definitions for a given word from the API.
+     *
+     * @param word             The word for which to fetch and save definitions.
+     * @param definitionsArray The JSON array containing definitions.
+     * @return The list of saved definitions.
+     * @throws JSONException If there is an error parsing the JSON response.
+     */
     private List<IO_Definition> fetchAndSaveDefinitions(IO_Word word, JSONArray definitionsArray) throws JSONException {
         List<IO_Definition> definitions = new ArrayList<>();
 
@@ -273,7 +320,9 @@ public class IO_DictionaryActivity extends AppCompatActivity
         return definitions;
     }
 
-
+    /**
+     * Handles the click event of the "View Saved Definitions" button.
+     */
     private void btnViewSavedDefinitionsClick() {
         LiveData<List<IO_Word>> savedWordsLiveData = dictionaryDatabase.wordDao().getAllWords();
         savedWordsLiveData.observe(this, savedWords -> {
@@ -281,30 +330,57 @@ public class IO_DictionaryActivity extends AppCompatActivity
         });
     }
 
+    /**
+     * Updates the RecyclerView with the given list of words.
+     *
+     * @param words The list of words to display.
+     */
     private void updateRecyclerView(List<IO_Word> words) {
         wordsAdapter.setWords(words);
     }
 
-
+    /**
+     * Handles the click event of a saved word, switching to the fragment displaying its definitions.
+     *
+     * @param savedWord The clicked saved word.
+     */
     @Override
     public void onSavedWordClick(IO_Word savedWord) {
         switchToSavedWordDefinitionFragment(savedWord);
     }
 
+
+    /**
+     * Navigates to the fragment displaying the definitions of a saved word.
+     *
+     * @param savedWord The saved word for which to display definitions.
+     */
     private void navigateToDefinitionsFragment(IO_Word savedWord) {
         IO_SavedWordDefinitionFragment definitionFragment = new IO_SavedWordDefinitionFragment();
 
+        // Pass the saved word ID as an argument to the fragment
         Bundle args = new Bundle();
         args.putLong(IO_SavedWordDefinitionFragment.ARG_SAVED_WORD_ID, savedWord.getId());
         definitionFragment.setArguments(args);
 
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.flContentDic, definitionFragment)
-                .addToBackStack(null)
-                .commit();
+        // Begin a fragment transaction to replace the current fragment with the definitions fragment
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.flContentDic, definitionFragment);
+
+        // Add the transaction to the back stack to allow back navigation
+        fragmentTransaction.addToBackStack(null);
+
+        // Commit the transaction
+        fragmentTransaction.commit();
     }
 
 
+    /**
+     * Retrieves definitions from the database for a given word.
+     *
+     * @param word The word for which to retrieve definitions.
+     * @return The list of definitions for the given word.
+     */
     private List<IO_Definition> getDefinitionsFromDatabase(IO_Word word) {
         long wordId = word.getId();
         List<IO_Definition> definitions = new ArrayList<>();
@@ -315,7 +391,12 @@ public class IO_DictionaryActivity extends AppCompatActivity
         return definitions;
     }
 
-
+    /**
+     * Saves a definition to the database for a given word.
+     *
+     * @param word       The word for which to save the definition.
+     * @param definition The definition to save.
+     */
     private void saveDefinitionToDatabase(IO_Word word, IO_Definition definition) {
         long wordId = word.getId();
         definition.setWordId(wordId);
@@ -323,40 +404,45 @@ public class IO_DictionaryActivity extends AppCompatActivity
         runOnUiThread(() -> {
             new Thread(() -> {
                 dictionaryDatabase.definitionDao().insertDefinition(definition);
-                Log.d("DictionaryActivity", "Definition saved to database: " + definition.getDefinition());
             }).start();
         });
     }
 
+    /**
+     * Saves a word to the database.
+     *
+     * @param word The word to save.
+     */
     private void saveWordToDatabase(IO_Word word) {
         IO_Word existingWord = dictionaryDatabase.wordDao().getWordByIdSync((int) word.getId());
         if (existingWord == null) {
             long wordId = dictionaryDatabase.wordDao().insertWord(word);
             word.setId(wordId);
-            Log.d("DictionaryActivity", "Word saved to database: " + word.getWord());
-        } else {
-            Log.d("DictionaryActivity", "Word already exists in the database: " + word.getWord());
         }
     }
 
-
+    /**
+     * Displays a toast message on the main thread.
+     *
+     * @param message The message to display.
+     */
     private void showToast(String message) {
         runOnUiThread(() -> Toast.makeText(IO_DictionaryActivity.this, message, Toast.LENGTH_SHORT).show());
     }
 
+    /**
+     * Handles the click event of a word, updating the UI to show word details and definitions.
+     *
+     * @param word The clicked word.
+     */
     @Override
     public void onWordClick(IO_Word word) {
         IO_WordDetailFragment wordDetailFragment = (IO_WordDetailFragment) getSupportFragmentManager().findFragmentById(R.id.flContentDic);
         if (wordDetailFragment != null) {
             wordDetailFragment.updateWordDetail(word);
-        } else {
-            Log.e("DictionaryActivity", "WordDetailFragment not found in the layout");
         }
 
-        Log.d("DictionaryActivity", "Clicked on word: " + (word != null ? word.getWord() : "null"));
-
         List<IO_Definition> definitions = getDefinitionsFromDatabase(word);
-        Log.d("DictionaryActivity", "Number of definitions for the word: " + definitions.size());
 
         IO_DefinitionsAdapter definitionsAdapter = new IO_DefinitionsAdapter(definitions);
 
@@ -365,15 +451,23 @@ public class IO_DictionaryActivity extends AppCompatActivity
         recyclerView.setAdapter(definitionsAdapter);
     }
 
+    /**
+     * Retrieves definitions from an API for a given word.
+     *
+     * @param word The word for which to fetch definitions.
+     * @return The list of definitions from the API.
+     */
     private List<IO_Definition> getDefinitionsFromApi(IO_Word word) {
         List<IO_Definition> definitions = new ArrayList<>();
-
-        // TODO: Implement your logic to fetch definitions from an API using the word parameter
 
         return definitions;
     }
 
-    // Method to store the search term in SharedPreferences
+    /**
+     * Saves the search term to SharedPreferences.
+     *
+     * @param searchTerm The search term to save.
+     */
     private void saveSearchTermToSharedPreferences(String searchTerm) {
         SharedPreferences preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
@@ -382,8 +476,9 @@ public class IO_DictionaryActivity extends AppCompatActivity
     }
 
 
-    // Method to retrieve and display previously searched words
-// Method to retrieve and display previously searched words
+    /**
+     * Displays previously searched words.
+     */
     private void displayPreviouslySearchedWords() {
         SharedPreferences preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         String lastSearchTerm = preferences.getString("lastSearchTerm", "");

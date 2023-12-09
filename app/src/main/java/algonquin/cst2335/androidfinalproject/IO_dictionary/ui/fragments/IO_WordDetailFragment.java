@@ -25,6 +25,12 @@ import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Word;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.adapters.IO_DefinitionsAdapter;
 import algonquin.cst2335.androidfinalproject.R;
 
+/**
+ * Fragment to display details of a selected word, including its definitions.
+ *
+ * @Author [Your Name]
+ * @Version 1.0
+ */
 public class IO_WordDetailFragment extends Fragment {
 
     private IO_DictionaryDatabase database;
@@ -36,7 +42,7 @@ public class IO_WordDetailFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.io_io_fragment_word_definition, container, false);
 
-        TextView tvWordDetail = view.findViewById(R.id.tvWordDetail);
+        tvWordDetail = view.findViewById(R.id.tvWordDetail);
 
         // Retrieve the selected word from the arguments
         IO_Word selectedWord = getArguments().getParcelable("selectedWord");
@@ -51,6 +57,11 @@ public class IO_WordDetailFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Updates the displayed word detail.
+     *
+     * @param word The selected word.
+     */
     public void updateWordDetail(IO_Word word) {
         if (tvWordDetail != null) {
             tvWordDetail.setText(word != null ? word.getWord() : "No word selected");
@@ -59,6 +70,11 @@ public class IO_WordDetailFragment extends Fragment {
         }
     }
 
+    /**
+     * Loads and displays definitions for the selected word.
+     *
+     * @param selectedWord The selected word.
+     */
     private void loadDefinitions(IO_Word selectedWord) {
         // Initialize the database
         database = IO_DictionaryDatabase.getInstance(requireContext());
@@ -80,6 +96,4 @@ public class IO_WordDetailFragment extends Fragment {
             }
         });
     }
-
-
 }

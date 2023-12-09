@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Observer;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import java.util.ArrayList;
@@ -19,6 +18,12 @@ import algonquin.cst2335.androidfinalproject.IO_dictionary.ui.adapters.IO_SavedW
 import algonquin.cst2335.androidfinalproject.R;
 import algonquin.cst2335.androidfinalproject.databinding.IoIoFragmentSavedWordsBinding;
 
+/**
+ * Fragment to display the list of saved words.
+ *
+ * @Author Iuliia Obukhova
+ * @Version 1.0
+ */
 public class IO_SavedWordsFragment extends Fragment implements IO_SavedWordsAdapter.OnSavedWordClickListener {
 
     private IoIoFragmentSavedWordsBinding binding;
@@ -32,9 +37,8 @@ public class IO_SavedWordsFragment extends Fragment implements IO_SavedWordsAdap
         // Initialize RecyclerView
         binding.savedWordRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        // Initialize and set up the adapter
         savedWordsAdapter = new IO_SavedWordsAdapter(new ArrayList<>(), this);
-
-        // Set the adapter to the RecyclerView
         binding.savedWordRecyclerView.setAdapter(savedWordsAdapter);
 
         // Make API request to get saved words
@@ -43,6 +47,9 @@ public class IO_SavedWordsFragment extends Fragment implements IO_SavedWordsAdap
         return view;
     }
 
+    /**
+     * Make an API request to get saved words from the database.
+     */
     private void makeApiRequest() {
         IO_DictionaryDatabase.getInstance(requireContext()).wordDao().getAllWords().observe(getViewLifecycleOwner(), savedWords -> {
             try {
@@ -53,20 +60,31 @@ public class IO_SavedWordsFragment extends Fragment implements IO_SavedWordsAdap
         });
     }
 
+    /**
+     * Update the RecyclerView with the provided list of saved words.
+     *
+     * @param savedWords The list of saved words to display.
+     */
     private void updateRecyclerView(List<IO_Word> savedWords) {
         savedWordsAdapter.setSavedWords(savedWords);
     }
 
-    // Implement the OnSavedWordClickListener interface method
+    /**
+     * Handle the click event when a saved word is clicked.
+     *
+     * @param savedWord The clicked saved word.
+     */
     @Override
     public void onSavedWordClick(IO_Word savedWord) {
-        // Handle saved word click here
-        // You can navigate to the details fragment or perform any desired action
-
-        // For example, navigate to a new fragment to show definitions
+        // Navigate to a new fragment to show definitions
         navigateToDefinitionsFragment(savedWord);
     }
 
+    /**
+     * Navigate to the fragment that will display definitions for the selected saved word.
+     *
+     * @param savedWord The selected saved word.
+     */
     private void navigateToDefinitionsFragment(IO_Word savedWord) {
         // Create a new instance of the fragment that will display definitions
         IO_SavedWordDefinitionFragment definitionFragment = new IO_SavedWordDefinitionFragment();
