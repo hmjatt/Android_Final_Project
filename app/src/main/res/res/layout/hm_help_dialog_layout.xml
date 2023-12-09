@@ -1,0 +1,180 @@
+<!-- res/layout/hm_help_dialog_layout.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/dialog_title"
+        style="@style/DialogTitleStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/help_dialog_title" />
+
+    <ScrollView
+        android:id="@+id/dialog_message"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/help_dialog_message_line1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/help_dialog_message_line1" />
+
+            <TextView
+                android:id="@+id/help_dialog_message_line2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/help_dialog_message_line2" />
+
+            <TextView
+                android:id="@+id/help_dialog_message_line3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="4dp"
+                android:text="@string/help_dialog_message_line3" />
+
+            <TextView
+                android:id="@+id/help_dialog_message_line4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="4dp"
+                android:text="@string/help_dialog_message_line4" />
+
+            <TextView
+                android:id="@+id/help_dialog_message_line5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/help_dialog_message_line5" />
+
+            <TextView
+                android:id="@+id/help_dialog_message_line6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="4dp"
+                android:text="@string/help_dialog_message_line6" />
+
+            <TextView
+                android:id="@+id/help_dialog_message_line7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="4dp"
+                android:text="@string/help_dialog_message_line7" />
+
+            <TextView
+                android:id="@+id/help_dialog_message_line8"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/help_dialog_message_line8" />
+
+            <TextView
+                android:id="@+id/help_dialog_message_line9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="4dp"
+                android:text="@string/help_dialog_message_line9" />
+
+            <TextView
+                android:id="@+id/help_dialog_message_line10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="4dp"
+                android:text="@string/help_dialog_message_line10" />
+
+            <TextView
+                android:id="@+id/help_dialog_message_line11"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/help_dialog_message_line11" />
+
+            <TextView
+                android:id="@+id/help_dialog_message_line12"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="4dp"
+                android:text="@string/help_dialog_message_line12" />
+
+            <TextView
+                android:id="@+id/help_dialog_message_line13"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/help_dialog_message_line13" />
+
+            <TextView
+                android:id="@+id/help_dialog_message_line14"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="4dp"
+                android:text="@string/help_dialog_message_line14" />
+
+            <TextView
+                android:id="@+id/help_dialog_message_line15"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="4dp"
+                android:text="@string/help_dialog_message_line15" />
+
+            <TextView
+                android:id="@+id/help_dialog_message_line16"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="4dp"
+                android:text="@string/help_dialog_message_line16" />
+
+            <TextView
+                android:id="@+id/help_dialog_message_line17"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/help_dialog_message_line17" />
+
+            <TextView
+                android:id="@+id/help_dialog_message_line18"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="4dp"
+                android:text="@string/help_dialog_message_line18" />
+
+            <TextView
+                android:id="@+id/help_dialog_message_line19"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="4dp"
+                android:text="@string/help_dialog_message_line19" />
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

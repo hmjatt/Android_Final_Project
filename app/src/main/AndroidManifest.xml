@@ -28,13 +28,12 @@
             android:name=".hmsong.ui.activities.SongSearchActivity"
             android:theme="@style/Base.Theme.AndroidFinalProject"
             android:launchMode="singleTop"
-            android:exported="true">
-        </activity>
+            android:exported="true" />
         <activity
-            android:name=".IO_dictionary.ui.activities.DictionaryActivity"
-            android:theme="@style/Base.Theme.AndroidFinalProject"
+            android:name=".IO_dictionary.ui.activities.IO_DictionaryActivity"
+            android:exported="true"
             android:launchMode="singleTop"
-            android:exported="true">
-        </activity>
+            android:theme="@style/Base.Theme.AndroidFinalProject" />
+
     </application>
 </manifest>
