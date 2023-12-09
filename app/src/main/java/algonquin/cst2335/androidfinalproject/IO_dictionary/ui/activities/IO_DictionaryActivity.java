@@ -29,6 +29,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 
 import algonquin.cst2335.androidfinalproject.IO_dictionary.data.IO_DictionaryDatabase;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Definition;
@@ -44,7 +47,7 @@ import algonquin.cst2335.androidfinalproject.R;
 
 
 public class IO_DictionaryActivity extends AppCompatActivity
-        implements IO_WordsAdapter.OnWordClickListener, IO_WordsAdapter.OnSaveButtonClickListener,
+        implements IO_WordsAdapter.OnWordClickListener,
         IO_SavedWordsAdapter.OnSavedWordClickListener {
     private final Handler handler = new Handler(Looper.getMainLooper());
 
@@ -70,7 +73,7 @@ public class IO_DictionaryActivity extends AppCompatActivity
         RecyclerView recyclerView = findViewById(R.id.dictionaryRecycler);
         dictionaryWords = new ArrayList<>();
 
-        wordsAdapter = new IO_WordsAdapter(dictionaryWords, this, this); // Pass the activity as both OnWordClickListener and OnSaveButtonClickListener
+        wordsAdapter = new IO_WordsAdapter(dictionaryWords, this); // Pass the activity as both OnWordClickListener and OnSaveButtonClickListener
         recyclerView.setAdapter(wordsAdapter);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -123,9 +126,7 @@ public class IO_DictionaryActivity extends AppCompatActivity
     private void makeApiRequest(String searchTerm) {
         String apiUrl = "https://api.dictionaryapi.dev/api/v2/entries/en/" + searchTerm;
 
-
         saveSearchTermToSharedPreferences(searchTerm);
-
 
         JsonArrayRequest request = new JsonArrayRequest(
                 Request.Method.GET,
@@ -135,7 +136,14 @@ public class IO_DictionaryActivity extends AppCompatActivity
                     new Thread(() -> {
                         try {
                             List<IO_Word> words = parseJsonResponse(response);
-                            handler.post(() -> updateRecyclerView(words));
+                            handler.post(() -> {
+                                if (wordAlreadyExists(words)) {
+                                    showToast("Word search success");
+                                } else {
+                                    showToast("Word already exists");
+                                }
+                                updateRecyclerView(words);
+                            });
                         } catch (JSONException e) {
                             e.printStackTrace();
                             showToast("Error parsing JSON response");
@@ -150,6 +158,34 @@ public class IO_DictionaryActivity extends AppCompatActivity
 
         IO_DictionaryVolleySingleton.getInstance(getApplicationContext()).addToRequestQueue(request);
     }
+
+
+    // Check if the word already exists in the list
+// Check if the word already exists in the list
+    private boolean wordAlreadyExists(List<IO_Word> words) {
+        if (words.isEmpty()) {
+            return false;
+        }
+
+        IO_Word firstWord = words.get(0);
+
+        // Use a background thread to check if the word already exists in the database
+        Callable<Boolean> callable = () -> {
+            IO_Word existingWord = dictionaryDatabase.wordDao().getWordByWordSync(firstWord.getWord());
+            return existingWord != null;
+        };
+
+        FutureTask<Boolean> futureTask = new FutureTask<>(callable);
+        new Thread(futureTask).start();
+
+        try {
+            return futureTask.get(); // This will block until the result is available
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
 
     private List<IO_Word> parseJsonResponse(JSONArray jsonResponse) throws JSONException {
         List<IO_Word> words = new ArrayList<>();
@@ -251,14 +287,6 @@ public class IO_DictionaryActivity extends AppCompatActivity
 
 
     @Override
-    public void onSaveButtonClick(IO_Word word) {
-        // Handle the save button click for the selected word
-        saveWordAndDefinitions(word);
-        showToast("Word and definitions saved");
-    }
-
-
-    @Override
     public void onSavedWordClick(IO_Word savedWord) {
         switchToSavedWordDefinitionFragment(savedWord);
     }
@@ -335,16 +363,6 @@ public class IO_DictionaryActivity extends AppCompatActivity
         RecyclerView recyclerView = findViewById(R.id.dictionaryRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(definitionsAdapter);
-    }
-
-    private void saveWordAndDefinitions(IO_Word word) {
-        saveWordToDatabase(word);
-        List<IO_Definition> definitions = getDefinitionsFromApi(word);
-
-        for (IO_Definition definition : definitions) {
-            saveDefinitionToDatabase(word, definition);
-        }
-        showToast("Word and definitions saved");
     }
 
     private List<IO_Definition> getDefinitionsFromApi(IO_Word word) {
