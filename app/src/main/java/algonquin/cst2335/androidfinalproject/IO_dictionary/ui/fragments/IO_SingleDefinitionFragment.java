@@ -1,6 +1,7 @@
 package algonquin.cst2335.androidfinalproject.IO_dictionary.ui.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import algonquin.cst2335.androidfinalproject.IO_dictionary.data.IO_DictionaryDatabase;
 import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Definition;
@@ -23,6 +25,10 @@ import algonquin.cst2335.androidfinalproject.databinding.IoIoFragmentSingleDefin
 
 public class IO_SingleDefinitionFragment extends Fragment {
 
+    private static final String DIALOG_TITLE = "Confirm Deletion";
+    private static final String DIALOG_MESSAGE = "Are you sure you want to delete this definition?";
+
+
     private static final String ARG_SAVED_WORD_ID = "saved_word_id";
 
     private IO_DictionaryDatabase dictionaryDatabase;
@@ -30,8 +36,10 @@ public class IO_SingleDefinitionFragment extends Fragment {
     private IO_SingleDefinitionAdapter definitionAdapter;
     private List<String> definitions = new ArrayList<>();
 
+
+    private AtomicReference<String> lastDeletedDefinition = new AtomicReference<>();
+
     // Variable to store the last deleted definition
-    private String lastDeletedDefinition;
 
     public IO_SingleDefinitionFragment() {
         // Required empty public constructor
@@ -98,47 +106,47 @@ public class IO_SingleDefinitionFragment extends Fragment {
         }
     }
 
-    private void deleteWordAndDefinition(String definitionToDelete) {
+    // Inside the deleteDefinitionForWord method
+    private void deleteDefinitionForWord(long savedWordId, String definitionToDelete) {
         new Thread(() -> {
-            if (getArguments() != null) {
-                long savedWordId = getArguments().getLong(ARG_SAVED_WORD_ID);
+            // Call the delete method from DAO
+            int deletedRows = dictionaryDatabase.definitionDao().deleteDefinitionForWord(savedWordId, definitionToDelete);
 
-                // Store the last deleted definition
-                lastDeletedDefinition = definitionToDelete;
+            requireActivity().runOnUiThread(() -> {
+                // Log the number of deleted rows
+                Log.d("IO_SingleDefiFragment", "Number of deleted rows: " + deletedRows);
 
-                // Change to int return type
-                int deletedRows = dictionaryDatabase.wordDao().deleteDefinitionForWord(savedWordId, definitionToDelete);
-
-                requireActivity().runOnUiThread(() -> {
-                    // Check the number of deleted rows if needed
-                    // For example, you can show a message based on the result
-                    if (deletedRows > 0) {
-                        loadDefinitionsFromDatabase(savedWordId);
-                        showUndoSnackbar();
-                    } else {
-                        // Show failure message
-                    }
-                });
-            }
+                // Check the number of deleted rows if needed
+                // For example, you can show a message based on the result
+                if (deletedRows > 0) {
+                    // Set the lastDeletedDefinition before loading definitions
+                    lastDeletedDefinition.set(definitionToDelete);
+                    loadDefinitionsFromDatabase(savedWordId);
+                    showUndoSnackbar();
+                } else {
+                    // Show failure message
+                    Log.e("IO_SingleDefiFragment", "Failed to delete definition");
+                }
+            });
         }).start();
     }
 
-    private void showUndoSnackbar() {
-        Snackbar snackbar = Snackbar.make(requireView(), "Definition DELETED", Snackbar.LENGTH_LONG);
-        snackbar.setAction("UNDO", v -> undoDefinitionDeletion());
-        snackbar.show();
-    }
-
+    // Inside the undoDefinitionDeletion method
     private void undoDefinitionDeletion() {
         if (getArguments() != null) {
             long savedWordId = getArguments().getLong(ARG_SAVED_WORD_ID);
 
             // Check if there is a last deleted definition to undo
-            if (lastDeletedDefinition != null) {
+            String lastDeleted = lastDeletedDefinition.get();
+            if (lastDeleted != null) {
                 // Insert the last deleted definition back to the database
                 new Thread(() -> {
-                    IO_Definition definitionToInsert = new IO_Definition(lastDeletedDefinition);
+                    IO_Definition definitionToInsert = new IO_Definition(lastDeleted);
                     definitionToInsert.setWordId(savedWordId);
+
+                    // Log the definition being inserted
+                    Log.d("IO_SingleDefiFragment", "Inserting definition: " + lastDeleted);
+
                     dictionaryDatabase.definitionDao().insertDefinition(definitionToInsert);
 
                     // Load definitions again to update the UI
@@ -149,13 +157,20 @@ public class IO_SingleDefinitionFragment extends Fragment {
     }
 
 
+    private void showUndoSnackbar() {
+        Snackbar snackbar = Snackbar.make(requireView(), "Definition DELETED", Snackbar.LENGTH_LONG);
+        snackbar.setAction("UNDO", v -> undoDefinitionDeletion());
+        snackbar.show();
+    }
+
+
     private void showDeleteDefinitionDialog(String definitionToDelete) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Confirm Deletion");
-        builder.setMessage("Are you sure you want to delete this definition?");
+        builder.setTitle(DIALOG_TITLE);
+        builder.setMessage(DIALOG_MESSAGE);
         builder.setPositiveButton("YES", (dialog, which) -> {
             // Proceed with the deletion
-            deleteWordAndDefinition(definitionToDelete);
+            deleteDefinitionForWord(getArguments().getLong(ARG_SAVED_WORD_ID), definitionToDelete);
         });
         builder.setNegativeButton("NO", (dialog, which) -> {
             // Do nothing, as the user chose not to delete
