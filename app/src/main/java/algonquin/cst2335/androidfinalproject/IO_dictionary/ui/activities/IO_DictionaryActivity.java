@@ -48,8 +48,8 @@ import algonquin.cst2335.androidfinalproject.R;
 /**
  * The main activity for the IO Dictionary application.
  *
- * @Author Iuliia Obukhova
- * @Version 1.0
+ * @author Iuliia Obukhova
+ * @version 1.0
  */
 public class IO_DictionaryActivity extends AppCompatActivity
         implements IO_WordsAdapter.OnWordClickListener,

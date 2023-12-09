@@ -12,8 +12,9 @@ import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Definition;
 
 /**
  * Data Access Object (DAO) for interacting with the IO_Definition table in the Room database.
- * Author: Iuliia Obukhova
- * Version: 1.0
+ *
+ * @author Iuliia Obukhova
+ * @version 1.0
  */
 @Dao
 public interface IO_DefinitionDao {

@@ -9,7 +9,7 @@
     app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
     android:padding="5dp"
     android:layout_margin="5dp"
-    android:background="@drawable/hm_image_border"
+    android:background="@drawable/image_border"
     android:layout_marginTop="130dp">
 
     <!-- Add a RecyclerView for displaying list of  results -->

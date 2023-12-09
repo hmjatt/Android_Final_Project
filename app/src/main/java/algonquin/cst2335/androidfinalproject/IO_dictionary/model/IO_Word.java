@@ -10,8 +10,8 @@ import androidx.room.PrimaryKey;
 /**
  * Entity class representing a word in the IO dictionary.
  *
- * @Author Iuliia Obukhova
- * @Version 1.0
+ * @author Iuliia Obukhova
+ * @version 1.0
  */
 @Entity(tableName = "word_table")
 public class IO_Word implements Parcelable {

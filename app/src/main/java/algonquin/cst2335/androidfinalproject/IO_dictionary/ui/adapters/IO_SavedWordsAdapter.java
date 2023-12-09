@@ -14,8 +14,8 @@ import algonquin.cst2335.androidfinalproject.databinding.IoIoFragmentSavedWordsB
 /**
  * Adapter class for displaying a list of saved IO_Word items in a RecyclerView.
  *
- * @Author Iuliia Obukhova
- * @Version 1.0
+ * @author Iuliia Obukhova
+ * @version 1.0
  */
 public class IO_SavedWordsAdapter extends RecyclerView.Adapter<IO_SavedWordsAdapter.SavedWordViewHolder> {
 

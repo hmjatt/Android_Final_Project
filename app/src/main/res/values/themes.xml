@@ -10,7 +10,7 @@
 
     <!-- Harmeet styles start -->
     <style name="HelpDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:windowBackground">@drawable/hm_dialog_background</item>
+        <item name="android:windowBackground">@drawable/dialog_background</item>
         <item name="android:windowTitleStyle">@style/DialogTitleStyle</item>
         <item name="android:buttonBarStyle">@style/ButtonBarStyle</item>
         <item name="android:textColorPrimary">@color/dialogTextPrimaryColor</item>

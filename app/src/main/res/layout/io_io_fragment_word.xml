@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="3dp"
-    android:background="@drawable/hm_rounded_corner"
+    android:background="@drawable/rounded_corner"
     android:orientation="vertical">
 
     <TextView
@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp"
-        android:background="@drawable/hm_image_border"
+        android:background="@drawable/image_border"
         android:padding="8dp"
         android:text="@string/word"
         android:textSize="24dp"

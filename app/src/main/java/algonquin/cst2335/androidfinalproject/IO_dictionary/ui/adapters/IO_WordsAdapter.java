@@ -16,8 +16,8 @@ import algonquin.cst2335.androidfinalproject.R;
 /**
  * Adapter class for displaying a list of words in a RecyclerView.
  *
- * @Author Iuliia Obukhova
- * @Version 1.0
+ * @author Iuliia Obukhova
+ * @version 1.0
  */
 public class IO_WordsAdapter extends RecyclerView.Adapter<IO_WordsAdapter.WordViewHolder> {
 

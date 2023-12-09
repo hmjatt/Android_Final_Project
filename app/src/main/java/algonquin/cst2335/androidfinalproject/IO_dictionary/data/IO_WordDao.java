@@ -14,8 +14,8 @@ import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Word;
 /**
  * Data Access Object (DAO) for IO_Word entities.
  *
- * @Author Iuliia Obukhova
- * @Version 1.0
+ * @author Iuliia Obukhova
+ * @version 1.0
  */
 @Dao
 public interface IO_WordDao {

@@ -21,8 +21,8 @@ import algonquin.cst2335.androidfinalproject.databinding.IoIoFragmentSavedWordDe
 /**
  * Fragment to display the definitions of a saved word.
  *
- * @Author Iuliia Obukhova
- * @Version 1.0
+ * @author Iuliia Obukhova
+ * @version 1.0
  */
 public class IO_SavedWordDefinitionFragment extends Fragment implements IO_SavedWordDefinitionAdapter.OnItemClickListener {
 

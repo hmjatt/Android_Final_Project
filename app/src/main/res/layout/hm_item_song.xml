@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="3dp"
-    android:background="@drawable/hm_rounded_corner">
+    android:background="@drawable/rounded_corner">
 
     <!-- Add your UI elements here -->
 
@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:background="@drawable/hm_image_border"
+        android:background="@drawable/image_border"
         android:padding="6dp"
         android:text="@string/track"
         android:textSize="20dp"

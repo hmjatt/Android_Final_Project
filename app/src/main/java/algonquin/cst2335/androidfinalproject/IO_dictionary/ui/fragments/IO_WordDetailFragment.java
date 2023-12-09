@@ -28,8 +28,8 @@ import algonquin.cst2335.androidfinalproject.R;
 /**
  * Fragment to display details of a selected word, including its definitions.
  *
- * @Author [Your Name]
- * @Version 1.0
+ * @author Iuliia Obukhova
+ * @author 1.0
  */
 public class IO_WordDetailFragment extends Fragment {
 

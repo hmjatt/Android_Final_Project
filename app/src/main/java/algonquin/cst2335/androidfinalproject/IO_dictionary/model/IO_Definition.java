@@ -11,8 +11,8 @@ import androidx.room.PrimaryKey;
 /**
  * Entity class representing a definition in the IO dictionary database.
  *
- * @Author Iuliia Obukhova
- * @Version 1.0
+ * @author Iuliia Obukhova
+ * @version 1.0
  */
 @Entity(
         tableName = "definition_table",

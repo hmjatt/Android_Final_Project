@@ -21,8 +21,8 @@ import algonquin.cst2335.androidfinalproject.databinding.IoIoFragmentSavedWordsB
 /**
  * Fragment to display the list of saved words.
  *
- * @Author Iuliia Obukhova
- * @Version 1.0
+ * @author Iuliia Obukhova
+ * @version 1.0
  */
 public class IO_SavedWordsFragment extends Fragment implements IO_SavedWordsAdapter.OnSavedWordClickListener {
 

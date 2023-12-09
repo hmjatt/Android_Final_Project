@@ -12,8 +12,9 @@ import algonquin.cst2335.androidfinalproject.IO_dictionary.model.IO_Word;
 
 /**
  * Room database class for the IO Dictionary application.
- * Author: Iuliia Obukhova
- * Version: 1.0
+ *
+ * @author Iuliia Obukhova
+ * @version 1.0
  */
 @Database(entities = {IO_Word.class, IO_Definition.class}, version = 3, exportSchema = false)
 public abstract class IO_DictionaryDatabase extends RoomDatabase {

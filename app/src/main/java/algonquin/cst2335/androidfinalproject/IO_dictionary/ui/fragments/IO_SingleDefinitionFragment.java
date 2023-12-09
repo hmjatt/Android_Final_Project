@@ -24,8 +24,8 @@ import algonquin.cst2335.androidfinalproject.databinding.IoIoFragmentSingleDefin
 /**
  * Fragment to display the single definition for a saved word.
  *
- * @Author Iuliia Obukhova
- * @Version 1.0
+ * @author Iuliia Obukhova
+ * @version 1.0
  */
 public class IO_SingleDefinitionFragment extends Fragment {
 
