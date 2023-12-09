@@ -152,6 +152,7 @@ public class IO_DictionaryActivity extends AppCompatActivity
                     new Thread(() -> {
                         try {
                             List<IO_Word> words = parseJsonResponse(response);
+
                             handler.post(() -> {
                                 if (wordAlreadyExists(words)) {
                                     showToast("Word search success");
@@ -159,6 +160,8 @@ public class IO_DictionaryActivity extends AppCompatActivity
                                     showToast("Word already exists");
                                 }
                                 updateRecyclerView(words);
+                                wordsAdapter.notifyDataSetChanged(); // Add this line
+
                             });
                         } catch (JSONException e) {
                             e.printStackTrace();

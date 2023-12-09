@@ -24,6 +24,7 @@ public class IO_WordsAdapter extends RecyclerView.Adapter<IO_WordsAdapter.WordVi
     private List<IO_Word> words;
     private OnWordClickListener listener;
 
+
     /**
      * Constructor to initialize the adapter with a list of words and a word click listener.
      *
@@ -63,7 +64,14 @@ public class IO_WordsAdapter extends RecyclerView.Adapter<IO_WordsAdapter.WordVi
         return words.size();
     }
 
+    /**
+     * Setter method for updating the list of words and notifying the adapter.
+     *
+     * @param words The updated list of words.
+     */
     public void setWords(List<IO_Word> words) {
+        this.words = words;
+        notifyDataSetChanged();
     }
 
     /**
